@@ -163,8 +163,8 @@ function Home() {
               </Link>
               <FloatingIllustration
                 src={labFlask}
-                className="hidden lg:block absolute -right-10 top-1/2 w-44"
-                rotate={-8}
+                className="hidden 2xl:block absolute -left-24 bottom-0 w-28 opacity-85"
+                rotate={-14}
               />
             </div>
 
