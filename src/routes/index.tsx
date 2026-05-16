@@ -42,7 +42,6 @@ function Home() {
 
         <div className="mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-10 pt-8 md:pt-12 pb-14 md:pb-20 relative">
           <div className="relative z-10 text-center max-w-3xl mx-auto">
-            <img src={helixCheck} alt="" className="mx-auto w-20 md:w-24 object-contain mb-4" />
             <div className="font-display text-sm md:text-base mb-4">
               A confident clinical decision
             </div>
@@ -237,7 +236,6 @@ function Home() {
           <div className="grid lg:grid-cols-[1fr_1.3fr] gap-12 lg:gap-20 items-start">
             {/* Left intro */}
             <div className="lg:sticky lg:top-28">
-              <img src={petriDish} alt="" className="w-20 md:w-24 object-contain mb-5" />
               <div className="font-display text-base md:text-lg" style={{ color: "var(--green-deep)" }}>
                 The dataset behind the model
               </div>
