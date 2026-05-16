@@ -1,13 +1,13 @@
 @import "tailwindcss" source(none);
 @source "../src";
 @import "tw-animate-css";
-@import url("https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&family=Fredoka:wght@400;500;600;700&family=Titan+One&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Bagel+Fat+One&family=Fredoka:wght@400;500;600;700&display=swap");
 
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
-  --font-sans: "Nunito", "Fredoka", ui-sans-serif, system-ui, sans-serif;
-  --font-display: "Titan One", "Fredoka", "Nunito", system-ui, sans-serif;
+  --font-sans: "Fredoka", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Bagel Fat One", "Fredoka", system-ui, sans-serif;
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
