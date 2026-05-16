@@ -18,7 +18,11 @@ import {
 } from "@/lib/api";
 import { useHistory } from "@/hooks/useHistory";
 import { FloatingIllustration } from "@/components/FloatingIllustration";
-import helix from "@/assets/illustrations/helix-doodle.png";
+import clipboard from "@/assets/illustrations/clipboard.png";
+import dnaStrand from "@/assets/illustrations/dna-strand.png";
+import labFlask from "@/assets/illustrations/lab-flask.png";
+import testTube from "@/assets/illustrations/test-tube.png";
+import chromosome from "@/assets/illustrations/chromosome.png";
 import {
   BarChart, Bar, XAxis, YAxis, ResponsiveContainer, Tooltip, Cell,
 } from "recharts";
@@ -38,29 +42,40 @@ type Form = Partial<Record<keyof PredictPayload, string>>;
 const FIELDS: {
   key: keyof PredictPayload;
   label: string;
-  indicator: string;
+  hint: string;
   options: string[];
 }[] = [
-  { key: "Sex", label: "Sex", indicator: "Demographic", options: ["Male", "Female"] },
-  { key: "Geographic_Region", label: "Geographic Region", indicator: "Geographic", options: ["Luzon", "Visayas", "Mindanao"] },
-  { key: "Location_Type", label: "Location Type", indicator: "Location", options: ["Urban", "Rural"] },
-  { key: "Disease_Category", label: "Disease Category", indicator: "Clinical", options: ["Pediatrics", "Neurology", "Metabolic", "Others"] },
-  { key: "Facility_Type", label: "Facility Type", indicator: "Institutional", options: ["Private", "Public"] },
-  { key: "Year", label: "Year of Testing", indicator: "Temporal", options: ["2021", "2022", "2023", "2024", "2025"] },
+  { key: "Sex", label: "Sex", hint: "Patient demographic", options: ["Male", "Female"] },
+  { key: "Geographic_Region", label: "Geographic Region", hint: "Major island group", options: ["Luzon", "Visayas", "Mindanao"] },
+  { key: "Location_Type", label: "Location Type", hint: "Urban or rural setting", options: ["Urban", "Rural"] },
+  { key: "Disease_Category", label: "Disease Category", hint: "Clinical area of concern", options: ["Pediatrics", "Neurology", "Metabolic", "Others"] },
+  { key: "Facility_Type", label: "Facility Type", hint: "Where care is delivered", options: ["Private", "Public"] },
+  { key: "Year", label: "Year of Testing", hint: "When testing occurs", options: ["2021", "2022", "2023", "2024", "2025"] },
 ];
 
+function StepBadge({ n, label }: { n: number; label: string }) {
+  return (
+    <div className="inline-flex items-center gap-3 mb-5">
+      <span className="h-9 w-9 rounded-full bg-coral flex items-center justify-center font-display text-base text-card-foreground">
+        {n}
+      </span>
+      <span className="font-display text-sm uppercase tracking-wide text-card-foreground/70">{label}</span>
+    </div>
+  );
+}
+
 function ConfidenceRing({ value }: { value: number }) {
-  const r = 52;
+  const r = 56;
   const c = 2 * Math.PI * r;
   const offset = c - (value / 100) * c;
   return (
-    <div className="relative h-32 w-32 text-card-foreground">
-      <svg viewBox="0 0 120 120" className="h-full w-full -rotate-90">
-        <circle cx="60" cy="60" r={r} stroke="currentColor" className="opacity-15" strokeWidth="10" fill="none" />
+    <div className="relative h-36 w-36 text-card-foreground mx-auto">
+      <svg viewBox="0 0 130 130" className="h-full w-full -rotate-90">
+        <circle cx="65" cy="65" r={r} stroke="currentColor" className="opacity-15" strokeWidth="11" fill="none" />
         <circle
-          cx="60" cy="60" r={r}
+          cx="65" cy="65" r={r}
           stroke="var(--coral)"
-          strokeWidth="10"
+          strokeWidth="11"
           fill="none"
           strokeDasharray={c}
           strokeDashoffset={offset}
@@ -69,8 +84,8 @@ function ConfidenceRing({ value }: { value: number }) {
         />
       </svg>
       <div className="absolute inset-0 flex flex-col items-center justify-center">
-        <div className="font-display text-2xl tabular-nums">{value.toFixed(1)}%</div>
-        <div className="text-[10px] uppercase tracking-wider opacity-70">Confidence</div>
+        <div className="font-display text-3xl tabular-nums">{value.toFixed(1)}%</div>
+        <div className="text-[10px] uppercase tracking-wider opacity-70 mt-1">Confidence</div>
       </div>
     </div>
   );
@@ -79,7 +94,7 @@ function ConfidenceRing({ value }: { value: number }) {
 function ProbabilityBar({ comp, targ }: { comp: number; targ: number }) {
   return (
     <div>
-      <div className="flex justify-between text-xs font-semibold uppercase tracking-wider mb-2">
+      <div className="flex justify-between text-xs font-bold mb-2">
         <span>Comprehensive {comp.toFixed(1)}%</span>
         <span>Targeted {targ.toFixed(1)}%</span>
       </div>
@@ -116,36 +131,6 @@ const KNOWLEDGE = {
   },
 } as const;
 
-function ResultKnowledgeCard({ prediction }: { prediction: string }) {
-  const info = KNOWLEDGE[prediction as keyof typeof KNOWLEDGE];
-  if (!info) return null;
-  return (
-    <div className="relative rounded-3xl bg-card text-card-foreground p-8 md:p-10 overflow-hidden">
-      <div className="absolute inset-0 rounded-3xl ring-4 ring-coral pointer-events-none" />
-      <div className="relative">
-        <div className="eyebrow text-coral mb-3">What this means</div>
-        <h3 className="display-md">{prediction}</h3>
-        <p className="mt-6 text-base leading-relaxed">
-          <span className="font-display text-coral text-4xl leading-none mr-1 align-top">“</span>
-          {info.definition}
-          <span className="font-display text-coral text-4xl leading-none ml-1 align-bottom">”</span>
-        </p>
-        <div className="mt-8">
-          <div className="eyebrow text-card-foreground/60 mb-3">Common examples</div>
-          <ul className="space-y-2.5">
-            {info.examples.map((e) => (
-              <li key={e} className="flex gap-3 text-sm">
-                <span className="mt-2 h-1.5 w-1.5 rounded-full bg-coral shrink-0" />
-                <span className="leading-relaxed">{e}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </div>
-    </div>
-  );
-}
-
 function PredictPage() {
   const [form, setForm] = useState<Form>({});
   const { add } = useHistory();
@@ -155,6 +140,7 @@ function PredictPage() {
     () => FIELDS.every((f) => form[f.key] !== undefined && form[f.key] !== ""),
     [form]
   );
+  const filledCount = FIELDS.filter((f) => form[f.key]).length;
 
   const mutation = useMutation({
     mutationFn: (payload: PredictPayload) => postPredict(payload),
@@ -186,48 +172,56 @@ function PredictPage() {
   };
 
   const result: PredictResponse | undefined = mutation.data;
+  const info = result ? KNOWLEDGE[result.prediction as keyof typeof KNOWLEDGE] : null;
 
   return (
-    <div className="relative">
+    <div className="relative overflow-hidden">
+      {/* Decorative corner illustrations — kept clear of text columns */}
       <FloatingIllustration
-        src={helix}
-        className="hidden lg:block absolute right-8 top-12 w-32 opacity-90 z-0"
-        rotate={14}
+        src={dnaStrand}
+        className="hidden xl:block absolute left-4 top-32 w-24 z-0 opacity-90"
+        rotate={-12}
       />
-      <div className="relative mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-10 py-16 animate-fade-up">
-        <div className="mb-12 max-w-3xl">
+      <FloatingIllustration
+        src={labFlask}
+        className="hidden xl:block absolute right-4 top-40 w-24 z-0 opacity-90"
+        rotate={10}
+        variant="drift"
+      />
+
+      <div className="relative mx-auto max-w-[1200px] px-4 sm:px-6 lg:px-10 py-16 animate-fade-up">
+        {/* ── Centered hero ── */}
+        <div className="text-center max-w-3xl mx-auto mb-14">
           <div className="eyebrow text-coral mb-4">Prediction</div>
           <h1 className="display-lg">
             Six indicators in,
             <br />
-            <span className="text-coral">one clear recommendation.</span>
+            <span className="hl">one clear recommendation.</span>
           </h1>
-          <p className="mt-5 text-foreground/75 max-w-xl">
-            Enter the patient's six indicators. GeneScope runs your local
-            Binary Logistic Regression model and explains the result.
+          <p className="mt-6 text-foreground/75 mx-auto max-w-xl">
+            Fill in the patient's six indicators below. GeneScope runs the local
+            Binary Logistic Regression model and walks you through what the result means.
           </p>
         </div>
 
-        <div className="grid lg:grid-cols-[1fr_1.1fr] gap-8">
-          {/* LEFT — form */}
-          <div className="rounded-3xl bg-card text-card-foreground p-7 md:p-9 h-fit">
-            <h2 className="font-display text-2xl">Patient indicators</h2>
-            <p className="mt-1 text-sm text-card-foreground/70">
-              All fields are required to generate a prediction.
+        {/* ── STEP 1 + STEP 2: symmetric two-column ── */}
+        <div className="grid lg:grid-cols-2 gap-6 items-stretch">
+          {/* STEP 1 — Inputs */}
+          <div className="rounded-[2rem] bg-card text-card-foreground p-7 md:p-9 flex flex-col">
+            <StepBadge n={1} label="Patient indicators" />
+            <p className="text-sm text-card-foreground/70 -mt-2 mb-6">
+              {filledCount} of {FIELDS.length} fields filled.
             </p>
 
-            <div className="mt-7 grid sm:grid-cols-2 gap-5">
+            <div className="grid sm:grid-cols-2 gap-5 flex-1">
               {FIELDS.map((f) => (
                 <div key={f.key} className="space-y-1.5">
-                  <label className="block text-sm font-semibold">{f.label}</label>
-                  <div className="text-[10px] uppercase tracking-wider text-card-foreground/55 -mt-1">
-                    {f.indicator}
-                  </div>
+                  <label className="block text-sm font-bold">{f.label}</label>
                   <Select
                     value={form[f.key] ?? ""}
                     onValueChange={(v) => setForm((p) => ({ ...p, [f.key]: v }))}
                   >
-                    <SelectTrigger className="rounded-full bg-cream-dim border-0 h-11 px-5">
+                    <SelectTrigger className="rounded-full bg-cream-dim border-0 h-12 px-5 font-semibold">
                       <SelectValue placeholder="Select…" />
                     </SelectTrigger>
                     <SelectContent>
@@ -236,6 +230,7 @@ function PredictPage() {
                       ))}
                     </SelectContent>
                   </Select>
+                  <p className="text-[11px] text-card-foreground/55 pl-1">{f.hint}</p>
                 </div>
               ))}
             </div>
@@ -246,108 +241,133 @@ function PredictPage() {
                 disabled={!allFilled || mutation.isPending}
                 className="pill pill-coral disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {mutation.isPending ? (
-                  <Loader2 className="h-4 w-4 animate-spin" />
-                ) : null}
+                {mutation.isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : null}
                 Generate Prediction
               </button>
               <button onClick={handleReset} className="pill bg-green-deep text-cream hover:bg-green-deep/85">
                 <RefreshCw className="h-4 w-4" /> Reset
               </button>
             </div>
-
-            <p className="mt-7 text-xs text-card-foreground/60 border-t border-card-foreground/10 pt-5">
-              A research-based tool. Does not replace clinical judgment. Inputs are processed locally.
-            </p>
           </div>
 
-          {/* RIGHT — output */}
-          <div className="space-y-6">
+          {/* STEP 2 — Result */}
+          <div className="rounded-[2rem] bg-card text-card-foreground p-7 md:p-9 flex flex-col">
+            <StepBadge n={2} label="Your result" />
+
             {!mutation.isPending && !mutation.isError && !result && (
-              <div className="rounded-3xl border-2 border-dashed border-foreground/20 p-14 text-center">
-                <p className="font-display text-2xl text-foreground/70">
-                  Your result will appear here.
+              <div className="flex-1 flex flex-col items-center justify-center text-center py-10">
+                <img src={clipboard} alt="" className="w-28 mb-5 opacity-90" />
+                <p className="font-display text-xl text-card-foreground/75">
+                  Fill the form to see your result.
                 </p>
-                <p className="mt-2 text-sm text-foreground/55">
-                  Fill the six indicators on the left and hit Generate.
+                <p className="mt-2 text-sm text-card-foreground/55 max-w-xs">
+                  Once all six indicators are set, hit Generate Prediction.
                 </p>
               </div>
             )}
 
             {mutation.isPending && (
-              <div className="rounded-3xl bg-card text-card-foreground p-14 text-center">
-                <Loader2 className="h-8 w-8 animate-spin mx-auto" />
-                <p className="mt-4 text-sm">Running model on local server…</p>
+              <div className="flex-1 flex flex-col items-center justify-center text-center py-10">
+                <Loader2 className="h-10 w-10 animate-spin mb-4" />
+                <p className="text-sm">Running model on local server…</p>
               </div>
             )}
 
-            {mutation.isError && <BackendOfflineNotice onRetry={handleSubmit} />}
+            {mutation.isError && (
+              <div className="flex-1 flex items-center"><BackendOfflineNotice onRetry={handleSubmit} /></div>
+            )}
 
             {result && (
-              <>
-                {/* Headline result */}
-                <div className="rounded-3xl bg-card text-card-foreground p-7">
-                  <div className="flex items-center justify-between gap-5 flex-wrap">
-                    <div>
-                      <div className="eyebrow text-card-foreground/55">Prediction</div>
-                      <div className="mt-2 font-display text-3xl md:text-4xl leading-tight">
-                        {result.prediction}
-                      </div>
-                    </div>
-                    <ConfidenceRing value={result.confidence} />
+              <div className="flex-1 flex flex-col">
+                <div className="text-center">
+                  <div className="eyebrow text-card-foreground/55 mb-2">Prediction</div>
+                  <div className="font-display text-2xl md:text-3xl leading-tight mb-6">
+                    {result.prediction}
                   </div>
-                  <div className="mt-7">
-                    <ProbabilityBar
-                      comp={result.probability_comprehensive}
-                      targ={result.probability_targeted}
-                    />
-                  </div>
+                  <ConfidenceRing value={result.confidence} />
                 </div>
 
-                {/* THE DOMINANT KNOWLEDGE CARD */}
-                <ResultKnowledgeCard prediction={result.prediction} />
-
-                {/* Feature influence */}
-                <div className="rounded-3xl bg-card text-card-foreground p-6">
-                  <div className="eyebrow text-coral mb-1">Indicator influence</div>
-                  <h3 className="font-display text-xl">What drove this prediction</h3>
-                  <div className="h-56 mt-5">
-                    {fi.isLoading && (
-                      <div className="h-full flex items-center justify-center text-sm">
-                        <Loader2 className="h-4 w-4 animate-spin mr-2" /> Loading…
-                      </div>
-                    )}
-                    {fi.isError && <div className="text-xs text-card-foreground/65">Feature importance unavailable.</div>}
-                    {fi.data && (
-                      <ResponsiveContainer width="100%" height="100%">
-                        <BarChart data={fi.data} layout="vertical" margin={{ left: 8 }}>
-                          <XAxis type="number" tick={{ fontSize: 11, fill: "var(--green-deep)" }} />
-                          <YAxis dataKey="feature" type="category" tick={{ fontSize: 11, fill: "var(--green-deep)" }} width={120} />
-                          <Tooltip contentStyle={{ background: "var(--green-deep)", color: "var(--cream)", border: "none", borderRadius: 12 }} />
-                          <Bar dataKey="importance" radius={[0, 999, 999, 0]}>
-                            {fi.data.map((_, i) => (
-                              <Cell key={i} fill="var(--coral)" />
-                            ))}
-                          </Bar>
-                        </BarChart>
-                      </ResponsiveContainer>
-                    )}
-                  </div>
+                <div className="mt-8">
+                  <ProbabilityBar
+                    comp={result.probability_comprehensive}
+                    targ={result.probability_targeted}
+                  />
                 </div>
 
-                <div className="flex flex-wrap gap-3">
-                  <button onClick={handleSave} disabled={saved} className="pill pill-cream disabled:opacity-60">
+                <div className="mt-auto pt-8 flex flex-wrap gap-3 justify-center">
+                  <button onClick={handleSave} disabled={saved} className="pill pill-coral disabled:opacity-60">
                     <Save className="h-4 w-4" />
-                    {saved ? "Saved to History" : "Save to History"}
+                    {saved ? "Saved" : "Save to History"}
                   </button>
-                  <button onClick={handleReset} className="pill pill-outline">
+                  <button onClick={handleReset} className="pill bg-green-deep text-cream hover:bg-green-deep/85">
                     New Prediction
                   </button>
                 </div>
-              </>
+              </div>
             )}
           </div>
         </div>
+
+        {/* ── STEP 3 — What this means (full width, only when result exists) ── */}
+        {result && info && (
+          <div className="mt-6 rounded-[2rem] bg-card text-card-foreground p-7 md:p-10 relative overflow-hidden">
+            <img src={testTube} alt="" className="hidden md:block absolute right-6 top-6 w-20 opacity-80" />
+            <StepBadge n={3} label="What this means" />
+            <h3 className="display-md mb-5">{result.prediction}</h3>
+            <div className="grid md:grid-cols-2 gap-8">
+              <p className="text-base leading-relaxed">{info.definition}</p>
+              <div>
+                <div className="eyebrow text-card-foreground/60 mb-3">Common examples</div>
+                <ul className="space-y-2.5">
+                  {info.examples.map((e) => (
+                    <li key={e} className="flex gap-3 text-sm">
+                      <span className="mt-2 h-1.5 w-1.5 rounded-full bg-coral shrink-0" />
+                      <span className="leading-relaxed">{e}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* ── STEP 4 — Indicator influence ── */}
+        {result && (
+          <div className="mt-6 rounded-[2rem] bg-card text-card-foreground p-7 md:p-10 relative overflow-hidden">
+            <img src={chromosome} alt="" className="hidden md:block absolute right-6 top-6 w-20 opacity-80" />
+            <StepBadge n={4} label="Indicator influence" />
+            <h3 className="font-display text-2xl mb-1">What drove this prediction</h3>
+            <p className="text-sm text-card-foreground/65 mb-6 max-w-xl">
+              Relative weight each indicator carried in the model's decision.
+            </p>
+            <div className="h-64 max-w-3xl">
+              {fi.isLoading && (
+                <div className="h-full flex items-center justify-center text-sm">
+                  <Loader2 className="h-4 w-4 animate-spin mr-2" /> Loading…
+                </div>
+              )}
+              {fi.isError && <div className="text-xs text-card-foreground/65">Feature importance unavailable.</div>}
+              {fi.data && (
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart data={fi.data} layout="vertical" margin={{ left: 8 }}>
+                    <XAxis type="number" tick={{ fontSize: 11, fill: "var(--green-deep)" }} />
+                    <YAxis dataKey="feature" type="category" tick={{ fontSize: 11, fill: "var(--green-deep)" }} width={130} />
+                    <Tooltip contentStyle={{ background: "var(--green-deep)", color: "var(--cream)", border: "none", borderRadius: 12 }} />
+                    <Bar dataKey="importance" radius={[0, 999, 999, 0]}>
+                      {fi.data.map((_, i) => (
+                        <Cell key={i} fill="var(--coral)" />
+                      ))}
+                    </Bar>
+                  </BarChart>
+                </ResponsiveContainer>
+              )}
+            </div>
+          </div>
+        )}
+
+        <p className="mt-10 text-center text-xs text-foreground/55 max-w-xl mx-auto">
+          A research-based tool. Does not replace clinical judgment. Inputs are processed locally.
+        </p>
       </div>
     </div>
   );
