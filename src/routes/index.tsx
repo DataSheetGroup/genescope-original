@@ -273,6 +273,7 @@ function Home() {
           className="hidden lg:block absolute right-6 top-16 w-24 z-0"
           rotate={12}
         />
+        <div className="mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-10 pb-32 relative">
           <div className="text-center mb-14">
             <div className="font-display text-base md:text-lg" style={{ color: "var(--green-deep)" }}>
               The dataset behind the model
