@@ -2,6 +2,8 @@ import { createFileRoute } from "@tanstack/react-router";
 import { Check } from "lucide-react";
 import { FloatingIllustration } from "@/components/FloatingIllustration";
 import helix from "@/assets/illustrations/helix-doodle.png";
+import heartPulse from "@/assets/illustrations/heart-pulse.png";
+import clipboard from "@/assets/illustrations/clipboard.png";
 
 export const Route = createFileRoute("/about")({
   head: () => ({
@@ -33,11 +35,22 @@ function AboutPage() {
   ];
 
   return (
-    <div className="relative">
+    <div className="relative overflow-hidden">
       <FloatingIllustration
         src={helix}
-        className="hidden md:block absolute right-6 top-12 w-28 opacity-90"
+        className="hidden md:block absolute right-4 top-12 w-24 opacity-90 z-0"
         rotate={18}
+      />
+      <FloatingIllustration
+        src={heartPulse}
+        className="hidden lg:block absolute left-4 top-1/3 w-20 opacity-90 z-0"
+        rotate={-10}
+        variant="drift"
+      />
+      <FloatingIllustration
+        src={clipboard}
+        className="hidden lg:block absolute right-6 bottom-20 w-24 opacity-90 z-0"
+        rotate={8}
       />
       <div className="relative mx-auto max-w-5xl px-4 sm:px-6 lg:px-10 py-16 animate-fade-up space-y-10">
         <div className="max-w-3xl">
