@@ -19,7 +19,7 @@ import petriDish from "@/assets/illustrations/petri-dish.png";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "GeneScope — Genetic Testing Clinical Decision Support" },
+      { title: "GeneScope" },
       {
         name: "description",
         content:

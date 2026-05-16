@@ -19,7 +19,7 @@ import {
 export const Route = createFileRoute("/performance")({
   head: () => ({
     meta: [
-      { title: "Performance — GeneScope" },
+      { title: "GeneScope" },
       { name: "description", content: "Comparative evaluation of Binary Logistic Regression, Decision Tree, and Random Forest." },
     ],
   }),

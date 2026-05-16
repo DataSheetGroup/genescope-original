@@ -32,7 +32,7 @@ import {
 export const Route = createFileRoute("/predict")({
   head: () => ({
     meta: [
-      { title: "Predict — GeneScope" },
+      { title: "GeneScope" },
       { name: "description", content: "Generate a genetic test type prediction from six patient indicators." },
     ],
   }),
