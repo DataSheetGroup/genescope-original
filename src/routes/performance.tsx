@@ -8,6 +8,9 @@ import { FloatingIllustration } from "@/components/FloatingIllustration";
 import heartPulse from "@/assets/illustrations/heart-pulse.png";
 import chromosome from "@/assets/illustrations/chromosome.png";
 import labFlask from "@/assets/illustrations/lab-flask.png";
+import clipboard from "@/assets/illustrations/clipboard.png";
+import dnaStrand from "@/assets/illustrations/dna-strand.png";
+import helixCheck from "@/assets/illustrations/helix-check.png";
 import {
   Bar, BarChart, CartesianGrid, Cell, Legend, Line, LineChart,
   ResponsiveContainer, Tooltip, XAxis, YAxis,
