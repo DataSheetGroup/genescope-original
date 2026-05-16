@@ -265,18 +265,24 @@ function Home() {
 
       {/* ───────────── HIGHLIGHTS / STATS (cream) ───────────── */}
       <section className="slab-cream relative overflow-hidden">
-        <FloatingIllustration
-          src={petriDish}
-          className="hidden xl:block absolute left-2 top-32 w-20 z-0 opacity-80"
-          rotate={-18}
-          variant="drift"
-        />
-        <FloatingIllustration
-          src={pillCap}
-          className="hidden xl:block absolute right-4 bottom-24 w-16 z-0 opacity-75"
-          rotate={24}
-        />
         <div className="mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-10 pb-32 relative">
+          <FloatingIllustration
+            src={petriDish}
+            className="hidden 2xl:block absolute -left-20 top-32 w-24 z-0 opacity-90"
+            rotate={-18}
+            variant="drift"
+          />
+          <FloatingIllustration
+            src={pillCap}
+            className="hidden 2xl:block absolute -right-16 bottom-32 w-20 z-0 opacity-90"
+            rotate={24}
+          />
+          <FloatingIllustration
+            src={magnifier}
+            className="hidden 2xl:block absolute -right-20 top-40 w-24 z-0 opacity-90"
+            rotate={14}
+            variant="drift"
+          />
           <div className="grid lg:grid-cols-[1fr_1.3fr] gap-12 lg:gap-20 items-start">
             {/* Left intro */}
             <div className="lg:sticky lg:top-28">
