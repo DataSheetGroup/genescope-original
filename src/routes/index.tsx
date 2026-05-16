@@ -2,7 +2,6 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { ArrowRight, ArrowDown } from "lucide-react";
 import { getEdaData } from "@/lib/api";
-import { FloatingIllustration } from "@/components/FloatingIllustration";
 import helix from "@/assets/illustrations/helix-doodle.png";
 import microscope from "@/assets/illustrations/microscope-doodle.png";
 import magnifier from "@/assets/illustrations/magnifier-strand.png";
@@ -40,37 +39,10 @@ function Home() {
     <div className="">
       {/* ───────────── HERO (green) — centered, asymmetric illustrations ───────────── */}
       <section className="hero-green relative overflow-hidden -mt-px">
-        {/* Hero stickers — anchored in outer corners, sized to fit gutters, never crossing text column */}
-        <FloatingIllustration
-          src={chromosome}
-          className="hidden lg:block absolute left-2 top-6 w-16 xl:w-24 z-0 opacity-90"
-          rotate={-16}
-        />
-        <FloatingIllustration
-          src={helixCheck}
-          className="hidden lg:block absolute right-2 top-4 w-24 xl:w-36 z-0 opacity-95"
-          rotate={10}
-          variant="drift"
-        />
-        <FloatingIllustration
-          src={dnaStrand}
-          className="hidden lg:block absolute left-2 bottom-6 w-20 xl:w-28 z-0 opacity-90"
-          rotate={-22}
-          variant="drift"
-        />
-        <FloatingIllustration
-          src={petriDish}
-          className="hidden lg:block absolute right-3 bottom-8 w-20 xl:w-28 z-0 opacity-90"
-          rotate={12}
-        />
-        <FloatingIllustration
-          src={testTube}
-          className="hidden xl:block absolute right-6 top-1/2 -translate-y-1/2 w-12 z-0 opacity-85"
-          rotate={22}
-        />
 
         <div className="mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-10 pt-8 md:pt-12 pb-14 md:pb-20 relative">
           <div className="relative z-10 text-center max-w-3xl mx-auto">
+            <img src={helixCheck} alt="" className="mx-auto w-20 md:w-24 object-contain mb-4" />
             <div className="font-display text-sm md:text-base mb-4">
               A confident clinical decision
             </div>
@@ -153,6 +125,7 @@ function Home() {
         <div className="mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-10 pb-32">
           <div className="grid lg:grid-cols-[1fr_1.2fr] gap-16 items-start">
             <div className="lg:sticky lg:top-28 relative">
+              <img src={labFlask} alt="" className="w-20 md:w-24 object-contain mb-5" />
               <div className="font-display text-base md:text-lg mb-6" style={{ color: "var(--green-deep)" }}>
                 Your needs, our solution
               </div>
@@ -166,11 +139,6 @@ function Home() {
               <Link to="/predict" className="mt-10 pill pill-coral inline-flex">
                 Discover the concept
               </Link>
-              <FloatingIllustration
-                src={labFlask}
-                className="hidden xl:block absolute -left-24 bottom-0 w-28 opacity-85"
-                rotate={-14}
-              />
             </div>
 
             <ol className="space-y-7">
@@ -266,26 +234,10 @@ function Home() {
       {/* ───────────── HIGHLIGHTS / STATS (cream) ───────────── */}
       <section className="slab-cream relative overflow-hidden">
         <div className="mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-10 pb-32 relative">
-          <FloatingIllustration
-            src={petriDish}
-            className="hidden 2xl:block absolute -left-20 top-32 w-24 z-0 opacity-90"
-            rotate={-18}
-            variant="drift"
-          />
-          <FloatingIllustration
-            src={pillCap}
-            className="hidden 2xl:block absolute -right-16 bottom-32 w-20 z-0 opacity-90"
-            rotate={24}
-          />
-          <FloatingIllustration
-            src={magnifier}
-            className="hidden 2xl:block absolute -right-20 top-40 w-24 z-0 opacity-90"
-            rotate={14}
-            variant="drift"
-          />
           <div className="grid lg:grid-cols-[1fr_1.3fr] gap-12 lg:gap-20 items-start">
             {/* Left intro */}
             <div className="lg:sticky lg:top-28">
+              <img src={petriDish} alt="" className="w-20 md:w-24 object-contain mb-5" />
               <div className="font-display text-base md:text-lg" style={{ color: "var(--green-deep)" }}>
                 The dataset behind the model
               </div>

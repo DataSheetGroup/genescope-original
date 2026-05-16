@@ -1,6 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Check } from "lucide-react";
-import { FloatingIllustration } from "@/components/FloatingIllustration";
 import helix from "@/assets/illustrations/helix-doodle.png";
 import heartPulse from "@/assets/illustrations/heart-pulse.png";
 import clipboard from "@/assets/illustrations/clipboard.png";
@@ -41,24 +40,22 @@ function AboutPage() {
   return (
     <div className="relative overflow-hidden">
       <div className="relative mx-auto max-w-5xl px-4 sm:px-6 lg:px-10 py-16 space-y-10 z-10">
-        {/* Stickers themed for About — research, records, DNA — placed in outer gutter only */}
-        <FloatingIllustration src={helix} className="hidden xl:block absolute -right-20 top-12 w-24 opacity-90 z-0" rotate={18} />
-        <FloatingIllustration src={magnifier} className="hidden xl:block absolute -left-24 top-32 w-24 opacity-90 z-0" rotate={-12} variant="drift" />
-        <FloatingIllustration src={heartPulse} className="hidden xl:block absolute -right-16 top-[40%] w-20 opacity-90 z-0" rotate={14} variant="drift" />
-        <FloatingIllustration src={clipboard} className="hidden xl:block absolute -left-20 top-[58%] w-24 opacity-90 z-0" rotate={-8} />
-        <FloatingIllustration src={petriDish} className="hidden xl:block absolute -right-20 top-[75%] w-24 opacity-90 z-0" rotate={-10} variant="drift" />
-        <FloatingIllustration src={pillCap} className="hidden xl:block absolute -left-16 bottom-24 w-20 opacity-90 z-0" rotate={-22} />
-        <FloatingIllustration src={testTube} className="hidden 2xl:block absolute -right-12 bottom-12 w-14 opacity-90 z-0" rotate={18} />
         <div className="max-w-3xl">
-          <div className="eyebrow text-coral mb-4">About</div>
-          <h1 className="display-lg">
-            A thesis built
-            <br />
-            <span className="text-coral">with care.</span>
-          </h1>
+          <div className="flex items-start gap-6">
+            <div className="flex-1">
+              <div className="eyebrow text-coral mb-4">About</div>
+              <h1 className="display-lg">
+                A thesis built
+                <br />
+                <span className="text-coral">with care.</span>
+              </h1>
+            </div>
+            <img src={helix} alt="" className="hidden md:block w-24 lg:w-28 shrink-0 object-contain -mt-2" />
+          </div>
         </div>
 
-        <div className="rounded-3xl bg-card text-card-foreground p-8 md:p-10">
+        <div className="rounded-3xl bg-card text-card-foreground p-8 md:p-10 relative overflow-hidden">
+          <img src={clipboard} alt="" className="hidden md:block absolute right-6 top-6 w-20 object-contain opacity-90" />
           <div className="eyebrow text-coral mb-2">Project</div>
           <h2 className="font-display text-3xl mb-6">Research information</h2>
           <dl>
@@ -82,7 +79,8 @@ function AboutPage() {
           </dl>
         </div>
 
-        <div className="rounded-3xl bg-card text-card-foreground p-8 md:p-10">
+        <div className="rounded-3xl bg-card text-card-foreground p-8 md:p-10 relative overflow-hidden">
+          <img src={heartPulse} alt="" className="hidden md:block absolute right-6 top-6 w-20 object-contain opacity-90" />
           <div className="eyebrow text-coral mb-2">Compliance</div>
           <h2 className="font-display text-3xl mb-6">A clear ethical perimeter</h2>
           <ul className="grid sm:grid-cols-2 gap-3">

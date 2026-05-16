@@ -4,7 +4,6 @@ import { Check } from "lucide-react";
 import { getFeatureImportance, getMetrics, type ModelMetrics } from "@/lib/api";
 import { BackendOfflineNotice } from "@/components/BackendOfflineNotice";
 import { ChartCard } from "@/components/ChartCard";
-import { FloatingIllustration } from "@/components/FloatingIllustration";
 import heartPulse from "@/assets/illustrations/heart-pulse.png";
 import chromosome from "@/assets/illustrations/chromosome.png";
 import labFlask from "@/assets/illustrations/lab-flask.png";
@@ -162,22 +161,21 @@ function PerformancePage() {
   return (
     <div className="relative overflow-hidden">
       <div className="relative mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-10 py-16 space-y-14 z-10">
-        {/* Stickers sit in the outer gutter of the centered container — only at 2xl+ where real gutter exists */}
-        <FloatingIllustration src={heartPulse} className="hidden 2xl:block absolute -left-16 top-24 w-20 opacity-90 z-0" rotate={-14} />
-        <FloatingIllustration src={chromosome} className="hidden 2xl:block absolute -right-20 top-[30%] w-24 opacity-90 z-0" rotate={18} variant="drift" />
-        <FloatingIllustration src={labFlask} className="hidden 2xl:block absolute -left-20 top-[55%] w-24 opacity-90 z-0" rotate={-8} variant="drift" />
-        <FloatingIllustration src={clipboard} className="hidden 2xl:block absolute -right-16 top-[75%] w-20 opacity-90 z-0" rotate={12} />
-        <FloatingIllustration src={helixCheck} className="hidden 2xl:block absolute -left-16 bottom-32 w-20 opacity-90 z-0" rotate={8} variant="drift" />
       <div className="max-w-3xl">
-        <div className="eyebrow text-coral mb-4">Evaluation</div>
-        <h1 className="display-lg">
-          Three models,
-          <br />
-          <span className="text-coral">one chosen for the job.</span>
-        </h1>
-        <p className="mt-5 text-foreground/75">
-          Comparative evaluation of Binary Logistic Regression, Decision Tree, and Random Forest.
-        </p>
+        <div className="flex items-start gap-6">
+          <div className="flex-1">
+            <div className="eyebrow text-coral mb-4">Evaluation</div>
+            <h1 className="display-lg">
+              Three models,
+              <br />
+              <span className="text-coral">one chosen for the job.</span>
+            </h1>
+            <p className="mt-5 text-foreground/75">
+              Comparative evaluation of Binary Logistic Regression, Decision Tree, and Random Forest.
+            </p>
+          </div>
+          <img src={helixCheck} alt="" className="hidden md:block w-24 lg:w-28 shrink-0 object-contain -mt-2" />
+        </div>
       </div>
 
       {/* Primary model hero */}
