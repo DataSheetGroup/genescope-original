@@ -43,13 +43,13 @@ function AboutPage() {
       />
       <FloatingIllustration
         src={heartPulse}
-        className="hidden 2xl:block absolute left-3 top-[42%] w-16 opacity-75 z-0"
+        className="hidden xl:block absolute left-3 top-[42%] w-16 opacity-75 z-0"
         rotate={-14}
         variant="drift"
       />
       <FloatingIllustration
         src={clipboard}
-        className="hidden 2xl:block absolute right-4 bottom-32 w-24 opacity-80 z-0"
+        className="hidden xl:block absolute right-4 bottom-32 w-24 opacity-80 z-0"
         rotate={-7}
       />
       <div className="relative mx-auto max-w-5xl px-4 sm:px-6 lg:px-10 py-16 space-y-10 z-10">

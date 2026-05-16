@@ -179,12 +179,12 @@ function PredictPage() {
       {/* Decorative corner illustrations — kept clear of text columns */}
       <FloatingIllustration
         src={dnaStrand}
-        className="hidden 2xl:block absolute left-3 top-40 w-16 z-0 opacity-75"
+        className="hidden xl:block absolute left-3 top-40 w-16 z-0 opacity-75"
         rotate={-18}
       />
       <FloatingIllustration
         src={labFlask}
-        className="hidden 2xl:block absolute right-4 top-56 w-24 z-0 opacity-80"
+        className="hidden xl:block absolute right-4 top-56 w-24 z-0 opacity-80"
         rotate={12}
         variant="drift"
       />
