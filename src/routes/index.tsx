@@ -38,57 +38,55 @@ function Home() {
 
   return (
     <div className="animate-fade-up">
-      {/* ───────────── HERO (green) — asymmetric ───────────── */}
+      {/* ───────────── HERO (green) — centered, asymmetric illustrations ───────────── */}
       <section className="hero-green relative overflow-hidden -mt-px">
-        <div className="mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-10 pt-8 md:pt-14 pb-16 md:pb-24 relative">
-          <div className="grid lg:grid-cols-12 gap-8 items-center">
-            {/* Text — left, asymmetric */}
-            <div className="relative z-10 lg:col-span-7 text-left">
-              <div className="font-display text-sm md:text-base mb-5">
-                A confident clinical decision
-              </div>
-              <h1 className="display-xl uppercase">
-                Genetic testing
-                <br />
-                decisions{" "}
-                <span className="hl">without</span>
-                <br />
-                the <span className="hl">guesswork</span>
-              </h1>
-              <p className="mt-6 max-w-xl text-sm md:text-base leading-relaxed">
-                GeneScope pairs every result with plain-language context, calibrated
-                probabilities, and feature attribution — so clinicians decide with
-                clarity, not guesswork.
-              </p>
-              <div className="mt-6 flex flex-wrap items-center gap-3">
-                <Link to="/predict" className="pill pill-coral">
-                  Start a prediction
-                </Link>
-                <Link to="/dashboard" className="pill pill-cream">
-                  View the dashboard
-                </Link>
-              </div>
-            </div>
+        {/* Asymmetric floating illustrations — varied sizes, rotations, offsets */}
+        <FloatingIllustration
+          src={microscope}
+          className="hidden lg:block absolute right-6 top-6 w-44 xl:w-52 z-0 opacity-95"
+          rotate={10}
+          variant="drift"
+        />
+        <FloatingIllustration
+          src={helix}
+          className="hidden lg:block absolute left-10 top-16 w-20 xl:w-24 z-0 opacity-90"
+          rotate={-18}
+        />
+        <FloatingIllustration
+          src={dnaStrand}
+          className="hidden lg:block absolute left-4 bottom-10 w-28 xl:w-32 z-0 opacity-95"
+          rotate={-8}
+          variant="drift"
+        />
+        <FloatingIllustration
+          src={testTube}
+          className="hidden lg:block absolute right-32 bottom-6 w-16 xl:w-20 z-0 opacity-90"
+          rotate={14}
+        />
 
-            {/* Illustrations — right cluster, intentionally off-balance */}
-            <div className="hidden lg:block lg:col-span-5 relative h-[420px]">
-              <FloatingIllustration
-                src={microscope}
-                className="absolute right-2 top-0 w-56 xl:w-64 z-0"
-                rotate={8}
-                variant="drift"
-              />
-              <FloatingIllustration
-                src={dnaStrand}
-                className="absolute left-4 bottom-4 w-32 xl:w-40 z-0"
-                rotate={-14}
-              />
-              <FloatingIllustration
-                src={testTube}
-                className="absolute right-24 bottom-0 w-20 xl:w-24 z-0"
-                rotate={12}
-                variant="drift"
-              />
+        <div className="mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-10 pt-8 md:pt-12 pb-14 md:pb-20 relative">
+          <div className="relative z-10 text-center max-w-3xl mx-auto">
+            <div className="font-display text-sm md:text-base mb-4">
+              A confident clinical decision
+            </div>
+            <h1 className="display-xl uppercase">
+              Genetic testing
+              <br />
+              decisions <span className="hl">without</span>
+              <br />
+              the <span className="hl">guesswork</span>
+            </h1>
+            <p className="mt-5 max-w-xl mx-auto text-sm md:text-base leading-relaxed">
+              GeneScope pairs every result with plain-language context, calibrated
+              probabilities, and feature attribution — so clinicians decide with clarity.
+            </p>
+            <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
+              <Link to="/predict" className="pill pill-coral">
+                Start a prediction
+              </Link>
+              <Link to="/dashboard" className="pill pill-cream">
+                View the dashboard
+              </Link>
             </div>
           </div>
         </div>
