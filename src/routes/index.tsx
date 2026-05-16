@@ -43,6 +43,7 @@ function Home() {
 
         <div className="mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-10 pt-8 md:pt-12 pb-14 md:pb-20 relative">
           <div className="relative z-10 text-center max-w-3xl mx-auto">
+            <img src={helixCheck} alt="" className="mx-auto w-20 md:w-24 object-contain mb-4" />
             <div className="font-display text-sm md:text-base mb-4">
               A confident clinical decision
             </div>
