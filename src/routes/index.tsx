@@ -262,14 +262,14 @@ function Home() {
       <section className="slab-cream relative overflow-hidden">
         <FloatingIllustration
           src={petriDish}
-          className="hidden lg:block absolute left-4 top-24 w-24 z-0 opacity-90"
-          rotate={-12}
+          className="hidden 2xl:block absolute left-2 top-32 w-20 z-0 opacity-80"
+          rotate={-18}
           variant="drift"
         />
         <FloatingIllustration
           src={pillCap}
-          className="hidden lg:block absolute right-8 bottom-40 w-20 z-0 opacity-90"
-          rotate={18}
+          className="hidden 2xl:block absolute right-4 bottom-24 w-16 z-0 opacity-75"
+          rotate={24}
         />
         <div className="mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-10 pb-32 relative">
           <div className="grid lg:grid-cols-[1fr_1.3fr] gap-12 lg:gap-20 items-start">
