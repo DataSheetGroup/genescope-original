@@ -67,10 +67,6 @@ function HistoryPage() {
           </div>
           <img src={clipboard} alt="" className="hidden md:block w-24 lg:w-28 shrink-0 object-contain -mt-2" />
         </div>
-        <div className="mt-5 inline-flex items-center gap-2 rounded-full bg-cream text-card-foreground px-4 py-2 text-xs font-semibold">
-          <Lock className="h-3.5 w-3.5" />
-          No personally identifiable information stored. RA 10173 compliant.
-        </div>
       </div>
 
       <div className="rounded-3xl bg-card text-card-foreground overflow-hidden">
