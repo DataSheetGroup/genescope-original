@@ -4,12 +4,10 @@ import { Check } from "lucide-react";
 import { getFeatureImportance, getMetrics, type ModelMetrics } from "@/lib/api";
 import { BackendOfflineNotice } from "@/components/BackendOfflineNotice";
 import { ChartCard } from "@/components/ChartCard";
-import heartPulse from "@/assets/illustrations/heart-pulse.png";
 import chromosome from "@/assets/illustrations/chromosome.png";
 import labFlask from "@/assets/illustrations/lab-flask.png";
 import clipboard from "@/assets/illustrations/clipboard.png";
 import dnaStrand from "@/assets/illustrations/dna-strand.png";
-import helixCheck from "@/assets/illustrations/helix-check.png";
 import {
   Bar, BarChart, CartesianGrid, Cell, Legend, Line, LineChart,
   ResponsiveContainer, Tooltip, XAxis, YAxis,
@@ -174,7 +172,6 @@ function PerformancePage() {
               Comparative evaluation of Binary Logistic Regression, Decision Tree, and Random Forest.
             </p>
           </div>
-          <img src={helixCheck} alt="" className="hidden md:block w-24 lg:w-28 shrink-0 object-contain -mt-2" />
         </div>
       </div>
 

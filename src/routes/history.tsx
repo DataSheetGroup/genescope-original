@@ -5,7 +5,6 @@ import { useHistory, type HistoryItem } from "@/hooks/useHistory";
 import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from "@/components/ui/select";
-import clipboard from "@/assets/illustrations/clipboard.png";
 import pillCap from "@/assets/illustrations/pill-capsule.png";
 import magnifier from "@/assets/illustrations/magnifier-strand.png";
 import chromosome from "@/assets/illustrations/chromosome.png";
@@ -68,7 +67,6 @@ function HistoryPage() {
               <span className="text-coral">accountable.</span>
             </h1>
           </div>
-          <img src={clipboard} alt="" className="hidden md:block w-24 lg:w-28 shrink-0 object-contain -mt-2" />
         </div>
       </div>
 
