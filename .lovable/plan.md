@@ -1,46 +1,89 @@
-## Fixes to apply
+# Plan: Illustration library expansion + typography softening + Predict redesign
 
-**1. Remove top confidentiality bar**
-- Remove `<ConfidentialityBanner />` from `src/routes/__root.tsx`. Keep the file but unused (or delete).
+## 1. Expand illustration library (same sticker style)
 
-**2. Wordmark — drop the decorative dots**
-- In `src/components/Navbar.tsx` `Wordmark`, render plain `GENESCOPE` (no `••` overlays). Same treatment anywhere else dots appear.
+Generate 8 new PNGs in `src/assets/illustrations/` with the established style: bold deep-green outlines, flat cream/coral/teal fills, cartoon sticker look, transparent background.
 
-**3. Bolder cartoonish display font**
-- Swap `Bowlby One SC` → **Titan One** (chunkier, rounder cartoon feel) in `src/styles.css` `@import` + `--font-display`.
-- Bump `.display-xl/lg/md` weights/tracking slightly for chunkier feel.
-- Apply display font to nav links + tab section headings (currently uppercase Inter) so all section titles share the cartoon style.
+New assets:
+- `dna-strand.png` — vertical DNA helix
+- `test-tube.png` — labeled test tube with bubbles
+- `clipboard.png` — clipboard with checklist
+- `pill-capsule.png` — two-tone capsule
+- `heart-pulse.png` — heart with EKG line
+- `lab-flask.png` — round-bottom flask
+- `chromosome.png` — X chromosome doodle
+- `petri-dish.png` — petri dish top view
 
-**4. Fix pink highlight overlap**
-- Current `.hl` uses `box-decoration-break: clone` with vertical padding that stacks per-line and overlaps with `line-height`.
-- Rewrite using `display: inline` + `padding: 0.05em 0.25em`, `line-height: 1.15` on parent headings that use `.hl`, and add a small `margin-right` so consecutive highlighted words don't collide. Also remove negative letter-spacing on highlighted runs.
-- Audit `index.tsx` usages — wrap only short phrases, not entire multi-line headings.
+Keep existing 4 (`helix-doodle`, `microscope-doodle`, `magnifier-strand`, `helix-check`).
 
-**5. Navigation hover style**
-- Remove the coral underline bar (`after:` pseudo) in `NavLink`.
-- Replace with a simple pill hover: on hover/active, link gets a cream rounded-full background with green text. No animation slide. No underline.
+## 2. Fix hero collisions
 
-**6. Footer giant wordmark too big / overflowing**
-- Reduce `clamp(4rem, 22vw, 22rem)` → `clamp(3rem, 14vw, 12rem)`.
-- Add `overflow-hidden` and `px-6` padding container; ensure no horizontal scroll on 634px viewport.
+`src/routes/index.tsx` hero:
+- Move floating illustrations OUT of the headline text bounds: confine them to corner zones (`top-4 right-4`, `bottom-8 left-4`) with `max-w-[110px]` on mobile, hidden under `sm`.
+- Add `z-0` to illustrations, `z-10` to text content, and `pointer-events-none`.
+- Add right-side padding reservation on the headline container (`pr-0 md:pr-40 lg:pr-56`) so text never sits beneath an illustration.
+- Apply same pattern to `predict.tsx`, `dashboard.tsx`, `about.tsx`, `performance.tsx`, `history.tsx` — illustrations only in margins/corners, never overlapping a text column.
 
-**7. Illustrations look bad / uncolored**
-- Regenerate the 4 PNGs in `src/assets/illustrations/` with explicit color instructions: cream/coral/teal flat fills with bold deep-green outlines (cartoon sticker look), transparent background, premium quality.
-  - `helix-doodle.png`, `microscope-doodle.png`, `magnifier-strand.png`, `helix-check.png`
-- Slightly increase displayed size and reduce float amplitude so they read as illustrations, not floaters.
+Sprinkle 2–4 new illustrations per page in safe corner/margin zones for visual richness.
 
-**8. Layout pass on all sections**
-- Home (`index.tsx`): verify section paddings (`py-20 md:py-28`), max-width `1200px`, consistent gutter `px-6 lg:px-10`. Fix any overflowing highlight headings by allowing wrap.
-- Predict / Dashboard / Performance / History / About: same gutter + section header treatment using the new display font; ensure cards don't bleed on mobile (634px viewport).
-- `SectionHeader`: use `font-display` for eyebrow too (smaller, coral).
+## 3. Rounder, fluffier fonts
 
-**Files touched**
-- `src/routes/__root.tsx` (remove banner)
-- `src/components/Navbar.tsx` (wordmark, hover)
-- `src/components/Footer.tsx` (wordmark size)
-- `src/components/SectionHeader.tsx`
-- `src/styles.css` (font swap, `.hl` rewrite, hover pill utility)
-- `src/routes/index.tsx`, `about.tsx`, `dashboard.tsx`, `predict.tsx`, `performance.tsx`, `history.tsx` (layout audit, headings)
-- `src/assets/illustrations/*.png` (regenerate, premium, colored)
+`src/styles.css`:
+- Swap body font from **Inter** → **Nunito** (rounded humanist sans, weights 400/600/700/800) via Google Fonts import.
+- Keep **Titan One** for display.
+- Bump base body weight from 400 → 500 for a softer, plumper feel.
+- Increase border-radius scale: `--radius` from `0.875rem` → `1.25rem` so all cards/inputs feel rounder.
 
-No backend / api / hook changes.
+## 4. Predict page redesign (clarity + symmetry)
+
+Current issues: asymmetric `1fr_1.1fr` grid, dense form, result stack feels random.
+
+New layout (`src/routes/predict.tsx`):
+
+```text
+┌─────────────────────────────────────────────────┐
+│  Centered hero: eyebrow + headline + subtitle   │
+└─────────────────────────────────────────────────┘
+┌──────────────────────┬──────────────────────────┐
+│  STEP 1 — Inputs     │  STEP 2 — Result         │
+│  (cream card)        │  (cream card)            │
+│                      │                          │
+│  6 fields in 2×3     │  Big prediction label    │
+│  symmetric grid      │  Confidence ring center  │
+│                      │  Probability bar         │
+│  [Generate] [Reset]  │  [Save] [New]            │
+└──────────────────────┴──────────────────────────┘
+┌─────────────────────────────────────────────────┐
+│  STEP 3 — What this means (full-width card)     │
+│  Definition + examples in 2-column layout       │
+└─────────────────────────────────────────────────┘
+┌─────────────────────────────────────────────────┐
+│  STEP 4 — Indicator influence (full-width)      │
+│  Horizontal bar chart, centered, max-w-3xl      │
+└─────────────────────────────────────────────────┘
+```
+
+Key changes:
+- Symmetric `lg:grid-cols-2` (equal columns) for the input/result row.
+- Numbered "STEP 1/2/3/4" eyebrows on each card for guided flow.
+- Empty-state for result panel shows a friendly illustration + "Fill the form to see your result" — never blank.
+- Form: 2-column grid on desktop, 1-column on mobile, consistent field height (`h-12`), labels above with optional helper text below.
+- Move definition + indicator influence BELOW the fold as full-width sections (so result + form stay aligned at top).
+- Add 1 illustration in each empty corner.
+
+## 5. Other pages — light symmetry pass
+
+- `dashboard.tsx`, `performance.tsx`: ensure chart cards use uniform `grid-cols-1 md:grid-cols-2` with equal gaps.
+- `history.tsx`: card grid `md:grid-cols-2 lg:grid-cols-3` symmetric.
+- `about.tsx`: ensure content max-width and section padding match other pages.
+
+## Files touched
+
+- New: 8 illustration PNGs in `src/assets/illustrations/`
+- Edit: `src/styles.css` (fonts, radius)
+- Edit: `src/routes/index.tsx` (hero collision fix + more illustrations)
+- Edit: `src/routes/predict.tsx` (full redesign)
+- Edit: `src/routes/dashboard.tsx`, `performance.tsx`, `history.tsx`, `about.tsx` (illustrations + symmetry)
+- Edit: `src/components/FloatingIllustration.tsx` (add safer positioning defaults if needed)
+
+No backend, no API, no hook changes.
