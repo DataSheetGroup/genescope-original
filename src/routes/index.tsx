@@ -3,8 +3,6 @@ import { useQuery } from "@tanstack/react-query";
 import { ArrowRight, ArrowDown } from "lucide-react";
 import { getEdaData } from "@/lib/api";
 import { FloatingIllustration } from "@/components/FloatingIllustration";
-import helix from "@/assets/illustrations/helix-doodle.png";
-import microscope from "@/assets/illustrations/microscope-doodle.png";
 import magnifier from "@/assets/illustrations/magnifier-strand.png";
 import helixCheck from "@/assets/illustrations/helix-check.png";
 import dnaStrand from "@/assets/illustrations/dna-strand.png";
