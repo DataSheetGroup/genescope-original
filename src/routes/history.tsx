@@ -59,10 +59,6 @@ function HistoryPage() {
   return (
     <div className="relative overflow-hidden">
       <div className="relative mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-10 py-16 z-10">
-        {/* History stickers — records / audit themed, gutter-only */}
-        <FloatingIllustration src={magnifier} className="hidden 2xl:block absolute -left-20 top-24 w-24 opacity-90 z-0" rotate={-14} variant="drift" />
-        <FloatingIllustration src={pillCap} className="hidden 2xl:block absolute -right-16 top-32 w-20 opacity-90 z-0" rotate={18} />
-        <FloatingIllustration src={chromosome} className="hidden 2xl:block absolute -left-16 bottom-32 w-20 opacity-90 z-0" rotate={-22} />
       <div className="mb-10 max-w-3xl">
         <div className="flex items-start gap-6">
           <div className="flex-1">
