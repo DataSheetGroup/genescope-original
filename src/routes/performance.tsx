@@ -162,14 +162,10 @@ function PerformancePage() {
   return (
     <div className="relative overflow-hidden">
       <div className="relative mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-10 py-16 space-y-14 z-10">
-        {/* Stickers sit in the outer gutter of the centered container — only at 2xl+ where real gutter exists */}
-        <FloatingIllustration src={heartPulse} className="hidden 2xl:block absolute -left-16 top-24 w-20 opacity-90 z-0" rotate={-14} />
-        <FloatingIllustration src={chromosome} className="hidden 2xl:block absolute -right-20 top-[30%] w-24 opacity-90 z-0" rotate={18} variant="drift" />
-        <FloatingIllustration src={labFlask} className="hidden 2xl:block absolute -left-20 top-[55%] w-24 opacity-90 z-0" rotate={-8} variant="drift" />
-        <FloatingIllustration src={clipboard} className="hidden 2xl:block absolute -right-16 top-[75%] w-20 opacity-90 z-0" rotate={12} />
-        <FloatingIllustration src={helixCheck} className="hidden 2xl:block absolute -left-16 bottom-32 w-20 opacity-90 z-0" rotate={8} variant="drift" />
       <div className="max-w-3xl">
-        <div className="eyebrow text-coral mb-4">Evaluation</div>
+        <div className="flex items-start gap-6">
+          <div className="flex-1">
+            <div className="eyebrow text-coral mb-4">Evaluation</div>
         <h1 className="display-lg">
           Three models,
           <br />
