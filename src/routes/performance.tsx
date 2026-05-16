@@ -4,6 +4,10 @@ import { Check } from "lucide-react";
 import { getFeatureImportance, getMetrics, type ModelMetrics } from "@/lib/api";
 import { BackendOfflineNotice } from "@/components/BackendOfflineNotice";
 import { ChartCard } from "@/components/ChartCard";
+import { FloatingIllustration } from "@/components/FloatingIllustration";
+import heartPulse from "@/assets/illustrations/heart-pulse.png";
+import chromosome from "@/assets/illustrations/chromosome.png";
+import labFlask from "@/assets/illustrations/lab-flask.png";
 import {
   Bar, BarChart, CartesianGrid, Cell, Legend, Line, LineChart,
   ResponsiveContainer, Tooltip, XAxis, YAxis,
@@ -153,7 +157,11 @@ function PerformancePage() {
   const colors = ["var(--coral)", "var(--green-deep)", "var(--teal-soft)"];
 
   return (
-    <div className="mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-10 py-16 animate-fade-up space-y-14">
+    <div className="relative overflow-hidden">
+      <FloatingIllustration src={heartPulse} className="hidden xl:block absolute right-6 top-24 w-24 opacity-90 z-0" rotate={10} />
+      <FloatingIllustration src={chromosome} className="hidden xl:block absolute left-6 top-1/3 w-20 opacity-90 z-0" rotate={-12} variant="drift" />
+      <FloatingIllustration src={labFlask} className="hidden xl:block absolute right-8 bottom-24 w-24 opacity-90 z-0" rotate={6} />
+      <div className="relative mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-10 py-16 animate-fade-up space-y-14">
       <div className="max-w-3xl">
         <div className="eyebrow text-coral mb-4">Evaluation</div>
         <h1 className="display-lg">

@@ -5,6 +5,9 @@ import { useHistory, type HistoryItem } from "@/hooks/useHistory";
 import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from "@/components/ui/select";
+import { FloatingIllustration } from "@/components/FloatingIllustration";
+import clipboard from "@/assets/illustrations/clipboard.png";
+import pillCap from "@/assets/illustrations/pill-capsule.png";
 
 export const Route = createFileRoute("/history")({
   head: () => ({
@@ -52,7 +55,10 @@ function HistoryPage() {
   const pillSelect = "rounded-full bg-cream text-card-foreground border-0 h-10 px-5";
 
   return (
-    <div className="mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-10 py-16 animate-fade-up">
+    <div className="relative overflow-hidden">
+      <FloatingIllustration src={clipboard} className="hidden xl:block absolute right-6 top-20 w-24 opacity-90 z-0" rotate={10} />
+      <FloatingIllustration src={pillCap} className="hidden xl:block absolute left-6 top-40 w-24 opacity-90 z-0" rotate={-8} variant="drift" />
+      <div className="relative mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-10 py-16 animate-fade-up">
       <div className="mb-10 max-w-3xl">
         <div className="eyebrow text-coral mb-4">Audit log</div>
         <h1 className="display-lg">
