@@ -165,6 +165,7 @@ function HistoryPage() {
           </table>
         </div>
       </div>
+      </div>
     </div>
   );
 }

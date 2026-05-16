@@ -334,6 +334,7 @@ function PerformancePage() {
           </ul>
         </div>
       </div>
+      </div>
     </div>
   );
 }
