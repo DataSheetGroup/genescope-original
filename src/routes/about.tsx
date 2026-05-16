@@ -4,6 +4,10 @@ import { FloatingIllustration } from "@/components/FloatingIllustration";
 import helix from "@/assets/illustrations/helix-doodle.png";
 import heartPulse from "@/assets/illustrations/heart-pulse.png";
 import clipboard from "@/assets/illustrations/clipboard.png";
+import testTube from "@/assets/illustrations/test-tube.png";
+import petriDish from "@/assets/illustrations/petri-dish.png";
+import magnifier from "@/assets/illustrations/magnifier-strand.png";
+import pillCap from "@/assets/illustrations/pill-capsule.png";
 
 export const Route = createFileRoute("/about")({
   head: () => ({
