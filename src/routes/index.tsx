@@ -259,60 +259,82 @@ function Home() {
       </section>
 
       {/* ───────────── HIGHLIGHTS / STATS (cream) ───────────── */}
-      <section className="slab-cream relative">
+      <section className="slab-cream relative overflow-hidden">
         <FloatingIllustration
           src={petriDish}
-          className="hidden lg:block absolute left-6 top-10 w-24 z-0"
-          rotate={-8}
+          className="hidden lg:block absolute left-4 top-24 w-24 z-0 opacity-90"
+          rotate={-12}
           variant="drift"
         />
         <FloatingIllustration
           src={pillCap}
-          className="hidden lg:block absolute right-6 top-16 w-24 z-0"
-          rotate={12}
+          className="hidden lg:block absolute right-8 bottom-40 w-20 z-0 opacity-90"
+          rotate={18}
         />
         <div className="mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-10 pb-32 relative">
-          <div className="text-center mb-14">
-            <div className="font-display text-base md:text-lg" style={{ color: "var(--green-deep)" }}>
-              The dataset behind the model
-            </div>
-            <h2 className="display-lg uppercase mt-6">
-              Our <span className="hl">highlights</span>
-              <br /> of the moment
-            </h2>
-          </div>
-
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
-            {[
-              { v: totalRecords, l: "Patient records" },
-              { v: "2021–25", l: "Years covered" },
-              { v: "3", l: "Models compared" },
-              { v: "6", l: "Indicators" },
-            ].map((s, i) => (
-              <div
-                key={i}
-                className="rounded-[2rem] bg-white shadow-[0_10px_40px_-20px_rgba(15,61,46,0.25)] p-8 text-center"
+          <div className="grid lg:grid-cols-[1fr_1.3fr] gap-12 lg:gap-20 items-start">
+            {/* Left intro */}
+            <div className="lg:sticky lg:top-28">
+              <div className="font-display text-base md:text-lg" style={{ color: "var(--green-deep)" }}>
+                The dataset behind the model
+              </div>
+              <h2 className="display-lg uppercase mt-5 leading-[0.95]">
+                Our <span className="hl">highlights</span>
+                <br />of the moment
+              </h2>
+              <p className="mt-6 text-sm md:text-base max-w-md leading-relaxed" style={{ color: "var(--green-deep)" }}>
+                A snapshot of what powers every GeneScope prediction — the data, the
+                models, and the indicators behind each calibrated probability.
+              </p>
+              <Link
+                to="/dashboard"
+                className="mt-8 inline-flex items-center gap-3 rounded-full bg-green-deep text-cream px-6 py-3 font-display text-sm"
               >
-                <div className="font-display text-5xl md:text-6xl tabular-nums" style={{ color: "var(--green-deep)" }}>
-                  {s.v}
+                <span>Explore the dashboard</span>
+                <span className="h-9 w-9 rounded-full bg-coral flex items-center justify-center" style={{ color: "var(--green-deep)" }}>
+                  <ArrowDown className="h-4 w-4 -rotate-90" />
+                </span>
+              </Link>
+            </div>
+
+            {/* Right asymmetric stat grid */}
+            <div className="grid grid-cols-6 gap-4 md:gap-5">
+              {/* Big record card */}
+              <div className="col-span-6 md:col-span-4 rounded-[2rem] bg-green-deep text-cream p-8 md:p-10 relative overflow-hidden">
+                <div className="text-xs font-display uppercase tracking-widest text-cream/70">01 — Records</div>
+                <div className="font-display text-6xl md:text-7xl lg:text-8xl tabular-nums mt-3 leading-none">
+                  {totalRecords}
                 </div>
-                <div className="mt-3 text-sm font-semibold" style={{ color: "var(--green-deep)" }}>
-                  {s.l}
+                <div className="mt-3 text-sm md:text-base text-cream/85 max-w-xs">
+                  De-identified Philippine patient records powering the locally-trained model.
                 </div>
               </div>
-            ))}
-          </div>
 
-          <div className="mt-14 flex justify-center">
-            <Link
-              to="/dashboard"
-              className="inline-flex items-center gap-3 rounded-full bg-green-deep text-cream px-6 py-3 font-display text-sm"
-            >
-              <span>So this project — let's talk?</span>
-              <span className="h-9 w-9 rounded-full bg-coral flex items-center justify-center" style={{ color: "var(--green-deep)" }}>
-                <ArrowDown className="h-4 w-4" />
-              </span>
-            </Link>
+              {/* Years */}
+              <div className="col-span-3 md:col-span-2 rounded-[2rem] bg-coral p-6 md:p-7 md:translate-y-6" style={{ color: "var(--green-deep)" }}>
+                <div className="text-xs font-display uppercase tracking-widest opacity-70">02 — Coverage</div>
+                <div className="font-display text-4xl md:text-5xl tabular-nums mt-3 leading-none">2021–25</div>
+                <div className="mt-3 text-xs md:text-sm font-semibold">Years covered</div>
+              </div>
+
+              {/* Models */}
+              <div className="col-span-3 md:col-span-2 rounded-[2rem] bg-white shadow-[0_10px_40px_-20px_rgba(15,61,46,0.25)] p-6 md:p-7" style={{ color: "var(--green-deep)" }}>
+                <div className="text-xs font-display uppercase tracking-widest opacity-70">03 — Benchmarks</div>
+                <div className="font-display text-4xl md:text-5xl tabular-nums mt-3 leading-none">3</div>
+                <div className="mt-3 text-xs md:text-sm font-semibold">Models compared</div>
+              </div>
+
+              {/* Indicators */}
+              <div className="col-span-3 md:col-span-4 rounded-[2rem] bg-white shadow-[0_10px_40px_-20px_rgba(15,61,46,0.25)] p-6 md:p-8 md:-translate-y-2 flex items-center gap-5" style={{ color: "var(--green-deep)" }}>
+                <div className="font-display text-5xl md:text-6xl tabular-nums leading-none">6</div>
+                <div>
+                  <div className="text-xs font-display uppercase tracking-widest opacity-70">04 — Inputs</div>
+                  <div className="mt-1 text-sm md:text-base font-semibold leading-snug">
+                    Structured clinical indicators per prediction
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
