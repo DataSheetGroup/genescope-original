@@ -12,7 +12,7 @@ import pillCap from "@/assets/illustrations/pill-capsule.png";
 export const Route = createFileRoute("/about")({
   head: () => ({
     meta: [
-      { title: "About — GeneScope" },
+      { title: "GeneScope" },
       { name: "description", content: "Research information and compliance for the GeneScope thesis project." },
     ],
   }),

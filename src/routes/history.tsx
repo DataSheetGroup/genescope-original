@@ -14,7 +14,7 @@ import chromosome from "@/assets/illustrations/chromosome.png";
 export const Route = createFileRoute("/history")({
   head: () => ({
     meta: [
-      { title: "History — GeneScope" },
+      { title: "GeneScope" },
       { name: "description", content: "Locally-stored prediction audit log. No PII." },
     ],
   }),

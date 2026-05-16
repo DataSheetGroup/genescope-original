@@ -17,7 +17,7 @@ import {
 export const Route = createFileRoute("/dashboard")({
   head: () => ({
     meta: [
-      { title: "Dashboard — GeneScope" },
+      { title: "GeneScope" },
       { name: "description", content: "Exploratory data analysis on anonymized 2021–2025 patient records." },
     ],
   }),
