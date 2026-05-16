@@ -1,32 +1,23 @@
-## Goals
-1. Make every illustration match the quality of the helix/microscope used in "Stay up to date" and "And your case?" cards (no cropping/trimming, generous padding, full sticker look).
-2. Stop illustrations from overlapping text on every page (especially history).
-3. Break the symmetry of the hero — both layout and illustration placement — and shrink content so it fits the initial viewport.
+## 1. Hero section — restore previous layout, fit viewport, asymmetric
 
-## 1. Regenerate illustrations (consistent style)
+Revert `src/routes/index.tsx` hero from the 2-column asymmetric grid back to the **previous centered single-column layout** (eyebrow, headline, paragraph, CTA pills all centered), but:
 
-Re-render all 8 newer assets with a unified prompt so they look like the "helix-doodle / microscope-doodle" reference:
-- Same bold deep-green outline (#0F3D2E), flat cream/coral/teal fills, transparent PNG.
-- 1024x1024, subject centered, generous ~15% padding on all sides (prevents the "cut/trimmed" look).
-- Friendly cartoon sticker, slightly thicker outline, soft rounded corners.
+- Keep it sized so the entire hero fits in ~600px tall viewport: `pt-8 md:pt-12 pb-14 md:pb-20`, no `min-h-[78vh]`.
+- Keep `display-xl` clamp small: `clamp(2rem, 5.5vw, 4.5rem)`.
+- Trim paragraph `mt-5`, CTAs `mt-6`.
+- Re-add the **floating illustrations around the centered text** but in **asymmetric, non-mirrored placements** (different sizes, rotations, vertical offsets — NOT 4 mirrored corners). Example: microscope top-right large, dna-strand mid-left small lower, test-tube bottom-right tiny, helix top-left tiny higher. All `hidden lg:block` with `z-0` behind text container.
 
-Files to regenerate (same paths, overwrite):
+## 2. Regenerate all non-matching illustrations to match microscope/helix style
+
+The "reference" look = `microscope-doodle.png` and `helix-doodle.png`: clean cartoon sticker with a **thick white outline trim** (sticker border) around a flat-color illustration, transparent background, generous padding, no cropping.
+
+Regenerate these 8 with one unified prompt emphasizing the **white sticker outline** + matching palette + thick outer trim + transparent bg + 15% padding:
+
 `dna-strand.png`, `test-tube.png`, `clipboard.png`, `pill-capsule.png`, `heart-pulse.png`, `lab-flask.png`, `chromosome.png`, `petri-dish.png`.
 
-## 2. Fix collisions
+Unified prompt: "Flat cartoon sticker illustration of a {subject}, thick white sticker outline border around the entire shape (die-cut sticker look), deep green inner linework (#0F3D2E), flat cream / coral / teal fills matching the GeneScope palette, friendly rounded shapes, centered with ~15% padding on all sides, transparent background, 1024x1024, consistent style with microscope and DNA helix reference."
 
-- **history.tsx**: remove the two floating illustrations on top of the heading/table; move them OUT of overlap. Put one tucked bottom-right of the page (below the table), one as a small inline mark inside the heading block — not absolutely positioned over content. Keep both `hidden lg:block` so mobile is clean.
-- **Audit other pages** (`about.tsx`, `dashboard.tsx`, `performance.tsx`, `predict.tsx`, `index.tsx`) for any FloatingIllustration whose absolute position lands over a text container; nudge each into true safe-zones (outside max-w-3xl content column, or only on xl+ screens with `opacity-90 z-0` and confirmed clearance).
-
-## 3. Hero asymmetry + viewport fit (`src/routes/index.tsx`)
-
-Current hero: text dead-center, illustrations mirrored left/right top + left/right bottom, `min-h-[78vh]` plus large `display-xl` clamp → overflow on 634px viewport.
-
-Changes:
-- **Layout**: switch from centered single column to an asymmetric 2-column grid on `lg+`: headline + CTAs left-aligned (cols 1-7), a single illustration cluster offset to the right (cols 8-12). On mobile, single column, left-aligned.
-- **Illustration placement (asymmetric)**: keep only 2 illustrations in the hero, both on the right side at different sizes/rotations (e.g. large microscope upper-right, smaller dna-strand lower-right offset inward). Remove the 4-corner mirrored setup.
-- **Fit initial viewport**: drop `min-h-[78vh]`, tighten paddings (`pt-8 md:pt-14 pb-16 md:pb-24`), shrink `display-xl` clamp to `clamp(2rem, 6vw, 4.75rem)`, reduce body paragraph max-width and margin-top, and reduce CTA top margin. Goal: full hero (eyebrow, headline, paragraph, CTAs) visible within ~600px tall viewport without scroll.
-- Headline copy stays the same; alignment becomes left (not center) to support the asymmetric grid.
+Also leave `helix-check.png` and `magnifier-strand.png` as-is (already match).
 
 ## Out of scope
-No backend, routing, data, or component-API changes. Pure visual + asset work.
+No routing, data, component-API, or other-page changes. Pure hero layout + asset regeneration.
