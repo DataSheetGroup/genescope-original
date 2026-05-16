@@ -139,11 +139,6 @@ function Home() {
               <Link to="/predict" className="mt-10 pill pill-coral inline-flex">
                 Discover the concept
               </Link>
-              <FloatingIllustration
-                src={labFlask}
-                className="hidden xl:block absolute -left-24 bottom-0 w-28 opacity-85"
-                rotate={-14}
-              />
             </div>
 
             <ol className="space-y-7">
