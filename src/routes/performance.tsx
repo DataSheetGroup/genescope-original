@@ -198,7 +198,7 @@ function PerformancePage() {
       <div className="rounded-3xl bg-card text-card-foreground overflow-hidden">
         <div className="px-7 py-5 border-b border-card-foreground/10">
           <div className="eyebrow text-coral mb-1">Comparison</div>
-          <h2 className="font-display text-2xl">All five metrics, side by side</h2>
+          <h2 className="font-display text-2xl">All five metrics, side by <span className="hl">side</span></h2>
         </div>
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
