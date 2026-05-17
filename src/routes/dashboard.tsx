@@ -91,7 +91,7 @@ function Card({ children, className = "" }: { children: ReactNode; className?: s
 
 function StatCard({
   icon, label, value, sub,
-}: { icon: string; label: string; value: ReactNode; sub?: ReactNode }) {
+}: { icon: StickerName; label: string; value: ReactNode; sub?: ReactNode }) {
   return (
     <Card className="p-7 h-full">
       <div className="flex items-start justify-between gap-4">
@@ -140,12 +140,12 @@ function Skeleton() {
 
 // ─────────────────────────── tabs
 type TabKey = "overview" | "geographic" | "demographic" | "institutional" | "temporal";
-const TABS: { key: TabKey; label: string; icon: string }[] = [
-  { key: "overview",      label: "Overview",      icon: "bar-chart" },
-  { key: "geographic",    label: "Geographic",    icon: "world-map" },
-  { key: "demographic",   label: "Demographic",   icon: "bust-in-silhouette" },
-  { key: "institutional", label: "Institutional", icon: "hospital" },
-  { key: "temporal",      label: "Temporal",      icon: "chart-increasing" },
+const TABS: { key: TabKey; label: string; icon: StickerName }[] = [
+  { key: "overview",      label: "Overview",      icon: "microscope" },
+  { key: "geographic",    label: "Geographic",    icon: "potion-blue" },
+  { key: "demographic",   label: "Demographic",   icon: "molecule" },
+  { key: "institutional", label: "Institutional", icon: "goggles" },
+  { key: "temporal",      label: "Temporal",      icon: "dropper" },
 ];
 
 function TabBar({ value, onChange }: { value: TabKey; onChange: (k: TabKey) => void }) {
