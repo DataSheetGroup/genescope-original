@@ -131,6 +131,26 @@ export function PhilippinesMap({
     return () => clearInterval(id);
   }, [playing, years]);
 
+  // Native Fullscreen API
+  const toggleFs = () => {
+    const el = wrapRef.current;
+    if (!el) return;
+    if (!document.fullscreenElement) {
+      el.requestFullscreen?.().catch(() => {});
+    } else {
+      document.exitFullscreen?.().catch(() => {});
+    }
+  };
+  useEffect(() => {
+    const onChange = () => {
+      const fs = !!document.fullscreenElement;
+      setFullscreen(fs);
+      setTimeout(() => mapRef.current?.invalidateSize?.(), 120);
+    };
+    document.addEventListener("fullscreenchange", onChange);
+    return () => document.removeEventListener("fullscreenchange", onChange);
+  }, []);
+
   // Keyboard shortcuts
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -138,9 +158,8 @@ export function PhilippinesMap({
       if (e.key === "1") setMode("bubbles");
       else if (e.key === "2") setMode("choropleth");
       else if (e.key === "3") setMode("heat");
-      else if (e.key === "f" || e.key === "F") setFullscreen((f) => !f);
+      else if (e.key === "f" || e.key === "F") toggleFs();
       else if (e.key === "r" || e.key === "R") { setSelected(null); mapRef.current?.flyTo([12.5, 122.5], 6, { duration: 0.7 }); }
-      else if (e.key === "Escape") setFullscreen(false);
       else if (e.key === "ArrowLeft" || e.key === "ArrowRight") {
         const all = ["all", ...years];
         const idx = all.indexOf(year);
