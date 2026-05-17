@@ -6,8 +6,9 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
-  --font-sans: "Fredoka", ui-sans-serif, system-ui, sans-serif;
-  --font-display: "Bagel Fat One", "Fredoka", system-ui, sans-serif;
+  --font-sans: "Poppins", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Anton", "Poppins", system-ui, sans-serif;
+  --font-brand: "Bagel Fat One", "Fredoka", system-ui, sans-serif;
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
@@ -134,20 +135,21 @@
 @layer base {
   * { border-color: var(--color-border); }
   html, body, button, input, select, textarea, label, a, p, span, div, li, td, th, small {
-    font-family: "Fredoka", ui-sans-serif, system-ui, sans-serif;
+    font-family: "Poppins", ui-sans-serif, system-ui, sans-serif;
   }
   body {
     background-color: var(--color-background);
     color: var(--color-foreground);
-    font-weight: 600;
+    font-weight: 500;
     letter-spacing: -0.005em;
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
   }
   h1, h2, h3, h4, h5, h6 {
-    font-family: "Bagel Fat One", "Fredoka", system-ui, sans-serif;
+    font-family: "Anton", "Poppins", system-ui, sans-serif;
     font-weight: 400;
-    letter-spacing: 0;
+    letter-spacing: 0.005em;
+    text-transform: uppercase;
   }
   ::selection { background: var(--coral); color: var(--green-deep); }
 }
@@ -156,29 +158,40 @@
 .font-display {
   font-family: var(--font-display);
   font-weight: 400;
-  letter-spacing: -0.01em;
+  letter-spacing: 0.005em;
+  line-height: 1;
+  text-transform: uppercase;
+}
+.font-brand {
+  font-family: var(--font-brand);
+  font-weight: 400;
+  letter-spacing: 0;
+  text-transform: none;
   line-height: 0.95;
 }
 
 .display-xl {
   font-family: var(--font-display);
   font-weight: 400;
-  font-size: clamp(1.85rem, 5.5vw, 4.5rem);
+  font-size: clamp(2.25rem, 6.5vw, 5.25rem);
   line-height: 0.95;
-  letter-spacing: -0.02em;
+  letter-spacing: 0.005em;
+  text-transform: uppercase;
 }
 .display-lg {
   font-family: var(--font-display);
   font-weight: 400;
-  font-size: clamp(2rem, 5.5vw, 4rem);
+  font-size: clamp(2.5rem, 6vw, 4.5rem);
   line-height: 1;
-  letter-spacing: -0.01em;
+  letter-spacing: 0.005em;
+  text-transform: uppercase;
 }
 .display-md {
   font-family: var(--font-display);
   font-weight: 400;
-  font-size: clamp(1.5rem, 3.5vw, 2.5rem);
+  font-size: clamp(1.75rem, 3.8vw, 2.75rem);
   line-height: 1.05;
+  text-transform: uppercase;
 }
 
 .eyebrow {
