@@ -107,15 +107,15 @@ export function Navbar() {
                 {l.label}
               </Link>
             ))}
-            <div className="px-4 pt-3">
+            <div className="px-4 pt-3 flex items-center gap-3">
               <span
-                className={`inline-flex items-center gap-2 rounded-full px-3 py-1 text-[11px] font-semibold uppercase tracking-wider ${
-                  online ? "bg-cream text-green-deep" : "bg-coral text-green-deep"
-                }`}
+                className="inline-flex items-center gap-2 rounded-full px-3 py-1 text-[11px] font-semibold uppercase tracking-wider"
+                style={{ background: online ? "var(--surface-strong)" : "var(--coral)", color: "var(--nav-bg)" }}
               >
-                <span className={`h-1.5 w-1.5 rounded-full bg-green-deep`} />
+                <span className="h-1.5 w-1.5 rounded-full" style={{ background: "var(--nav-bg)" }} />
                 {online ? "Model Online" : "Server Offline"}
               </span>
+              <ThemeToggle />
             </div>
           </div>
         )}
