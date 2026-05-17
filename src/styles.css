@@ -190,8 +190,8 @@
 
 /* Marker-style highlight: pink block behind dark text */
 .hl {
-  background: var(--coral);
-  color: var(--green-deep);
+  background: var(--teal);
+  color: var(--ink);
   padding: 0.02em 0.22em;
   border-radius: 0.15em;
   box-decoration-break: clone;
