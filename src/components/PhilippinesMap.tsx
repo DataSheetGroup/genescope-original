@@ -228,12 +228,9 @@ export function PhilippinesMap({
   }
   const { MapContainer, TileLayer, CircleMarker, Tooltip, Circle, Polygon } = Comp;
 
-  const containerCls = fullscreen
-    ? "fixed inset-4 z-50 rounded-2xl overflow-hidden bg-white"
-    : "relative rounded-2xl overflow-hidden bg-white";
-
-  const containerStyle = fullscreen
-    ? { border: "1px solid color-mix(in oklab, var(--ink) 14%, transparent)" }
+  const containerCls = "relative rounded-2xl overflow-hidden bg-white";
+  const containerStyle: React.CSSProperties = fullscreen
+    ? { border: "1px solid color-mix(in oklab, var(--ink) 14%, transparent)", height: "100vh", width: "100vw", borderRadius: 0 }
     : { border: "1px solid color-mix(in oklab, var(--ink) 14%, transparent)", height: 680 };
 
   const selectedData = selected ? islandValues[selected] : null;
@@ -254,7 +251,6 @@ export function PhilippinesMap({
 
   return (
     <>
-      {fullscreen && <div className="fixed inset-0 z-40 bg-black/50" onClick={() => setFullscreen(false)} />}
       <div ref={wrapRef} className={containerCls} style={containerStyle}>
         {/* Scoped: hide leaflet attribution + zoom defaults within this map */}
         <style>{`
