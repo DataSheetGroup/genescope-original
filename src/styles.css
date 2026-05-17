@@ -49,75 +49,86 @@
 :root {
   --radius: 1.25rem;
 
-  /* Brand palette — editorial green / cream / coral */
-  --green-deep: oklch(0.32 0.06 158);     /* #0F3D2E forest green */
-  --green-mid:  oklch(0.38 0.06 158);     /* slightly lighter inner panel */
-  --cream:      oklch(0.95 0.025 85);     /* #F5EFE0 paper */
-  --cream-dim:  oklch(0.88 0.025 85);     /* secondary cream */
-  --coral:      oklch(0.83 0.08 12);      /* #F5B9C9 pink */
-  --mustard:    oklch(0.84 0.13 85);      /* warm banner */
-  --teal-soft:  oklch(0.78 0.07 175);     /* soft teal accent */
+  /* Brand palette — GeneScope logo: teal → purple */
+  --teal:        oklch(0.72 0.10 190);
+  --teal-deep:   oklch(0.45 0.09 195);
+  --purple:      oklch(0.55 0.16 295);
+  --purple-deep: oklch(0.32 0.12 295);
+  --ink:         oklch(0.22 0.05 285);
+  --paper:       oklch(0.97 0.01 280);
+  --paper-dim:   oklch(0.90 0.012 280);
+  --mustard:     oklch(0.84 0.13 85);
+
+  /* Legacy aliases so existing components keep working */
+  --green-deep: var(--ink);
+  --green-mid:  var(--purple-deep);
+  --cream:      var(--paper);
+  --cream-dim:  var(--paper-dim);
+  --coral:      var(--purple);
+  --teal-soft:  var(--teal);
+
+  --gradient-brand: linear-gradient(135deg, var(--teal), var(--purple));
 
   /* ---- DARK (default) ---- */
-  --background: var(--green-deep);
-  --foreground: var(--cream);
-  --card: var(--cream);
-  --card-foreground: var(--green-deep);
-  --popover: var(--cream);
-  --popover-foreground: var(--green-deep);
-  --primary: var(--coral);
-  --primary-foreground: var(--green-deep);
-  --secondary: var(--cream);
-  --secondary-foreground: var(--green-deep);
-  --muted: var(--green-mid);
-  --muted-foreground: oklch(0.85 0.02 85 / 0.78);
-  --accent: var(--cream);
-  --accent-foreground: var(--green-deep);
+  --background: var(--ink);
+  --foreground: var(--paper);
+  --card: var(--paper);
+  --card-foreground: var(--ink);
+  --popover: var(--paper);
+  --popover-foreground: var(--ink);
+  --primary: var(--purple);
+  --primary-foreground: var(--paper);
+  --secondary: var(--teal);
+  --secondary-foreground: var(--ink);
+  --muted: var(--purple-deep);
+  --muted-foreground: oklch(0.88 0.02 280 / 0.78);
+  --accent: var(--teal);
+  --accent-foreground: var(--ink);
   --destructive: oklch(0.65 0.2 25);
-  --destructive-foreground: var(--cream);
-  --success: var(--teal-soft);
-  --success-foreground: var(--green-deep);
+  --destructive-foreground: var(--paper);
+  --success: var(--teal);
+  --success-foreground: var(--ink);
   --warning: var(--mustard);
   --warning-foreground: oklch(0.28 0.06 60);
-  --border: oklch(0.95 0.025 85 / 0.18);
-  --input: oklch(0.32 0.06 158);
-  --ring: var(--coral);
+  --border: oklch(0.97 0.01 280 / 0.18);
+  --input: var(--purple-deep);
+  --ring: var(--teal);
 
-  --chart-1: var(--cream);
-  --chart-2: var(--coral);
-  --chart-3: var(--teal-soft);
-  --chart-4: var(--mustard);
-  --chart-5: oklch(0.55 0.08 158);
+  --chart-1: var(--teal);
+  --chart-2: var(--purple);
+  --chart-3: var(--paper);
+  --chart-4: oklch(0.62 0.12 230);
+  --chart-5: oklch(0.70 0.14 320);
 
   /* Themed neutrals used by components */
-  --nav-bg: var(--green-deep);
-  --nav-fg: var(--cream);
-  --surface-strong: var(--cream);
+  --nav-bg: var(--ink);
+  --nav-fg: var(--paper);
+  --surface-strong: var(--paper);
 }
 
 /* ---- LIGHT THEME ---- */
 :root[data-theme="light"] {
-  --background: oklch(0.97 0.018 85);       /* paper */
-  --foreground: var(--green-deep);
-  --card: oklch(1 0 0);                      /* pure white panels */
-  --card-foreground: var(--green-deep);
+  --background: var(--paper);
+  --foreground: var(--ink);
+  --card: oklch(1 0 0);
+  --card-foreground: var(--ink);
   --popover: oklch(1 0 0);
-  --popover-foreground: var(--green-deep);
-  --primary: var(--green-deep);
-  --primary-foreground: var(--cream);
-  --secondary: var(--green-deep);
-  --secondary-foreground: var(--cream);
-  --muted: oklch(0.92 0.015 85);
-  --muted-foreground: oklch(0.40 0.04 158);
-  --accent: var(--coral);
-  --accent-foreground: var(--green-deep);
-  --border: oklch(0.32 0.06 158 / 0.14);
-  --input: oklch(0.92 0.015 85);
-  --ring: var(--green-deep);
+  --popover-foreground: var(--ink);
+  --primary: var(--purple);
+  --primary-foreground: var(--paper);
+  --secondary: var(--teal);
+  --secondary-foreground: var(--ink);
+  --muted: oklch(0.93 0.012 280);
+  --muted-foreground: oklch(0.42 0.07 285);
+  --accent: var(--teal);
+  --accent-foreground: var(--ink);
+  --border: oklch(0.32 0.12 295 / 0.16);
+  --input: oklch(0.93 0.012 280);
+  --ring: var(--purple);
 
-  --nav-bg: var(--cream);
-  --nav-fg: var(--green-deep);
-  --surface-strong: var(--green-deep);
+  --nav-bg: var(--paper);
+  --nav-fg: var(--ink);
+  --surface-strong: var(--purple);
 }
 
 @layer base {
@@ -179,8 +190,8 @@
 
 /* Marker-style highlight: pink block behind dark text */
 .hl {
-  background: var(--coral);
-  color: var(--green-deep);
+  background: var(--teal);
+  color: var(--ink);
   padding: 0.02em 0.22em;
   border-radius: 0.15em;
   box-decoration-break: clone;
