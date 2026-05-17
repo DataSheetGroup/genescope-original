@@ -204,6 +204,18 @@ export function buildEdaData(): EdaData {
     stacked_region: region_vs_test,
     stacked_disease: disease_vs_test,
     stacked_facility: facility_vs_test,
+    region_by_year: (() => {
+      const acc: Record<string, { Targeted: number; Comprehensive: number }> = {};
+      for (const r of rows) {
+        const k = `${r.Geographic_Region}__${r.Year}`;
+        if (!acc[k]) acc[k] = { Targeted: 0, Comprehensive: 0 };
+        acc[k][r.TestType] += 1;
+      }
+      return Object.entries(acc).map(([k, v]) => {
+        const [region, year] = k.split("__");
+        return { region, year, count: v.Targeted + v.Comprehensive, Targeted: v.Targeted, Comprehensive: v.Comprehensive };
+      });
+    })(),
   };
 }
 
