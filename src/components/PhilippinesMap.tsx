@@ -341,8 +341,8 @@ export function PhilippinesMap({
 
         {/* ── Top-left: Selected region detail */}
         {selectedData && selected && (
-          <div className="absolute top-4 left-4 z-[400] w-[270px] rounded-2xl bg-white/95 backdrop-blur p-4 shadow-xl animate-fade-up"
-            style={{ border: "1px solid color-mix(in oklab, var(--ink) 14%, transparent)" }}>
+          <div className="absolute top-4 left-4 z-[400] w-[260px] rounded-xl p-4 animate-fade-up"
+            style={{ background: "#fff", border: "1px solid color-mix(in oklab, var(--ink) 18%, transparent)" }}>
             <div className="flex items-start justify-between gap-2">
               <div>
                 <div className="font-display text-[10px] tracking-widest" style={{ color: "color-mix(in oklab, var(--ink) 55%, var(--paper))" }}>SELECTED REGION</div>
@@ -376,46 +376,55 @@ export function PhilippinesMap({
           />
         </div>
 
-        {/* ── Bottom-left: Mode switcher */}
-        <div className="absolute bottom-5 left-5 z-[400] flex items-center gap-1 rounded-full bg-white/95 backdrop-blur p-1.5 shadow-xl"
-          style={{ border: "1px solid color-mix(in oklab, var(--ink) 14%, transparent)" }}>
+        {/* ── Bottom-left: Mode switcher (flat) */}
+        <div className="absolute bottom-5 left-5 z-[400] flex items-center gap-1 rounded-full p-1"
+          style={{ background: "#fff", border: "1px solid color-mix(in oklab, var(--ink) 18%, transparent)" }}>
           {([
-            ["bubbles", "Bubbles", "●"],
-            ["choropleth", "Regions", "◆"],
-            ["heat", "Heat", "≋"],
-          ] as [Mode, string, string][]).map(([v, l, g]) => {
+            ["bubbles", "Bubbles"],
+            ["choropleth", "Regions"],
+            ["heat", "Heat"],
+          ] as [Mode, string][]).map(([v, l]) => {
             const active = mode === v;
             return (
               <button
                 key={v}
                 onClick={() => setMode(v)}
                 title={`${l} (shortcut: ${v === "bubbles" ? "1" : v === "choropleth" ? "2" : "3"})`}
-                className="inline-flex items-center gap-2 rounded-full px-4 h-10 font-display text-[13px] tracking-wide transition-colors"
+                className="rounded-full px-3.5 h-9 font-display text-[12.5px] tracking-wide transition-colors"
                 style={active
                   ? { background: "var(--ink)", color: "var(--paper)" }
                   : { background: "transparent", color: "var(--ink)", opacity: 0.75 }
                 }
               >
-                <span aria-hidden style={{ fontSize: 12 }}>{g}</span>
                 {l}
               </button>
             );
           })}
         </div>
 
-        {/* ── Bottom-right: Action stack (zoom + reset + fullscreen) */}
+        {/* ── Bottom-right: Action stack (flat) */}
         <div className="absolute bottom-5 right-5 z-[400] flex items-center gap-1.5">
-          <div className="flex flex-col rounded-full bg-white/95 backdrop-blur shadow-xl overflow-hidden"
-            style={{ border: "1px solid color-mix(in oklab, var(--ink) 14%, transparent)" }}>
-            <IconBtn title="Zoom in (+)" onClick={() => handleZoom(1)} label="+" />
-            <div className="h-px w-full" style={{ background: "color-mix(in oklab, var(--ink) 12%, transparent)" }} />
-            <IconBtn title="Zoom out (−)" onClick={() => handleZoom(-1)} label="−" />
+          <div className="flex items-center rounded-full overflow-hidden"
+            style={{ background: "#fff", border: "1px solid color-mix(in oklab, var(--ink) 18%, transparent)" }}>
+            <FlatBtn title="Zoom out (−)" onClick={() => handleZoom(-1)} label="−" />
+            <div className="w-px h-5" style={{ background: "color-mix(in oklab, var(--ink) 14%, transparent)" }} />
+            <FlatBtn title="Zoom in (+)" onClick={() => handleZoom(1)} label="+" />
           </div>
-          <IconBtn title="Reset view (R)" onClick={handleReset} label="⟲" pill />
-          <IconBtn title={fullscreen ? "Exit fullscreen (F)" : "Fullscreen (F)"} onClick={() => setFullscreen((f) => !f)} label={fullscreen ? "⤫" : "⛶"} pill solid />
+          <button
+            onClick={handleReset}
+            title="Reset view (R)"
+            className="rounded-full h-9 px-4 font-display text-[12.5px] tracking-wide"
+            style={{ background: "#fff", color: "var(--ink)", border: "1px solid color-mix(in oklab, var(--ink) 18%, transparent)" }}
+          >Reset</button>
+          <button
+            onClick={() => setFullscreen((f) => !f)}
+            title={fullscreen ? "Exit fullscreen (F)" : "Fullscreen (F)"}
+            className="rounded-full h-9 px-4 font-display text-[12.5px] tracking-wide"
+            style={{ background: "var(--ink)", color: "var(--paper)", border: "1px solid var(--ink)" }}
+          >{fullscreen ? "Exit" : "Fullscreen"}</button>
         </div>
 
-        {/* ── Tiny attribution (legal, off-canvas, bottom-right text) */}
+        {/* ── Tiny attribution */}
         <div className="absolute bottom-1 right-2 z-[300] text-[9px] opacity-40 pointer-events-none"
           style={{ color: "var(--ink)", fontFamily: "Poppins, sans-serif" }}>
           {BASEMAPS[basemap].attr}
