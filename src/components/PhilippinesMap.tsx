@@ -51,10 +51,10 @@ type Metric = "total" | "targeted" | "comprehensive" | "share";
 type Basemap = "light" | "dark" | "satellite";
 type IslandName = "Luzon" | "Visayas" | "Mindanao";
 
-const BASEMAPS: Record<Basemap, { url: string; attr: string; preview: string }> = {
-  light:     { url: "https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png", attr: "© OSM © CARTO", preview: "linear-gradient(135deg,#f5f5f5,#e2e2e2)" },
-  dark:      { url: "https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}{r}.png",  attr: "© OSM © CARTO", preview: "linear-gradient(135deg,#2a2a35,#0f0f15)" },
-  satellite: { url: "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}", attr: "Tiles © Esri", preview: "linear-gradient(135deg,#3b5f3a,#1d3a4a)" },
+const BASEMAPS: Record<Basemap, { url: string; attr: string }> = {
+  light:     { url: "https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png", attr: "© OSM © CARTO" },
+  dark:      { url: "https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}{r}.png",  attr: "© OSM © CARTO" },
+  satellite: { url: "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}", attr: "Tiles © Esri" },
 };
 
 const PURPLE_RAMP = ["#efe7ff", "#cdb6ff", "#a382ff", "#7b4fff", "#5a2bdb"];
