@@ -249,6 +249,7 @@ function OverviewTab({ data }: { data: any }) {
   const tt = (data.test_type_distribution ?? []) as { name: string; value: number }[];
   return (
     <>
+      <KpiRow data={data} />
       <div className="grid gap-6 lg:grid-cols-3 auto-rows-fr">
         <Panel title="Type of Genetic Test" hint="Overall distribution">
           <ChartBox>
