@@ -56,7 +56,7 @@ function AboutPage() {
         <div className="rounded-3xl bg-card text-card-foreground p-8 md:p-10 relative overflow-hidden">
           <img src={fireFlask} alt="" className="hidden md:block absolute right-6 top-6 w-20 object-contain opacity-90" />
           <div className="eyebrow text-coral mb-2">Project</div>
-          <h2 className="font-display text-3xl mb-6">Research information</h2>
+          <h2 className="font-display text-3xl mb-6">Research <span className="hl">information</span></h2>
           <dl>
             <Row k="System" v="GeneScope v1.0" />
             <Row k="Study" v="Predicting Genetic Testing Utilization in the Philippines Using Binary Logistic Regression Through Indicators" />
