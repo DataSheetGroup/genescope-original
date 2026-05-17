@@ -316,7 +316,7 @@ function PerformancePage() {
 
         <div className="rounded-3xl bg-card text-card-foreground p-7">
           <div className="eyebrow text-coral mb-2">Quality assurance</div>
-          <h2 className="font-display text-2xl">Testing methods</h2>
+          <h2 className="font-display text-2xl">Testing <span className="hl">methods</span></h2>
           <ul className="mt-5 space-y-2.5">
             {[
               "White Box Testing",
