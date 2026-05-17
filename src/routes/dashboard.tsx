@@ -2,12 +2,12 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useMemo, useState, type ReactNode } from "react";
 import {
-  Activity, Building2, CalendarRange, Database, Filter, LayoutGrid,
+  Building2, CalendarRange, Database, Filter, LayoutGrid,
   Map as MapIcon, Search, Stethoscope, TrendingUp, Users,
 } from "lucide-react";
 import {
-  Bar, BarChart, CartesianGrid, Cell, ComposedChart, Legend, Line,
-  Pie, PieChart, ResponsiveContainer, Tooltip, XAxis, YAxis, Area, AreaChart,
+  Area, AreaChart, Bar, BarChart, CartesianGrid, Cell, ComposedChart,
+  Legend, Line, Pie, PieChart, ResponsiveContainer, Tooltip, XAxis, YAxis,
 } from "recharts";
 import { getEdaData } from "@/lib/api";
 import { BackendOfflineNotice } from "@/components/BackendOfflineNotice";
@@ -23,53 +23,55 @@ export const Route = createFileRoute("/dashboard")({
   component: Dashboard,
 });
 
-// ─────────────────────────── tokens
-const PALETTE = ["var(--teal)", "var(--purple)", "var(--mustard)", "var(--green-mid)", "var(--cream-dim)"];
+// ─────────────────────────── tokens (solid, two-tone)
+const INK = "var(--ink)";
+const PAPER = "var(--paper)";
+const ACCENT = "var(--purple)";          // single accent
+const MUTED = "color-mix(in oklab, var(--ink) 55%, var(--paper))";
+const HAIRLINE = "color-mix(in oklab, var(--ink) 14%, transparent)";
+const GRID = "color-mix(in oklab, var(--ink) 8%, transparent)";
+
 const tooltipStyle = {
-  background: "var(--ink)",
-  color: "var(--paper)",
-  border: "none",
-  borderRadius: 12,
+  background: PAPER,
+  color: INK,
+  border: `1px solid ${HAIRLINE}`,
+  borderRadius: 10,
   fontSize: 12,
   padding: "8px 12px",
+  boxShadow: "none",
 };
-const axisTick = { fontSize: 11, fill: "var(--ink)", opacity: 0.7 };
-const gridStroke = "color-mix(in oklab, var(--ink) 10%, transparent)";
+const axisTick = { fontSize: 11, fill: INK, opacity: 0.6 };
 
 // ─────────────────────────── primitives
 function Card({ children, className = "" }: { children: ReactNode; className?: string }) {
   return (
-    <div className={`relative overflow-hidden rounded-2xl bg-card text-card-foreground ${className}`}>
-      <div
-        aria-hidden
-        className="pointer-events-none absolute -top-16 -right-16 h-40 w-40 rounded-full opacity-40 blur-2xl"
-        style={{ background: "color-mix(in oklab, var(--teal) 50%, transparent)" }}
-      />
+    <div
+      className={`rounded-2xl bg-white ${className}`}
+      style={{ border: `1px solid ${HAIRLINE}`, color: INK }}
+    >
       {children}
     </div>
   );
 }
 
 function StatCard({
-  icon, label, value, sub, accent = "var(--teal)",
-}: {
-  icon: ReactNode; label: string; value: ReactNode; sub?: ReactNode; accent?: string;
-}) {
+  icon, label, value, sub,
+}: { icon: ReactNode; label: string; value: ReactNode; sub?: ReactNode }) {
   return (
-    <Card className="p-5">
+    <Card className="p-6">
       <div className="flex items-start gap-4">
         <div
-          className="grid h-12 w-12 place-items-center rounded-xl"
-          style={{ background: `color-mix(in oklab, ${accent} 18%, transparent)`, color: accent }}
+          className="grid h-11 w-11 place-items-center rounded-lg"
+          style={{ background: PAPER, color: INK, border: `1px solid ${HAIRLINE}` }}
         >
           {icon}
         </div>
         <div className="min-w-0 flex-1">
-          <div className="font-display text-4xl leading-none tracking-tight">{value}</div>
-          <div className="mt-2 text-[11px] font-semibold uppercase tracking-[0.14em] text-card-foreground/60">
+          <div className="font-display text-[2.25rem] leading-none tracking-tight">{value}</div>
+          <div className="mt-2 font-display text-[11px] leading-none" style={{ color: MUTED }}>
             {label}
           </div>
-          {sub && <div className="mt-1 text-xs text-card-foreground/70">{sub}</div>}
+          {sub && <div className="mt-2 text-xs" style={{ color: MUTED }}>{sub}</div>}
         </div>
       </div>
     </Card>
@@ -78,36 +80,31 @@ function StatCard({
 
 function Panel({
   title, hint, action, children, className = "",
-}: {
-  title: string; hint?: string; action?: ReactNode; children: ReactNode; className?: string;
-}) {
+}: { title: string; hint?: string; action?: ReactNode; children: ReactNode; className?: string }) {
   return (
-    <Card className={`p-5 ${className}`}>
+    <Card className={`p-6 ${className}`}>
       <div className="mb-4 flex items-start justify-between gap-3">
         <div className="min-w-0">
-          <h3 className="text-base font-semibold tracking-tight">{title}</h3>
-          {hint && <p className="mt-0.5 text-xs text-card-foreground/65">{hint}</p>}
+          <h3 className="font-display text-[1.1rem] leading-tight">{title}</h3>
+          {hint && <p className="mt-1 text-xs" style={{ color: MUTED }}>{hint}</p>}
         </div>
-        {action && <div className="text-xs text-card-foreground/65">{action}</div>}
+        {action && <div className="text-xs" style={{ color: MUTED }}>{action}</div>}
       </div>
-      <div className="h-px w-full bg-card-foreground/10" />
-      <div className="pt-4">{children}</div>
+      <div className="h-px w-full" style={{ background: HAIRLINE }} />
+      <div className="pt-5">{children}</div>
     </Card>
   );
 }
 
-function ChartBox({ children, h = 260 }: { children: ReactNode; h?: number }) {
-  return <div className="w-full" style={{ height: h }}>{children}</div>;
+function ChartBox({ children }: { children: ReactNode }) {
+  return <div className="w-full h-72">{children}</div>;
 }
 
 function Skeleton() {
   return (
-    <div className="grid gap-5 lg:grid-cols-2 xl:grid-cols-4">
+    <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-4">
       {Array.from({ length: 4 }).map((_, i) => (
-        <div key={i} className="h-28 rounded-2xl bg-card/40 animate-pulse" />
-      ))}
-      {Array.from({ length: 4 }).map((_, i) => (
-        <div key={`b${i}`} className="col-span-2 h-80 rounded-2xl bg-card/40 animate-pulse" />
+        <div key={i} className="h-28 rounded-2xl animate-pulse" style={{ background: HAIRLINE }} />
       ))}
     </div>
   );
@@ -125,18 +122,21 @@ const TABS: { key: TabKey; label: string; icon: ReactNode }[] = [
 
 function TabBar({ value, onChange }: { value: TabKey; onChange: (k: TabKey) => void }) {
   return (
-    <div className="inline-flex flex-wrap items-center gap-1 rounded-full bg-card p-1.5 text-card-foreground shadow-sm">
+    <div
+      className="flex items-center gap-1 overflow-x-auto rounded-xl p-1"
+      style={{ background: "white", border: `1px solid ${HAIRLINE}` }}
+    >
       {TABS.map((t) => {
         const active = t.key === value;
         return (
           <button
             key={t.key}
             onClick={() => onChange(t.key)}
-            className="inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold transition-colors"
+            className="inline-flex shrink-0 items-center gap-2 rounded-lg px-4 py-2.5 font-display text-[13px] transition-colors"
             style={
               active
-                ? { background: "var(--gradient-brand)", color: "var(--paper)" }
-                : { color: "var(--ink)", opacity: 0.75 }
+                ? { background: INK, color: PAPER }
+                : { background: "transparent", color: INK, opacity: 0.7 }
             }
           >
             {t.icon}
@@ -167,53 +167,60 @@ function Dashboard() {
   }
 
   return (
-    <div className="mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-10 py-10">
-      {/* header */}
-      <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+    <div style={{ background: PAPER, color: INK }}>
+      <div className="mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-10 py-12">
+        {/* header */}
         <div>
-          <div className="eyebrow text-coral mb-3">Analytics</div>
-          <h1 className="display-lg">
-            The dataset, at <span className="text-coral">a glance.</span>
+          <div className="font-display text-[11px]" style={{ color: ACCENT }}>ANALYTICS</div>
+          <h1 className="display-lg mt-2">
+            The dataset, at <span style={{ color: ACCENT }}>a glance.</span>
           </h1>
-          <p className="mt-3 max-w-xl text-foreground/75">
+          <p className="mt-3 max-w-xl text-sm" style={{ color: MUTED }}>
             Exploratory analysis of anonymized patient genetic testing records, 2021–2025.
           </p>
         </div>
 
-        <div className="flex flex-wrap items-center gap-2">
-          <div className="flex items-center gap-2 rounded-full bg-card px-4 py-2 text-sm text-card-foreground/80 shadow-sm">
-            <Search className="h-4 w-4 opacity-70" />
+        {/* tabs */}
+        <div className="mt-8">
+          <TabBar value={tab} onChange={setTab} />
+        </div>
+
+        {/* toolbar */}
+        <div className="mt-4 flex flex-wrap items-center gap-2">
+          <div
+            className="flex items-center gap-2 rounded-lg bg-white px-3 py-2 text-sm"
+            style={{ border: `1px solid ${HAIRLINE}`, color: INK }}
+          >
+            <Search className="h-4 w-4" style={{ color: MUTED }} />
             <input
               value={q}
               onChange={(e) => setQ(e.target.value)}
               placeholder="Search regions, facilities…"
-              className="w-44 bg-transparent outline-none placeholder:text-card-foreground/50"
+              className="w-52 bg-transparent outline-none placeholder:opacity-50"
             />
           </div>
-          <button className="inline-flex items-center gap-2 rounded-full bg-card px-3 py-2 text-sm font-semibold text-card-foreground/80 shadow-sm">
+          <button
+            className="inline-flex items-center gap-2 rounded-lg bg-white px-3 py-2 font-display text-[12px]"
+            style={{ border: `1px solid ${HAIRLINE}`, color: INK }}
+          >
             <Filter className="h-4 w-4" /> Filters
           </button>
         </div>
-      </div>
 
-      {/* tabs */}
-      <div className="mt-7">
-        <TabBar value={tab} onChange={setTab} />
-      </div>
-
-      {/* body */}
-      <div className="mt-7">
-        {isLoading && <Skeleton />}
-        {data && (
-          <div className="animate-fade-up space-y-6">
-            <KpiRow data={data} />
-            {tab === "overview"      && <OverviewTab data={data} />}
-            {tab === "geographic"    && <GeographicTab data={data} query={q} />}
-            {tab === "demographic"   && <DemographicTab data={data} />}
-            {tab === "institutional" && <InstitutionalTab data={data} query={q} />}
-            {tab === "temporal"      && <TemporalTab data={data} />}
-          </div>
-        )}
+        {/* body */}
+        <div className="mt-8">
+          {isLoading && <Skeleton />}
+          {data && (
+            <div className="animate-fade-up space-y-6">
+              <KpiRow data={data} />
+              {tab === "overview"      && <OverviewTab data={data} />}
+              {tab === "geographic"    && <GeographicTab data={data} query={q} />}
+              {tab === "demographic"   && <DemographicTab data={data} />}
+              {tab === "institutional" && <InstitutionalTab data={data} query={q} />}
+              {tab === "temporal"      && <TemporalTab data={data} />}
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
@@ -225,51 +232,35 @@ function KpiRow({ data }: { data: any }) {
   const regions = data.region_distribution?.length ?? 0;
   const diseases = data.disease_category?.length ?? 0;
   return (
-    <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-      <StatCard
-        icon={<Database className="h-5 w-5" />}
-        label="Total Records" value={total.toLocaleString()}
-        sub={data.year_coverage ? `Covering ${data.year_coverage}` : null}
-        accent="var(--teal)"
-      />
-      <StatCard
-        icon={<CalendarRange className="h-5 w-5" />}
-        label="Year Coverage" value={data.year_coverage ?? "—"}
-        sub={`${data.annual_volume?.length ?? 0} reporting years`}
-        accent="var(--purple)"
-      />
-      <StatCard
-        icon={<MapIcon className="h-5 w-5" />}
-        label="Regions" value={regions}
-        sub="Island groups covered"
-        accent="var(--mustard)"
-      />
-      <StatCard
-        icon={<Stethoscope className="h-5 w-5" />}
-        label="Disease Categories" value={diseases}
-        sub="Distinct conditions tracked"
-        accent="var(--teal)"
-      />
+    <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-4">
+      <StatCard icon={<Database className="h-5 w-5" />} label="TOTAL RECORDS" value={total.toLocaleString()} sub={data.year_coverage ? `Covering ${data.year_coverage}` : null} />
+      <StatCard icon={<CalendarRange className="h-5 w-5" />} label="YEAR COVERAGE" value={data.year_coverage ?? "—"} sub={`${data.annual_volume?.length ?? 0} reporting years`} />
+      <StatCard icon={<MapIcon className="h-5 w-5" />} label="REGIONS" value={regions} sub="Island groups covered" />
+      <StatCard icon={<Stethoscope className="h-5 w-5" />} label="DISEASE CATEGORIES" value={diseases} sub="Distinct conditions tracked" />
     </div>
   );
 }
 
+// shared chart helpers
+const SOLID_TARGETED = INK;
+const SOLID_COMP = ACCENT;
+const renderLegend = () => null;
+
 // ─────────────────────────── OVERVIEW
 function OverviewTab({ data }: { data: any }) {
+  const tt = (data.test_type_distribution ?? []) as { name: string; value: number }[];
   return (
     <>
-      <div className="grid gap-5 lg:grid-cols-3">
+      <div className="grid gap-6 lg:grid-cols-3">
         <Panel title="Type of Genetic Test" hint="Overall distribution">
           <ChartBox>
             <ResponsiveContainer>
               <PieChart>
-                <Pie data={data.test_type_distribution ?? []} dataKey="value" nameKey="name" innerRadius={55} outerRadius={90} paddingAngle={2}>
-                  {(data.test_type_distribution ?? []).map((_: any, i: number) => (
-                    <Cell key={i} fill={PALETTE[i % PALETTE.length]} />
-                  ))}
+                <Pie data={tt} dataKey="value" nameKey="name" innerRadius={60} outerRadius={95} paddingAngle={1} stroke="none">
+                  {tt.map((_, i) => <Cell key={i} fill={i === 0 ? SOLID_COMP : SOLID_TARGETED} />)}
                 </Pie>
                 <Tooltip contentStyle={tooltipStyle} />
-                <Legend wrapperStyle={{ fontSize: 11 }} />
+                <Legend wrapperStyle={{ fontSize: 11, color: INK }} />
               </PieChart>
             </ResponsiveContainer>
           </ChartBox>
@@ -279,34 +270,28 @@ function OverviewTab({ data }: { data: any }) {
           <ChartBox>
             <ResponsiveContainer>
               <ComposedChart data={data.annual_volume ?? []}>
-                <defs>
-                  <linearGradient id="volFill" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%"  stopColor="var(--teal)"   stopOpacity={0.85} />
-                    <stop offset="100%" stopColor="var(--purple)" stopOpacity={0.85} />
-                  </linearGradient>
-                </defs>
-                <CartesianGrid strokeDasharray="3 3" stroke={gridStroke} />
-                <XAxis dataKey="year" tick={axisTick} />
-                <YAxis tick={axisTick} />
+                <CartesianGrid stroke={GRID} vertical={false} />
+                <XAxis dataKey="year" tick={axisTick} axisLine={{ stroke: HAIRLINE }} tickLine={false} />
+                <YAxis tick={axisTick} axisLine={false} tickLine={false} />
                 <Tooltip contentStyle={tooltipStyle} />
-                <Bar dataKey="count" fill="url(#volFill)" radius={[8, 8, 0, 0]} />
-                <Line type="monotone" dataKey="cumulative" stroke="var(--ink)" strokeWidth={2} dot={{ r: 3 }} />
+                <Bar dataKey="count" fill={ACCENT} radius={[4, 4, 0, 0]} barSize={28} />
+                <Line type="monotone" dataKey="cumulative" stroke={INK} strokeWidth={2} dot={{ r: 3, fill: INK }} />
               </ComposedChart>
             </ResponsiveContainer>
           </ChartBox>
         </Panel>
       </div>
 
-      <div className="grid gap-5 lg:grid-cols-2">
+      <div className="grid gap-6 lg:grid-cols-2">
         <Panel title="Disease Category Frequency" hint="Most-tested conditions">
           <ChartBox>
             <ResponsiveContainer>
               <BarChart data={data.disease_category ?? []} layout="vertical" margin={{ left: 20 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke={gridStroke} />
-                <XAxis type="number" tick={axisTick} />
-                <YAxis dataKey="name" type="category" tick={axisTick} width={110} />
+                <CartesianGrid stroke={GRID} horizontal={false} />
+                <XAxis type="number" tick={axisTick} axisLine={false} tickLine={false} />
+                <YAxis dataKey="name" type="category" tick={axisTick} width={120} axisLine={false} tickLine={false} />
                 <Tooltip contentStyle={tooltipStyle} />
-                <Bar dataKey="value" fill="var(--purple)" radius={[0, 999, 999, 0]} />
+                <Bar dataKey="value" fill={ACCENT} radius={[0, 4, 4, 0]} barSize={18} />
               </BarChart>
             </ResponsiveContainer>
           </ChartBox>
@@ -316,13 +301,13 @@ function OverviewTab({ data }: { data: any }) {
           <ChartBox>
             <ResponsiveContainer>
               <ComposedChart data={data.yearly_by_test_type ?? []}>
-                <CartesianGrid strokeDasharray="3 3" stroke={gridStroke} />
-                <XAxis dataKey="year" tick={axisTick} />
-                <YAxis tick={axisTick} />
+                <CartesianGrid stroke={GRID} vertical={false} />
+                <XAxis dataKey="year" tick={axisTick} axisLine={{ stroke: HAIRLINE }} tickLine={false} />
+                <YAxis tick={axisTick} axisLine={false} tickLine={false} />
                 <Tooltip contentStyle={tooltipStyle} />
-                <Legend wrapperStyle={{ fontSize: 11 }} />
-                <Line type="monotone" dataKey="Targeted" stroke="var(--teal)" strokeWidth={2.5} dot={{ r: 3 }} />
-                <Line type="monotone" dataKey="Comprehensive" stroke="var(--purple)" strokeWidth={2.5} dot={{ r: 3 }} />
+                <Legend wrapperStyle={{ fontSize: 11, color: INK }} />
+                <Line type="monotone" dataKey="Targeted" stroke={SOLID_TARGETED} strokeWidth={2.5} dot={{ r: 3, fill: SOLID_TARGETED }} />
+                <Line type="monotone" dataKey="Comprehensive" stroke={SOLID_COMP} strokeWidth={2.5} dot={{ r: 3, fill: SOLID_COMP }} />
               </ComposedChart>
             </ResponsiveContainer>
           </ChartBox>
@@ -341,29 +326,25 @@ function GeographicTab({ data, query }: { data: any; query: string }) {
 
   return (
     <>
-      <div className="grid gap-4 sm:grid-cols-3">
-        <StatCard icon={<MapIcon className="h-5 w-5" />} label="Top Region" value={top?.name ?? "—"} sub={top ? `${top.value.toLocaleString()} records` : ""} accent="var(--teal)" />
-        <StatCard icon={<Activity className="h-5 w-5" />} label="Coverage" value={`${regions.length}`} sub="Island groups represented" accent="var(--purple)" />
-        <StatCard icon={<Database className="h-5 w-5" />} label="Total Tests" value={total.toLocaleString()} sub="Across all regions" accent="var(--mustard)" />
+      <div className="grid gap-6 sm:grid-cols-3">
+        <StatCard icon={<MapIcon className="h-5 w-5" />} label="TOP REGION" value={top?.name ?? "—"} sub={top ? `${top.value.toLocaleString()} records` : ""} />
+        <StatCard icon={<MapIcon className="h-5 w-5" />} label="COVERAGE" value={`${regions.length}`} sub="Island groups represented" />
+        <StatCard icon={<Database className="h-5 w-5" />} label="TOTAL TESTS" value={total.toLocaleString()} sub="Across all regions" />
       </div>
 
-      <div className="grid gap-5 lg:grid-cols-[1.6fr_1fr]">
-        <Panel title="Philippines" hint="Testing volume by island group">
+      <div className="grid gap-6 lg:grid-cols-12">
+        <Panel title="Philippines" hint="Testing volume by island group" className="lg:col-span-7">
           <PhilippinesMap data={regions} />
         </Panel>
-        <Panel title="Regional Breakdown" hint="Counts per island group">
+        <Panel title="Regional Breakdown" hint="Counts per island group" className="lg:col-span-5">
           <ChartBox>
             <ResponsiveContainer>
               <BarChart data={filtered} layout="vertical" margin={{ left: 10 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke={gridStroke} />
-                <XAxis type="number" tick={axisTick} />
-                <YAxis dataKey="name" type="category" tick={axisTick} width={90} />
+                <CartesianGrid stroke={GRID} horizontal={false} />
+                <XAxis type="number" tick={axisTick} axisLine={false} tickLine={false} />
+                <YAxis dataKey="name" type="category" tick={axisTick} width={100} axisLine={false} tickLine={false} />
                 <Tooltip contentStyle={tooltipStyle} />
-                <Bar dataKey="value" radius={[0, 999, 999, 0]}>
-                  {filtered.map((_, i) => (
-                    <Cell key={i} fill={PALETTE[i % PALETTE.length]} />
-                  ))}
-                </Bar>
+                <Bar dataKey="value" fill={ACCENT} radius={[0, 4, 4, 0]} barSize={18} />
               </BarChart>
             </ResponsiveContainer>
           </ChartBox>
@@ -371,16 +352,16 @@ function GeographicTab({ data, query }: { data: any; query: string }) {
       </div>
 
       <Panel title="Region × Test Type" hint="Which test types dominate in each region">
-        <ChartBox h={300}>
+        <ChartBox>
           <ResponsiveContainer>
             <BarChart data={data.region_vs_test ?? []}>
-              <CartesianGrid strokeDasharray="3 3" stroke={gridStroke} />
-              <XAxis dataKey="name" tick={axisTick} />
-              <YAxis tick={axisTick} />
+              <CartesianGrid stroke={GRID} vertical={false} />
+              <XAxis dataKey="name" tick={axisTick} axisLine={{ stroke: HAIRLINE }} tickLine={false} />
+              <YAxis tick={axisTick} axisLine={false} tickLine={false} />
               <Tooltip contentStyle={tooltipStyle} />
-              <Legend wrapperStyle={{ fontSize: 11 }} />
-              <Bar dataKey="Targeted" stackId="a" fill="var(--teal)" />
-              <Bar dataKey="Comprehensive" stackId="a" fill="var(--purple)" />
+              <Legend wrapperStyle={{ fontSize: 11, color: INK }} />
+              <Bar dataKey="Targeted" stackId="a" fill={SOLID_TARGETED} />
+              <Bar dataKey="Comprehensive" stackId="a" fill={SOLID_COMP} radius={[4, 4, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
         </ChartBox>
@@ -399,22 +380,22 @@ function DemographicTab({ data }: { data: any }) {
 
   return (
     <>
-      <div className="grid gap-4 sm:grid-cols-3">
-        <StatCard icon={<Users className="h-5 w-5" />} label="Total Patients" value={total.toLocaleString()} sub="Anonymized records" accent="var(--teal)" />
-        <StatCard icon={<Users className="h-5 w-5" />} label="Female Share" value={`${pct(female)}%`} sub={`${female.toLocaleString()} records`} accent="var(--purple)" />
-        <StatCard icon={<Users className="h-5 w-5" />} label="Male Share" value={`${pct(male)}%`} sub={`${male.toLocaleString()} records`} accent="var(--mustard)" />
+      <div className="grid gap-6 sm:grid-cols-3">
+        <StatCard icon={<Users className="h-5 w-5" />} label="TOTAL PATIENTS" value={total.toLocaleString()} sub="Anonymized records" />
+        <StatCard icon={<Users className="h-5 w-5" />} label="FEMALE SHARE" value={`${pct(female)}%`} sub={`${female.toLocaleString()} records`} />
+        <StatCard icon={<Users className="h-5 w-5" />} label="MALE SHARE" value={`${pct(male)}%`} sub={`${male.toLocaleString()} records`} />
       </div>
 
-      <div className="grid gap-5 lg:grid-cols-2">
+      <div className="grid gap-6 lg:grid-cols-2">
         <Panel title="Sex Distribution" hint="Patient mix">
           <ChartBox>
             <ResponsiveContainer>
               <PieChart>
-                <Pie data={sex} dataKey="value" nameKey="name" innerRadius={55} outerRadius={95} paddingAngle={2}>
-                  {sex.map((_, i) => <Cell key={i} fill={PALETTE[i % PALETTE.length]} />)}
+                <Pie data={sex} dataKey="value" nameKey="name" innerRadius={60} outerRadius={95} paddingAngle={1} stroke="none">
+                  {sex.map((_, i) => <Cell key={i} fill={i === 0 ? SOLID_COMP : SOLID_TARGETED} />)}
                 </Pie>
                 <Tooltip contentStyle={tooltipStyle} />
-                <Legend wrapperStyle={{ fontSize: 11 }} />
+                <Legend wrapperStyle={{ fontSize: 11, color: INK }} />
               </PieChart>
             </ResponsiveContainer>
           </ChartBox>
@@ -424,13 +405,13 @@ function DemographicTab({ data }: { data: any }) {
           <ChartBox>
             <ResponsiveContainer>
               <BarChart data={data.sex_vs_test ?? []}>
-                <CartesianGrid strokeDasharray="3 3" stroke={gridStroke} />
-                <XAxis dataKey="name" tick={axisTick} />
-                <YAxis tick={axisTick} />
+                <CartesianGrid stroke={GRID} vertical={false} />
+                <XAxis dataKey="name" tick={axisTick} axisLine={{ stroke: HAIRLINE }} tickLine={false} />
+                <YAxis tick={axisTick} axisLine={false} tickLine={false} />
                 <Tooltip contentStyle={tooltipStyle} />
-                <Legend wrapperStyle={{ fontSize: 11 }} />
-                <Bar dataKey="Targeted" fill="var(--teal)" radius={[6, 6, 0, 0]} />
-                <Bar dataKey="Comprehensive" fill="var(--purple)" radius={[6, 6, 0, 0]} />
+                <Legend wrapperStyle={{ fontSize: 11, color: INK }} />
+                <Bar dataKey="Targeted" fill={SOLID_TARGETED} radius={[4, 4, 0, 0]} barSize={28} />
+                <Bar dataKey="Comprehensive" fill={SOLID_COMP} radius={[4, 4, 0, 0]} barSize={28} />
               </BarChart>
             </ResponsiveContainer>
           </ChartBox>
@@ -438,16 +419,16 @@ function DemographicTab({ data }: { data: any }) {
       </div>
 
       <Panel title="Disease Category × Test Type" hint="Targeted vs comprehensive by condition">
-        <ChartBox h={320}>
+        <ChartBox>
           <ResponsiveContainer>
             <BarChart data={data.disease_vs_test ?? []}>
-              <CartesianGrid strokeDasharray="3 3" stroke={gridStroke} />
-              <XAxis dataKey="name" tick={axisTick} interval={0} angle={-15} textAnchor="end" height={70} />
-              <YAxis tick={axisTick} />
+              <CartesianGrid stroke={GRID} vertical={false} />
+              <XAxis dataKey="name" tick={axisTick} interval={0} angle={-15} textAnchor="end" height={70} axisLine={{ stroke: HAIRLINE }} tickLine={false} />
+              <YAxis tick={axisTick} axisLine={false} tickLine={false} />
               <Tooltip contentStyle={tooltipStyle} />
-              <Legend wrapperStyle={{ fontSize: 11 }} />
-              <Bar dataKey="Targeted" stackId="a" fill="var(--teal)" />
-              <Bar dataKey="Comprehensive" stackId="a" fill="var(--purple)" />
+              <Legend wrapperStyle={{ fontSize: 11, color: INK }} />
+              <Bar dataKey="Targeted" stackId="a" fill={SOLID_TARGETED} />
+              <Bar dataKey="Comprehensive" stackId="a" fill={SOLID_COMP} radius={[4, 4, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
         </ChartBox>
@@ -480,25 +461,23 @@ function InstitutionalTab({ data, query }: { data: any; query: string }) {
 
   return (
     <>
-      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        <StatCard icon={<Building2 className="h-5 w-5" />} label="Facility Types" value={fac.length} sub="Distinct categories" accent="var(--teal)" />
-        <StatCard icon={<Building2 className="h-5 w-5" />} label="Public" value={`${total ? Math.round(publicTotal / total * 100) : 0}%`} sub={`${publicTotal.toLocaleString()} records`} accent="var(--purple)" />
-        <StatCard icon={<Building2 className="h-5 w-5" />} label="Private" value={`${total ? Math.round(privateTotal / total * 100) : 0}%`} sub={`${privateTotal.toLocaleString()} records`} accent="var(--mustard)" />
-        <StatCard icon={<Database className="h-5 w-5" />} label="Total Records" value={total.toLocaleString()} sub="Across all facilities" accent="var(--teal)" />
+      <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-4">
+        <StatCard icon={<Building2 className="h-5 w-5" />} label="FACILITY TYPES" value={fac.length} sub="Distinct categories" />
+        <StatCard icon={<Building2 className="h-5 w-5" />} label="PUBLIC" value={`${total ? Math.round(publicTotal / total * 100) : 0}%`} sub={`${publicTotal.toLocaleString()} records`} />
+        <StatCard icon={<Building2 className="h-5 w-5" />} label="PRIVATE" value={`${total ? Math.round(privateTotal / total * 100) : 0}%`} sub={`${privateTotal.toLocaleString()} records`} />
+        <StatCard icon={<Database className="h-5 w-5" />} label="TOTAL RECORDS" value={total.toLocaleString()} sub="Across all facilities" />
       </div>
 
-      <div className="grid gap-5 lg:grid-cols-2">
+      <div className="grid gap-6 lg:grid-cols-2">
         <Panel title="Facility Distribution" hint="Records by facility type">
           <ChartBox>
             <ResponsiveContainer>
               <BarChart data={fac}>
-                <CartesianGrid strokeDasharray="3 3" stroke={gridStroke} />
-                <XAxis dataKey="name" tick={axisTick} />
-                <YAxis tick={axisTick} />
+                <CartesianGrid stroke={GRID} vertical={false} />
+                <XAxis dataKey="name" tick={axisTick} axisLine={{ stroke: HAIRLINE }} tickLine={false} />
+                <YAxis tick={axisTick} axisLine={false} tickLine={false} />
                 <Tooltip contentStyle={tooltipStyle} />
-                <Bar dataKey="value" radius={[8, 8, 0, 0]}>
-                  {fac.map((_, i) => <Cell key={i} fill={PALETTE[i % PALETTE.length]} />)}
-                </Bar>
+                <Bar dataKey="value" fill={ACCENT} radius={[4, 4, 0, 0]} barSize={32} />
               </BarChart>
             </ResponsiveContainer>
           </ChartBox>
@@ -508,13 +487,13 @@ function InstitutionalTab({ data, query }: { data: any; query: string }) {
           <ChartBox>
             <ResponsiveContainer>
               <BarChart data={facVsTest}>
-                <CartesianGrid strokeDasharray="3 3" stroke={gridStroke} />
-                <XAxis dataKey="name" tick={axisTick} />
-                <YAxis tick={axisTick} />
+                <CartesianGrid stroke={GRID} vertical={false} />
+                <XAxis dataKey="name" tick={axisTick} axisLine={{ stroke: HAIRLINE }} tickLine={false} />
+                <YAxis tick={axisTick} axisLine={false} tickLine={false} />
                 <Tooltip contentStyle={tooltipStyle} />
-                <Legend wrapperStyle={{ fontSize: 11 }} />
-                <Bar dataKey="Targeted" stackId="a" fill="var(--teal)" />
-                <Bar dataKey="Comprehensive" stackId="a" fill="var(--purple)" />
+                <Legend wrapperStyle={{ fontSize: 11, color: INK }} />
+                <Bar dataKey="Targeted" stackId="a" fill={SOLID_TARGETED} />
+                <Bar dataKey="Comprehensive" stackId="a" fill={SOLID_COMP} radius={[4, 4, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </ChartBox>
@@ -525,29 +504,22 @@ function InstitutionalTab({ data, query }: { data: any; query: string }) {
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
-              <tr className="text-[11px] font-semibold uppercase tracking-[0.12em] text-card-foreground/60">
-                <th className="px-4 py-3 text-left">Facility Type</th>
-                <th className="px-4 py-3 text-left">Sector</th>
-                <th className="px-4 py-3 text-right">Records</th>
-                <th className="px-4 py-3 text-right">Share</th>
-                <th className="px-4 py-3 text-left">Dominant Test</th>
+              <tr className="font-display text-[11px]" style={{ color: MUTED }}>
+                <th className="px-4 py-3 text-left font-normal">FACILITY TYPE</th>
+                <th className="px-4 py-3 text-left font-normal">SECTOR</th>
+                <th className="px-4 py-3 text-right font-normal">RECORDS</th>
+                <th className="px-4 py-3 text-right font-normal">SHARE</th>
+                <th className="px-4 py-3 text-left font-normal">DOMINANT TEST</th>
               </tr>
             </thead>
             <tbody>
-              {rows.map((r) => (
-                <tr key={r.name} className="border-t border-card-foreground/10">
+              {rows.map((r, i) => (
+                <tr key={r.name} style={{ background: i % 2 ? PAPER : "transparent", borderTop: `1px solid ${HAIRLINE}` }}>
                   <td className="px-4 py-3 font-medium">{r.name}</td>
                   <td className="px-4 py-3">
-                    <span
-                      className="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold"
-                      style={{
-                        background: r.sector === "Public"
-                          ? "color-mix(in oklab, var(--teal) 22%, transparent)"
-                          : "color-mix(in oklab, var(--purple) 22%, transparent)",
-                        color: r.sector === "Public" ? "var(--teal-deep)" : "var(--purple-deep)",
-                      }}
-                    >
-                      {r.sector}
+                    <span className="inline-flex items-center gap-2">
+                      <span className="h-1.5 w-1.5 rounded-full" style={{ background: r.sector === "Public" ? INK : ACCENT }} />
+                      <span>{r.sector}</span>
                     </span>
                   </td>
                   <td className="px-4 py-3 text-right tabular-nums">{r.sum.toLocaleString()}</td>
@@ -556,7 +528,7 @@ function InstitutionalTab({ data, query }: { data: any; query: string }) {
                 </tr>
               ))}
               {rows.length === 0 && (
-                <tr><td colSpan={5} className="px-4 py-8 text-center text-card-foreground/60">No facilities match your search.</td></tr>
+                <tr><td colSpan={5} className="px-4 py-8 text-center" style={{ color: MUTED }}>No facilities match your search.</td></tr>
               )}
             </tbody>
           </table>
@@ -576,49 +548,37 @@ function TemporalTab({ data }: { data: any }) {
 
   return (
     <>
-      <div className="grid gap-4 sm:grid-cols-3">
-        <StatCard icon={<CalendarRange className="h-5 w-5" />} label="Peak Year" value={peak?.year ?? "—"} sub={peak ? `${peak.count.toLocaleString()} tests` : ""} accent="var(--teal)" />
-        <StatCard icon={<TrendingUp className="h-5 w-5" />} label="Growth" value={`${growth > 0 ? "+" : ""}${growth}%`} sub={`From ${first?.year} → ${last?.year}`} accent="var(--purple)" />
-        <StatCard icon={<Database className="h-5 w-5" />} label="Cumulative" value={(last?.cumulative ?? 0).toLocaleString()} sub="Tests recorded through latest year" accent="var(--mustard)" />
+      <div className="grid gap-6 sm:grid-cols-3">
+        <StatCard icon={<CalendarRange className="h-5 w-5" />} label="PEAK YEAR" value={peak?.year ?? "—"} sub={peak ? `${peak.count.toLocaleString()} tests` : ""} />
+        <StatCard icon={<TrendingUp className="h-5 w-5" />} label="GROWTH" value={`${growth > 0 ? "+" : ""}${growth}%`} sub={`From ${first?.year} → ${last?.year}`} />
+        <StatCard icon={<Database className="h-5 w-5" />} label="CUMULATIVE" value={(last?.cumulative ?? 0).toLocaleString()} sub="Through latest year" />
       </div>
 
       <Panel title="Annual Testing Volume" hint="Yearly counts with cumulative trend">
-        <ChartBox h={320}>
+        <ChartBox>
           <ResponsiveContainer>
             <ComposedChart data={vol}>
-              <defs>
-                <linearGradient id="tVol" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%"  stopColor="var(--teal)"   stopOpacity={0.9} />
-                  <stop offset="100%" stopColor="var(--purple)" stopOpacity={0.9} />
-                </linearGradient>
-              </defs>
-              <CartesianGrid strokeDasharray="3 3" stroke={gridStroke} />
-              <XAxis dataKey="year" tick={axisTick} />
-              <YAxis tick={axisTick} />
+              <CartesianGrid stroke={GRID} vertical={false} />
+              <XAxis dataKey="year" tick={axisTick} axisLine={{ stroke: HAIRLINE }} tickLine={false} />
+              <YAxis tick={axisTick} axisLine={false} tickLine={false} />
               <Tooltip contentStyle={tooltipStyle} />
-              <Bar dataKey="count" fill="url(#tVol)" radius={[8, 8, 0, 0]} />
-              <Line type="monotone" dataKey="cumulative" stroke="var(--ink)" strokeWidth={2.5} dot={{ r: 3 }} />
+              <Bar dataKey="count" fill={ACCENT} radius={[4, 4, 0, 0]} barSize={32} />
+              <Line type="monotone" dataKey="cumulative" stroke={INK} strokeWidth={2.5} dot={{ r: 3, fill: INK }} />
             </ComposedChart>
           </ResponsiveContainer>
         </ChartBox>
       </Panel>
 
-      <div className="grid gap-5 lg:grid-cols-2">
-        <Panel title="Cumulative Growth" hint="Running total of tests over time">
+      <div className="grid gap-6 lg:grid-cols-2">
+        <Panel title="Cumulative Growth" hint="Running total over time">
           <ChartBox>
             <ResponsiveContainer>
               <AreaChart data={vol}>
-                <defs>
-                  <linearGradient id="cumA" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="var(--teal)" stopOpacity={0.5} />
-                    <stop offset="100%" stopColor="var(--teal)" stopOpacity={0} />
-                  </linearGradient>
-                </defs>
-                <CartesianGrid strokeDasharray="3 3" stroke={gridStroke} />
-                <XAxis dataKey="year" tick={axisTick} />
-                <YAxis tick={axisTick} />
+                <CartesianGrid stroke={GRID} vertical={false} />
+                <XAxis dataKey="year" tick={axisTick} axisLine={{ stroke: HAIRLINE }} tickLine={false} />
+                <YAxis tick={axisTick} axisLine={false} tickLine={false} />
                 <Tooltip contentStyle={tooltipStyle} />
-                <Area type="monotone" dataKey="cumulative" stroke="var(--teal-deep)" strokeWidth={2.5} fill="url(#cumA)" />
+                <Area type="monotone" dataKey="cumulative" stroke={INK} strokeWidth={2.5} fill={INK} fillOpacity={0.08} />
               </AreaChart>
             </ResponsiveContainer>
           </ChartBox>
@@ -628,13 +588,13 @@ function TemporalTab({ data }: { data: any }) {
           <ChartBox>
             <ResponsiveContainer>
               <BarChart data={data.yearly_by_test_type ?? []}>
-                <CartesianGrid strokeDasharray="3 3" stroke={gridStroke} />
-                <XAxis dataKey="year" tick={axisTick} />
-                <YAxis tick={axisTick} />
+                <CartesianGrid stroke={GRID} vertical={false} />
+                <XAxis dataKey="year" tick={axisTick} axisLine={{ stroke: HAIRLINE }} tickLine={false} />
+                <YAxis tick={axisTick} axisLine={false} tickLine={false} />
                 <Tooltip contentStyle={tooltipStyle} />
-                <Legend wrapperStyle={{ fontSize: 11 }} />
-                <Bar dataKey="Targeted" stackId="a" fill="var(--teal)" radius={[0, 0, 0, 0]} />
-                <Bar dataKey="Comprehensive" stackId="a" fill="var(--purple)" radius={[6, 6, 0, 0]} />
+                <Legend wrapperStyle={{ fontSize: 11, color: INK }} />
+                <Bar dataKey="Targeted" stackId="a" fill={SOLID_TARGETED} />
+                <Bar dataKey="Comprehensive" stackId="a" fill={SOLID_COMP} radius={[4, 4, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </ChartBox>

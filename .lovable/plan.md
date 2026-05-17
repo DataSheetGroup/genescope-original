@@ -1,52 +1,50 @@
 ## Goal
-Replace the editorial green/cream/coral palette with one derived from the GeneScope logo: teal (~#3FB8AF) on the left, deep indigo-purple (~#6B4FBB) on the right, with a soft off-white surface.
 
-## Scope
-CSS-only change in `src/styles.css`. No component refactors — every component already consumes semantic tokens (`--primary`, `--accent`, `--background`, `--nav-bg`, `--surface-strong`, `--coral`, `--cream`, `--green-deep`, chart colors, scrollbar). I'll repoint those tokens to the new palette so the whole app picks it up automatically.
+Make `/dashboard` feel solid and editorial — same brand language as the Phamily Pharma site (and your home page): deep ink background, cream surfaces, **one** confident accent, Bagel Fat One for display, Fredoka for body. No gradient washes, no glow blobs, no rainbow charts.
 
-## New palette (oklch)
-- `--teal`        ≈ oklch(0.72 0.10 190)  — logo teal
-- `--teal-deep`   ≈ oklch(0.45 0.09 195)  — dark teal surface
-- `--purple`      ≈ oklch(0.55 0.16 295)  — logo purple
-- `--purple-deep` ≈ oklch(0.32 0.12 295)  — dark purple surface
-- `--ink`         ≈ oklch(0.22 0.05 285)  — near-black indigo for dark bg
-- `--paper`       ≈ oklch(0.97 0.01 280)  — off-white with violet tint
-- `--gradient-brand`: `linear-gradient(135deg, var(--teal), var(--purple))`
+## What changes
 
-## Token remap
+### 1. Kill the "trying too hard" visuals
+- Remove the teal→purple gradient on the active tab pill, on the volume bars, and on the cumulative area fill.
+- Remove the decorative blurred blob in the corner of every `Card`.
+- Remove the soft drop shadows on header chips.
+- One accent color per surface — no 5-color pie/bar palettes. Charts get **ink + a single accent** (Targeted = ink, Comprehensive = accent), categorical bars all share one color.
 
-Dark mode (default `:root`):
-- `--background` → `--ink`
-- `--foreground` → `--paper`
-- `--card` / `--popover` → `--paper` (kept light so existing card text stays readable)
-- `--primary` → `--purple`, `--primary-foreground` → `--paper`
-- `--accent` → `--teal`
-- `--muted` → `--purple-deep`
-- `--ring` → `--teal`
-- Charts: teal, purple, paper, mid-teal, mid-purple
-- `--nav-bg` → `--ink`, `--nav-fg` → `--paper`
+### 2. Solid color system on the dashboard
+- Page background: `--paper` (cream), not the global ink — gives the dashboard a flat editorial feel like Phamily's green slab.
+- Cards: flat white on cream, hairline border in `ink/12`, no shadow, no blob.
+- Accent: pick **one** — recommend keeping `--purple` as the single dashboard accent (matches the logo without going pastel). Teal demoted to neutral support.
+- Tabs: flat pill row, active = solid ink fill + cream text, inactive = transparent with ink/70 text. No gradient.
 
-Light mode (`[data-theme="light"]`):
-- `--background` → `--paper`
-- `--foreground` → `--ink`
-- `--primary` → `--purple`, `--accent` → `--teal`
-- `--nav-bg` → `--paper`, `--surface-strong` → `--purple`
+### 3. Typography — Phamily style
+- Phamily uses a fat rounded display face for the logo (you already have **Bagel Fat One**) and a rounded geometric sans for UI (you already have **Fredoka**). Same stack, just used more consistently.
+- Apply **Bagel Fat One** to: dashboard H1 (already), all `Panel` titles, all tab labels, table column headers, KPI big-number (already).
+- Body / labels / table cells: **Fredoka** 500–600, slightly tighter tracking.
+- Drop the all-caps `tracking-[0.14em]` micro-labels — replace with normal-case Bagel Fat One small caps feel via the display font at 11–12px.
 
-Legacy aliases (so existing class names like `.hero-green`, `.slab-cream`, `.pill-coral`, `--coral`, `--cream`, `--green-deep` keep working without touching components):
-- `--green-deep` → `--ink`
-- `--cream` / `--cream-dim` → `--paper` / slightly dimmer paper
-- `--coral` → `--purple` (so coral pills/highlights become purple)
-- `--teal-soft` → `--teal`
-- `.hero-green` background stays mapped to `--ink`
-- `.slab-cream` stays mapped to `--paper`
-- Scrollbar: track `--ink`, thumb `--purple`, hover `--teal`
+### 4. Layout cleanup
+- Header: single row on desktop, stacks cleanly on mobile. Search + Filter move into a compact toolbar **under** the tab row (where they belong on a dashboard), not floating beside the title.
+- Tab bar: horizontal scroll on mobile (current wraps look messy at 634px), 44px tall pills, even spacing.
+- Grid: standardize on a 12-col mental model — KPI row = 4 equal cards, content blocks below in 6/6 or 8/4 splits. Remove the awkward 1.6fr/1fr Geographic split — use 7/5.
+- Spacing: section gap `gap-6`, card padding `p-6`, chart height `h-72` for everything (currently jumps between 260/300/320).
+- Facility table: zebra rows, sticky header, right-align numeric columns (already partial), remove the colored sector pills — replace with a quiet dot + label.
 
-Optional polish: `.hl` highlight uses `--teal` with `--ink` text for better contrast against purple primary.
+### 5. Chart polish
+- Single accent (`--purple`) for all single-series bars/pies.
+- Two-series charts: `--ink` (Targeted) + `--purple` (Comprehensive). Legend dots match.
+- Axis ticks: Fredoka 11px, ink/60.
+- Gridlines: 1px solid `ink/8`, no dashes.
+- Tooltips: cream bg, ink text, 1px ink border, square corners feel — keep 12px radius but drop the dark fill.
 
-## Out of scope
-- No changes to map tiles, charts data, layout, or component structure.
-- Logo image itself untouched.
+## Files touched
 
-## Verification
-- Build passes (tokens only).
-- Spot-check landing, dashboard, navbar in both themes via preview.
+- `src/routes/dashboard.tsx` — full restyle of `Card`, `StatCard`, `Panel`, `TabBar`, header, all four tabs, table.
+- `src/styles.css` — add a `.font-display` application to panel/tab headings is already available; no token changes unless you want me to also calm the home-page palette (out of scope unless you say so).
+
+## What I won't touch (unless you ask)
+
+- Home page, Predict page, Performance page, Navbar — same visual language stays.
+- The local-data engine, charts data shape, tab structure (Overview / Geographic / Demographic / Institutional / Temporal stays).
+- Color tokens in `styles.css` — I'll just use `--ink`, `--paper`, `--purple` more strictly inside the dashboard.
+
+Approve and I'll rewrite `src/routes/dashboard.tsx` in one pass.
