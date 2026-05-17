@@ -166,7 +166,7 @@ function PerformancePage() {
             <h1 className="display-lg">
               Three models,
               <br />
-              <span className="text-coral">one chosen for the job.</span>
+              <span className="hl">one chosen for the job.</span>
             </h1>
             <p className="mt-5 text-foreground/75">
               Comparative evaluation of Binary Logistic Regression, Decision Tree, and Random Forest.
