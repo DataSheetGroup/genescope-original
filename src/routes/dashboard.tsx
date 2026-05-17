@@ -1,7 +1,14 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useMemo, useState, type ReactNode } from "react";
-import { Icon } from "@iconify/react";
+import microscopeSticker from "@/assets/stickers/microscope.png";
+import moleculeSticker from "@/assets/stickers/molecule.png";
+import flaskPurpleSticker from "@/assets/stickers/flask-purple.png";
+import flaskGreenSticker from "@/assets/stickers/flask-green.png";
+import potionBlueSticker from "@/assets/stickers/potion-blue.png";
+import dropperSticker from "@/assets/stickers/dropper.png";
+import magnetSticker from "@/assets/stickers/magnet.png";
+import gogglesSticker from "@/assets/stickers/goggles.png";
 import {
   Area, AreaChart, Bar, BarChart, CartesianGrid, Cell, ComposedChart,
   Legend, Line, Pie, PieChart, ResponsiveContainer, Tooltip, XAxis, YAxis,
@@ -42,8 +49,32 @@ const axisTick = { fontSize: 12, fill: INK, opacity: 0.6, fontFamily: "Poppins, 
 const chartMargin = { top: 8, right: 16, bottom: 0, left: 0 };
 
 // ─────────────────────────── sticker icon helper
-function Sticker({ name, size = 28 }: { name: string; size?: number }) {
-  return <Icon icon={`fluent-emoji-flat:${name}`} width={size} height={size} />;
+export type StickerName =
+  | "microscope" | "molecule" | "flask-purple" | "flask-green"
+  | "potion-blue" | "dropper" | "magnet" | "goggles";
+
+const STICKERS: Record<StickerName, string> = {
+  "microscope": microscopeSticker,
+  "molecule": moleculeSticker,
+  "flask-purple": flaskPurpleSticker,
+  "flask-green": flaskGreenSticker,
+  "potion-blue": potionBlueSticker,
+  "dropper": dropperSticker,
+  "magnet": magnetSticker,
+  "goggles": gogglesSticker,
+};
+
+export function Sticker({ name, size = 28 }: { name: StickerName; size?: number }) {
+  return (
+    <img
+      src={STICKERS[name]}
+      alt=""
+      width={size}
+      height={size}
+      style={{ width: size, height: size, objectFit: "contain", display: "inline-block" }}
+      draggable={false}
+    />
+  );
 }
 
 // ─────────────────────────── primitives
@@ -60,7 +91,7 @@ function Card({ children, className = "" }: { children: ReactNode; className?: s
 
 function StatCard({
   icon, label, value, sub,
-}: { icon: string; label: string; value: ReactNode; sub?: ReactNode }) {
+}: { icon: StickerName; label: string; value: ReactNode; sub?: ReactNode }) {
   return (
     <Card className="p-7 h-full">
       <div className="flex items-start justify-between gap-4">
@@ -109,12 +140,12 @@ function Skeleton() {
 
 // ─────────────────────────── tabs
 type TabKey = "overview" | "geographic" | "demographic" | "institutional" | "temporal";
-const TABS: { key: TabKey; label: string; icon: string }[] = [
-  { key: "overview",      label: "Overview",      icon: "bar-chart" },
-  { key: "geographic",    label: "Geographic",    icon: "world-map" },
-  { key: "demographic",   label: "Demographic",   icon: "bust-in-silhouette" },
-  { key: "institutional", label: "Institutional", icon: "hospital" },
-  { key: "temporal",      label: "Temporal",      icon: "chart-increasing" },
+const TABS: { key: TabKey; label: string; icon: StickerName }[] = [
+  { key: "overview",      label: "Overview",      icon: "microscope" },
+  { key: "geographic",    label: "Geographic",    icon: "potion-blue" },
+  { key: "demographic",   label: "Demographic",   icon: "molecule" },
+  { key: "institutional", label: "Institutional", icon: "goggles" },
+  { key: "temporal",      label: "Temporal",      icon: "dropper" },
 ];
 
 function TabBar({ value, onChange }: { value: TabKey; onChange: (k: TabKey) => void }) {
@@ -185,7 +216,7 @@ function Dashboard() {
               className="flex items-center gap-2 rounded-xl bg-white px-4 py-3 text-base"
               style={{ border: `1px solid ${HAIRLINE}`, color: INK }}
             >
-              <Icon icon="fluent-emoji-flat:magnifying-glass-tilted-left" width={18} height={18} />
+              <Sticker name="magnet" size={20} />
               <input
                 value={q}
                 onChange={(e) => setQ(e.target.value)}
@@ -197,7 +228,7 @@ function Dashboard() {
               className="inline-flex items-center gap-2 rounded-xl bg-white px-4 py-3 font-display text-[13px]"
               style={{ border: `1px solid ${HAIRLINE}`, color: INK, letterSpacing: "0.03em" }}
             >
-              <Icon icon="fluent-emoji-flat:control-knobs" width={18} height={18} />
+              <Sticker name="dropper" size={20} />
               Filters
             </button>
           </div>
@@ -233,10 +264,10 @@ function KpiRow({ data }: { data: any }) {
   const diseases = data.disease_category?.length ?? 0;
   return (
     <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-4 auto-rows-fr">
-      <StatCard icon="card-index-dividers" label="TOTAL RECORDS" value={total.toLocaleString()} sub={data.year_coverage ? `Covering ${data.year_coverage}` : null} />
-      <StatCard icon="spiral-calendar" label="YEAR COVERAGE" value={data.year_coverage ?? "—"} sub={`${data.annual_volume?.length ?? 0} reporting years`} />
-      <StatCard icon="round-pushpin" label="REGIONS" value={regions} sub="Island groups covered" />
-      <StatCard icon="dna" label="DISEASE CATEGORIES" value={diseases} sub="Distinct conditions tracked" />
+      <StatCard icon="microscope" label="TOTAL RECORDS" value={total.toLocaleString()} sub={data.year_coverage ? `Covering ${data.year_coverage}` : null} />
+      <StatCard icon="flask-green" label="YEAR COVERAGE" value={data.year_coverage ?? "—"} sub={`${data.annual_volume?.length ?? 0} reporting years`} />
+      <StatCard icon="potion-blue" label="REGIONS" value={regions} sub="Island groups covered" />
+      <StatCard icon="molecule" label="DISEASE CATEGORIES" value={diseases} sub="Distinct conditions tracked" />
     </div>
   );
 }
@@ -326,9 +357,9 @@ function GeographicTab({ data, query }: { data: any; query: string }) {
   return (
     <>
       <div className="grid gap-6 sm:grid-cols-3 auto-rows-fr">
-        <StatCard icon="trophy" label="TOP REGION" value={top?.name ?? "—"} sub={top ? `${top.value.toLocaleString()} records` : ""} />
-        <StatCard icon="globe-showing-asia-australia" label="COVERAGE" value={`${regions.length}`} sub="Island groups represented" />
-        <StatCard icon="card-index-dividers" label="TOTAL TESTS" value={total.toLocaleString()} sub="Across all regions" />
+        <StatCard icon="flask-purple" label="TOP REGION" value={top?.name ?? "—"} sub={top ? `${top.value.toLocaleString()} records` : ""} />
+        <StatCard icon="potion-blue" label="COVERAGE" value={`${regions.length}`} sub="Island groups represented" />
+        <StatCard icon="microscope" label="TOTAL TESTS" value={total.toLocaleString()} sub="Across all regions" />
       </div>
 
       <PhilippinesMap
@@ -381,9 +412,9 @@ function DemographicTab({ data }: { data: any }) {
   return (
     <>
       <div className="grid gap-6 sm:grid-cols-3 auto-rows-fr">
-        <StatCard icon="busts-in-silhouette" label="TOTAL PATIENTS" value={total.toLocaleString()} sub="Anonymized records" />
-        <StatCard icon="woman" label="FEMALE SHARE" value={`${pct(female)}%`} sub={`${female.toLocaleString()} records`} />
-        <StatCard icon="man" label="MALE SHARE" value={`${pct(male)}%`} sub={`${male.toLocaleString()} records`} />
+        <StatCard icon="molecule" label="TOTAL PATIENTS" value={total.toLocaleString()} sub="Anonymized records" />
+        <StatCard icon="flask-purple" label="FEMALE SHARE" value={`${pct(female)}%`} sub={`${female.toLocaleString()} records`} />
+        <StatCard icon="flask-green" label="MALE SHARE" value={`${pct(male)}%`} sub={`${male.toLocaleString()} records`} />
       </div>
 
       <div className="grid gap-6 lg:grid-cols-2 auto-rows-fr">
@@ -462,10 +493,10 @@ function InstitutionalTab({ data, query }: { data: any; query: string }) {
   return (
     <>
       <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-4 auto-rows-fr">
-        <StatCard icon="hospital" label="FACILITY TYPES" value={fac.length} sub="Distinct categories" />
-        <StatCard icon="classical-building" label="PUBLIC" value={`${total ? Math.round(publicTotal / total * 100) : 0}%`} sub={`${publicTotal.toLocaleString()} records`} />
-        <StatCard icon="office-building" label="PRIVATE" value={`${total ? Math.round(privateTotal / total * 100) : 0}%`} sub={`${privateTotal.toLocaleString()} records`} />
-        <StatCard icon="card-index-dividers" label="TOTAL RECORDS" value={total.toLocaleString()} sub="Across all facilities" />
+        <StatCard icon="goggles" label="FACILITY TYPES" value={fac.length} sub="Distinct categories" />
+        <StatCard icon="flask-green" label="PUBLIC" value={`${total ? Math.round(publicTotal / total * 100) : 0}%`} sub={`${publicTotal.toLocaleString()} records`} />
+        <StatCard icon="flask-purple" label="PRIVATE" value={`${total ? Math.round(privateTotal / total * 100) : 0}%`} sub={`${privateTotal.toLocaleString()} records`} />
+        <StatCard icon="microscope" label="TOTAL RECORDS" value={total.toLocaleString()} sub="Across all facilities" />
       </div>
 
       <div className="grid gap-6 lg:grid-cols-2 auto-rows-fr">
@@ -549,9 +580,9 @@ function TemporalTab({ data }: { data: any }) {
   return (
     <>
       <div className="grid gap-6 sm:grid-cols-3 auto-rows-fr">
-        <StatCard icon="trophy" label="PEAK YEAR" value={peak?.year ?? "—"} sub={peak ? `${peak.count.toLocaleString()} tests` : ""} />
-        <StatCard icon="chart-increasing" label="GROWTH" value={`${growth > 0 ? "+" : ""}${growth}%`} sub={`From ${first?.year} → ${last?.year}`} />
-        <StatCard icon="card-index-dividers" label="CUMULATIVE" value={(last?.cumulative ?? 0).toLocaleString()} sub="Through latest year" />
+        <StatCard icon="flask-purple" label="PEAK YEAR" value={peak?.year ?? "—"} sub={peak ? `${peak.count.toLocaleString()} tests` : ""} />
+        <StatCard icon="dropper" label="GROWTH" value={`${growth > 0 ? "+" : ""}${growth}%`} sub={`From ${first?.year} → ${last?.year}`} />
+        <StatCard icon="microscope" label="CUMULATIVE" value={(last?.cumulative ?? 0).toLocaleString()} sub="Through latest year" />
       </div>
 
       <Panel title="Annual Testing Volume" hint="Yearly counts with cumulative trend">

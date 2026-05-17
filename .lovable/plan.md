@@ -1,81 +1,114 @@
 ## Goals
 
-1. Show the four KPI cards (TOTAL RECORDS, YEAR COVERAGE, REGIONS, DISEASE CATEGORIES) **only on the Overview tab**, not on every tab.
-2. On the Geographic tab, give the map its own full-width section and move "Regional Breakdown" below it.
-3. Upgrade the Philippines map into the dashboard's hero feature — interactive, advanced, with real controls.
+1. Replace **every** `@iconify` "fluent-emoji-flat" icon on the dashboard with the 8 uploaded lab/science stickers.
+2. Redesign the Philippines map controls so they're easier to scan and use — fewer dense segmented rows, more obvious labels, and a collapsible panel so the map breathes.
 
 ---
 
-## 1. KPI scoping (Overview only)
+## 1. Sticker assets
 
-In `src/routes/dashboard.tsx`:
-- Remove `<KpiRow data={data} />` from the shared body wrapper.
-- Render `<KpiRow />` as the first block inside `OverviewTab` only.
-- Leave the per-tab StatCard rows on Geographic / Demographic / Institutional alone (those are tab-specific KPIs, not the global four).
-
-## 2. Geographic tab layout
-
-Restructure the Geographic tab into three vertical sections:
+Copy the 8 user-uploaded PNGs into `src/assets/stickers/` and import them as ES modules:
 
 ```text
-[ Top region · Coverage · Total tests ]   ← existing 3 stat cards
-──────────────────────────────────────────
-[ PHILIPPINES MAP — full width, solo ]
-──────────────────────────────────────────
-[ Regional Breakdown (bar chart, full width) ]
-──────────────────────────────────────────
-[ Region × Test Type (existing) ]
+src/assets/stickers/
+  microscope.png   ← microscope-removebg-preview-2.png
+  molecule.png     ← amino-removebg-preview-2.png
+  flask-purple.png ← purple-removebg-preview-2.png
+  flask-green.png  ← green-removebg-preview-2.png
+  potion-blue.png  ← fire-removebg-preview-3.png
+  dropper.png      ← drop-removebg-preview-3.png
+  magnet.png       ← magnet-removebg-preview-2.png
+  goggles.png      ← glasses-removebg-preview-3.png
 ```
 
-- Drop the `lg:grid-cols-12` split that put map+breakdown side-by-side.
-- Map panel becomes full-width, taller (h-[600px]) so it reads as the highlight.
-- Breakdown bar chart sits on its own row below.
+## 2. Sticker mapping (every emoji → a sticker)
 
-## 3. Advanced interactive map
+In `src/routes/dashboard.tsx`, replace the `Sticker` helper so it maps semantic names → imported PNGs:
 
-Rewrite `src/components/PhilippinesMap.tsx` to be the dashboard's centerpiece. All work stays in this component plus its panel wrapper.
+```ts
+type StickerName =
+  | "records" | "calendar" | "regions" | "dna"
+  | "overview" | "geographic" | "demographic" | "institutional" | "temporal"
+  | "search" | "filters"
+  | "trophy" | "coverage" | "patients" | "female" | "male"
+  | "hospital" | "public" | "private" | "growth";
+```
 
-### Visualization modes (toggle in a control bar overlaid on the map)
-- **Bubbles** — current island-group circles, sized by volume (default).
-- **Heat** — proportional radial gradients per island group (CSS/SVG-rendered overlay, no extra deps if possible; otherwise `leaflet.heat`).
-- **Choropleth** — fill Luzon / Visayas / Mindanao polygons by volume using a 5-step purple ramp. Use a small inlined GeoJSON of the three island-group hulls (lightweight, hand-defined coordinates — no external fetch).
+Mapping (re-uses the 8 stickers thoughtfully — labs/genetics theme):
 
-### Controls (floating panel, top-right of map)
-- Mode switcher (Bubbles / Heat / Choropleth) — segmented control.
-- Metric switcher (Total records / Targeted only / Comprehensive only / % share) — requires passing `region_vs_test` into the map.
-- Year filter — segmented `All · 2021 · 2022 · 2023 · 2024 · 2025` (requires passing year-broken regional data; if backend doesn't expose it, fall back to "All" only and hide the year segmented control gracefully).
-- Basemap toggle — Light / Dark / Satellite (CARTO light, CARTO dark, Esri World Imagery tile URLs).
-- Reset view button.
-- Fullscreen toggle (CSS-only: expand the map container to `fixed inset-4 z-50`).
+| Use case (current icon)                    | Sticker        |
+|---                                          |---             |
+| TOTAL RECORDS / TOTAL TESTS / CUMULATIVE   | microscope     |
+| YEAR COVERAGE                               | flask-green    |
+| REGIONS / TOP REGION / COVERAGE / map tab  | potion-blue    |
+| DISEASE CATEGORIES                          | molecule       |
+| Overview tab                                | microscope     |
+| Demographic tab / TOTAL PATIENTS            | molecule       |
+| FEMALE SHARE                                | flask-purple   |
+| MALE SHARE                                  | flask-green    |
+| Institutional tab / FACILITY TYPES / hospital | goggles      |
+| PUBLIC                                      | flask-green    |
+| PRIVATE                                     | flask-purple   |
+| Temporal tab / GROWTH / chart-increasing   | dropper        |
+| PEAK YEAR / TOP REGION trophy               | flask-purple   |
+| Header search input                         | magnet         |
+| Header "Filters" button                     | dropper        |
 
-### On-map interactivity
-- Click an island group → "selected" state: ring highlight + detail card slides in from the left of the map showing name, total, share, top disease (if available), top facility (if available).
-- Hover → richer tooltip card (name, count, share, mini sparkline of yearly trend if year data available, else just count + share).
-- Region context dots (existing 17 dots) become clickable with name labels on hover.
-- Enable `scrollWheelZoom` (currently disabled), add `zoomControl` styled to match theme (bottom-right).
-- Smooth fly-to animation on selection (`map.flyTo`).
+Update every `<StatCard icon="…">` call and the `TABS` array to use the new semantic names.
+
+## 3. Cleaner, friendlier map controls (`PhilippinesMap.tsx`)
+
+Replace the current dense top-right panel (4 stacked segmented controls + 2 buttons, ~260px tall) with a much calmer two-piece UI:
+
+### Toolbar — bottom-center, pill-shaped
+
+A single horizontal toolbar that hovers above the bottom of the map:
+
+```text
+┌──────────────────────────────────────────────────────────────────────┐
+│  [● Bubbles] [◇ Choropleth] [≋ Heat]    │    Year: [ All ▾ ]         │
+│                                          │    Map:  [ Light ▾ ]       │
+│                       [ Reset ]  [ ⤢ Expand ]                        │
+└──────────────────────────────────────────────────────────────────────┘
+```
+
+- Visualization mode = 3 clearly-labeled pill buttons with small inline icons (active pill filled with `--ink`, inactive transparent). This is the most important control, so it gets the most space.
+- Year + Basemap collapse into compact native-styled dropdowns (real `<select>` for accessibility, restyled to match the card hairlines). Year dropdown is hidden when `regionByYear` is empty.
+- Reset + Expand are right-aligned ghost buttons.
+- Metric switcher (Total / Targeted / Comprehensive / Share) moves into a **secondary "Layers"** drawer (see below) — most users never need it, so it shouldn't crowd the primary toolbar.
+
+### Layers drawer — top-right, collapsible
+
+Single small button labeled `LAYERS` in the top-right. Clicking it slides out a clean panel containing:
+- Metric switcher (4 options, as a vertical radio list with descriptions like "Total records" / "Targeted only").
+- Closed by default → map looks calm and uncluttered. Persists during the session via local component state.
+
+### Detail card
+
+Keep the "selected region" card but move it to **top-left** with friendlier copy and a small sticker (potion-blue) in the header so it visually ties to the map.
 
 ### Legend
-- Bottom-left card: gradient bar with min/max counts, current metric label, current year label.
 
-### Performance / safety
-- Keep the dynamic `import("react-leaflet")` client-only pattern.
-- All extra layers (choropleth polygons, heat overlay) live inside the same client-only effect — no SSR access to `window`.
-- Use design tokens (`--ink`, `--purple`, `--paper`, `--coral`) for all colors; no hardcoded brand colors.
+Keep at bottom-left, but shrink it to a single line: `[gradient bar] 0 — 184  ·  Total records · All years` so it reads as a caption, not a panel.
 
-### Data plumbing
-- `PhilippinesMap` props expand to: `{ data, regionByTest?, regionByYear? }`. Pass `data.region_vs_test` and (if present) `data.region_by_year` from the Geographic tab. If a prop is missing, the related control is hidden — no crash.
+### Affordances
 
----
+- Add a subtle one-line helper *under* the map ("Click an island group for details · scroll to zoom") so users know what's interactive — replaces having to discover via the dense panel.
+- Bump map height from `600px` to `640px` on desktop now that floating UI is lighter.
 
-## Files touched
+### What's removed
 
-- `src/routes/dashboard.tsx` — move KPI row into Overview tab; restructure Geographic tab layout; pass extra data to the map.
-- `src/components/PhilippinesMap.tsx` — full rewrite with modes, controls, selection, legend, fullscreen.
+- The 260px floating control card.
+- The cramped 11px font in segmented controls.
+- Two of the segmented rows (Metric moves to drawer; nothing else changes behavior).
 
-No new dependencies required for the core (modes built with react-leaflet primitives + inline GeoJSON). If heat mode proves too heavy without `leaflet.heat`, I'll skip Heat and ship Bubbles + Choropleth only — will note before installing anything.
+## 4. Files touched
+
+- `src/routes/dashboard.tsx` — swap `Sticker` helper to import PNGs, rename every `icon=` prop, replace the two header `<Icon>` calls.
+- `src/components/PhilippinesMap.tsx` — replace top-right control panel with bottom toolbar + collapsible Layers drawer; relocate detail card; shrink legend; add helper caption.
+- `src/assets/stickers/*.png` — 8 copied PNG files.
 
 ## Out of scope
 
-- Backend / API changes. If `region_by_year` doesn't exist in the EDA payload, the year filter is hidden; I won't add new endpoints.
-- Other tabs' charts, fonts, color tokens, navbar.
+- Color tokens, fonts, navbar, other tabs' charts, data layer, backend.
+- No new dependencies.
