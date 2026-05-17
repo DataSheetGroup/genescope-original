@@ -213,7 +213,6 @@ function Dashboard() {
           {isLoading && <Skeleton />}
           {data && (
             <div className="animate-fade-up space-y-8">
-              <KpiRow data={data} />
               {tab === "overview"      && <OverviewTab data={data} />}
               {tab === "geographic"    && <GeographicTab data={data} query={q} />}
               {tab === "demographic"   && <DemographicTab data={data} />}
