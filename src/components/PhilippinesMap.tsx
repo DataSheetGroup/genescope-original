@@ -483,3 +483,13 @@ function PrettySelect({
     </label>
   );
 }
+
+function Row({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="flex items-center justify-between border-b last:border-0 pb-1.5 last:pb-0"
+      style={{ borderColor: "color-mix(in oklab, var(--ink) 10%, transparent)" }}>
+      <span style={{ opacity: 0.6 }}>{label}</span>
+      <span style={{ fontVariantNumeric: "tabular-nums", fontWeight: 600 }}>{value}</span>
+    </div>
+  );
+}
