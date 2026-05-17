@@ -300,7 +300,7 @@ function PerformancePage() {
       <div className="grid md:grid-cols-2 gap-5">
         <div className="rounded-3xl bg-card text-card-foreground p-7">
           <div className="eyebrow text-coral mb-2">Cross validation</div>
-          <h2 className="font-display text-2xl">5-Fold Mean ± SD</h2>
+          <h2 className="font-display text-2xl">5-Fold Mean ± <span className="hl">SD</span></h2>
           <div className="mt-5 space-y-2.5">
             {models.map((m) => (
               <div key={m.name} className="flex items-center justify-between rounded-2xl bg-cream-dim px-5 py-4">
