@@ -91,7 +91,7 @@ export function PhilippinesMap({
   const [showLabels, setShowLabels] = useState(true);
   const [showDots, setShowDots] = useState(true);
   const [minThreshold, setMinThreshold] = useState(0);
-  const [drawerOpen, setDrawerOpen] = useState(true);
+  // (drawer state removed; controls are now distributed pods)
   const [playing, setPlaying] = useState(false);
   const mapRef = useRef<any>(null);
   const wrapRef = useRef<HTMLDivElement | null>(null);
