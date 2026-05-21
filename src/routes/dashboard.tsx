@@ -330,10 +330,10 @@ function OverviewTab({ data }: { data: any }) {
         <Panel title="Disease Category Frequency" hint="Most-tested conditions">
           <ChartBox>
             <ResponsiveContainer>
-              <BarChart data={data.disease_category ?? []} layout="vertical" margin={{ ...chartMargin, left: 20 }}>
+              <BarChart data={data.disease_category ?? []} layout="vertical" margin={{ top: 8, right: 24, bottom: 0, left: 0 }}>
                 <CartesianGrid stroke={GRID} horizontal={false} />
                 <XAxis type="number" tick={axisTick} axisLine={false} tickLine={false} />
-                <YAxis dataKey="name" type="category" tick={axisTick} width={130} axisLine={false} tickLine={false} />
+                <YAxis dataKey="name" type="category" tick={axisTick} width={90} axisLine={false} tickLine={false} />
                 <Tooltip contentStyle={tooltipStyle} />
                 <Bar dataKey="value" fill={ACCENT} radius={[0, 6, 6, 0]} barSize={22} />
               </BarChart>
