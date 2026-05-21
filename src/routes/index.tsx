@@ -291,69 +291,60 @@ function Home() {
             </p>
           </div>
 
-          {/* Slidable stat carousel */}
+          {/* Slidable stat carousel — matches numbered process cards */}
           {(() => {
             const stats = [
               {
                 n: "01",
-                label: "Records",
-                value: String(totalRecords),
-                body: "De-identified Philippine patient records powering the locally-trained model.",
-                bg: "var(--green-deep)",
-                fg: "var(--cream)",
-                accent: "var(--teal-soft)",
+                t: `${totalRecords} Philippine patient records`,
+                d: "De-identified clinical records powering the locally-trained model, curated for the realities of Philippine practice.",
               },
               {
                 n: "02",
-                label: "Coverage",
-                value: "2021–25",
-                body: "Years of clinical data covered by the training corpus.",
-                bg: "var(--coral)",
-                fg: "var(--cream)",
-                accent: "var(--cream)",
+                t: "Five years of coverage (2021–25)",
+                d: "Years of clinical data covered by the training corpus, capturing recent shifts in genetic testing utilization.",
               },
               {
                 n: "03",
-                label: "Benchmarks",
-                value: "3",
-                body: "Candidate models compared head-to-head during evaluation.",
-                bg: "#ffffff",
-                fg: "var(--green-deep)",
-                accent: "var(--coral)",
+                t: "Three models benchmarked",
+                d: "Candidate models compared head-to-head during evaluation so the strongest, best-calibrated predictor ships to clinicians.",
               },
               {
                 n: "04",
-                label: "Inputs",
-                value: "6",
-                body: "Structured clinical indicators driving every prediction.",
-                bg: "var(--teal-soft)",
-                fg: "var(--green-deep)",
-                accent: "var(--green-deep)",
+                t: "Six structured clinical inputs",
+                d: "A compact set of indicators drives every prediction — fast to enter, easy to interpret, calibrated for the workflow.",
               },
             ];
             return (
               <div
-                className="flex gap-4 md:gap-5 overflow-x-auto snap-x snap-mandatory pb-2 -mx-4 px-4 sm:-mx-6 sm:px-6 lg:-mx-10 lg:px-10 scroll-smooth"
+                className="flex gap-6 md:gap-7 overflow-x-auto snap-x snap-mandatory pb-2 -mx-4 px-4 sm:-mx-6 sm:px-6 lg:-mx-10 lg:px-10 scroll-smooth"
                 style={{ scrollbarWidth: "none" }}
               >
                 {stats.map((s) => (
                   <article
                     key={s.n}
-                    className="snap-start shrink-0 w-[80%] sm:w-[55%] md:w-[40%] lg:w-[30%] rounded-[2rem] p-7 md:p-8 flex flex-col justify-between min-h-[300px] md:min-h-[340px]"
-                    style={{ background: s.bg, color: s.fg }}
+                    className="snap-start shrink-0 w-[82%] sm:w-[60%] md:w-[45%] lg:w-[32%] rounded-[2rem] bg-white shadow-[0_10px_40px_-20px_rgba(15,61,46,0.25)] p-8 lg:p-10 flex items-start gap-6 md:gap-8"
                   >
-                    <div className="font-display text-xs tracking-[0.2em] uppercase opacity-60">
-                      {s.n} — {s.label}
-                    </div>
                     <div
-                      className="font-display tabular-nums leading-[0.85] tracking-tight text-6xl md:text-7xl my-6"
-                      style={{ color: s.accent }}
+                      className="shrink-0 w-14 h-14 md:w-16 md:h-16 rounded-full bg-coral flex items-center justify-center font-display text-xl md:text-2xl"
+                      style={{ color: "var(--green-deep)" }}
                     >
-                      {s.value}
+                      {s.n}
                     </div>
-                    <p className="text-sm leading-snug opacity-85 max-w-[28ch]">
-                      {s.body}
-                    </p>
+                    <div className="flex-1">
+                      <h3
+                        className="font-display text-2xl md:text-[1.75rem] leading-[1.05]"
+                        style={{ color: "var(--green-deep)" }}
+                      >
+                        {s.t}
+                      </h3>
+                      <p
+                        className="mt-4 text-sm md:text-base leading-relaxed"
+                        style={{ color: "var(--green-deep)" }}
+                      >
+                        {s.d}
+                      </p>
+                    </div>
                   </article>
                 ))}
               </div>
@@ -361,6 +352,7 @@ function Home() {
           })()}
         </div>
       </section>
+
 
 
       {/* ───────────── GREEN CTA CARDS (on cream) ───────────── */}
