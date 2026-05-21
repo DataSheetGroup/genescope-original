@@ -150,9 +150,8 @@ function Home() {
                 <br />
                 <span className="hl">Not the bewildered.</span>
               </h2>
-              <Link to="/predict" className="mt-10 pill pill-coral inline-flex">
-                Discover the concept
-              </Link>
+
+
             </div>
 
             <ol className="space-y-7">
