@@ -287,7 +287,7 @@ function PerformancePage() {
             <BarChart data={fiQ.data} layout="vertical" margin={{ top: 8, right: 24, bottom: 0, left: 0 }}>
               <CartesianGrid strokeDasharray="3 3" stroke={gridStroke} />
               <XAxis type="number" tick={axisTick} />
-              <YAxis dataKey="feature" type="category" tick={axisTick} width={110} />
+              <YAxis dataKey="feature" type="category" tick={axisTick} width={140} />
               <Tooltip contentStyle={tooltipStyle} />
               <Bar dataKey="importance" radius={[0, 999, 999, 0]}>
                 {fiQ.data.map((_, i) => <Cell key={i} fill="var(--coral)" />)}
