@@ -3,6 +3,7 @@
 // Naive Bayes classifier (Laplace-smoothed) trained on the same data.
 
 import csvText from "@/data/genetic_testing_data.csv?raw";
+import pklModel from "@/data/model-from-pkl.json";
 import type {
   EdaData,
   FeatureImportance,
@@ -10,6 +11,21 @@ import type {
   PredictPayload,
   PredictResponse,
 } from "./api-types";
+
+// Real trained-model metrics extracted from my_trained_model.pkl
+// at build time (see public/models/my_trained_model.pkl).
+type PklModelEntry = {
+  results: { Accuracy: number; Precision: number; Recall: number; "F1-Score": number; "ROC-AUC": number; cm: number[][] };
+  cv: { cv_roc_mean: number; cv_roc_std: number; cv_acc_mean: number; cv_acc_std: number; cv_folds: number[] };
+  feature_importance: { feature: string; importance: number }[];
+};
+type PklModel = {
+  best_model_name: string;
+  dataset_info: { total_records: number; train_records: number; test_records: number; n_features: number };
+  models: Record<string, PklModelEntry>;
+};
+const PKL: PklModel = pklModel as PklModel;
+const HAS_PKL = Boolean(PKL?.models && Object.keys(PKL.models).length);
 
 // ─────────────────────── CSV parsing ───────────────────────
 
