@@ -481,7 +481,22 @@ function computeAllMetrics(): ModelMetrics[] {
 const METRICS_CACHE = computeAllMetrics();
 
 export function getMetricsLocal(): ModelMetrics[] {
+  if (HAS_PKL) return metricsFromPkl();
   return METRICS_CACHE;
+}
+
+function metricsFromPkl(): ModelMetrics[] {
+  return Object.entries(PKL.models).map(([name, m]) => ({
+    name,
+    accuracy: m.results.Accuracy,
+    precision: m.results.Precision,
+    recall: m.results.Recall,
+    f1: m.results["F1-Score"],
+    roc_auc: m.results["ROC-AUC"],
+    cv_mean: m.cv.cv_acc_mean,
+    cv_std: m.cv.cv_acc_std,
+    confusion_matrix: m.results.cm,
+  }));
 }
 
 // Feature importance via mutual information with the target
