@@ -71,6 +71,38 @@ function Home() {
         </div>
       </section>
 
+      {/* ───────────── PIONEERS band ───────────── */}
+      <section className="slab-cream relative overflow-hidden">
+        <div className="mx-auto max-w-[1100px] px-4 sm:px-6 lg:px-10 pt-24 md:pt-28 pb-20 md:pb-24 text-center">
+          <div
+            className="font-display text-sm md:text-base uppercase tracking-[0.2em]"
+            style={{ color: "var(--green-deep)" }}
+          >
+            Pioneering Research
+          </div>
+          <h2 className="display-lg uppercase mt-6">
+            The <span className="hl">first</span> locally-built
+            <br />
+            decision-support system for
+            <br />
+            genetic testing in the Philippines.
+          </h2>
+          <p className="mt-7 max-w-2xl mx-auto text-sm md:text-base leading-relaxed">
+            GeneScope is pioneering work at the intersection of clinical genetics and
+            machine learning in the Philippine setting — built locally, validated
+            locally, and designed to keep patient data on the workstation where it
+            belongs.
+          </p>
+          <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
+            <span className="pill pill-coral">First of its kind · PH genetic testing DSS</span>
+            <span className="pill pill-cream">Locally trained · Philippine indicators</span>
+            <span className="pill pill-cream">RA 10173 by design</span>
+          </div>
+        </div>
+      </section>
+
+
+
       {/* ───────────── MISSION header (cream) ───────────── */}
       <section className="slab-cream">
         <div className="mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-10 pt-32 pb-12 text-center">

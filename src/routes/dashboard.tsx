@@ -468,7 +468,7 @@ function DemographicTab({ data }: { data: any }) {
           <ResponsiveContainer>
             <BarChart data={data.disease_vs_test ?? []} margin={chartMargin}>
               <CartesianGrid stroke={GRID} vertical={false} />
-              <XAxis dataKey="name" tick={axisTick} interval={0} angle={-15} textAnchor="end" height={80} axisLine={{ stroke: HAIRLINE }} tickLine={false} />
+              <XAxis dataKey="name" tick={axisTick} interval={0} height={40} axisLine={{ stroke: HAIRLINE }} tickLine={false} />
               <YAxis tick={axisTick} axisLine={false} tickLine={false} />
               <Tooltip contentStyle={tooltipStyle} />
               <Legend wrapperStyle={{ fontSize: 13, color: INK, fontFamily: "Poppins, sans-serif" }} />
