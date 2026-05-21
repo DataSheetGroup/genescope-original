@@ -131,7 +131,15 @@ function Panel({
 }
 
 function ChartBox({ children }: { children: ReactNode }) {
-  return <div className="w-full h-80">{children}</div>;
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+  return (
+    <div className="w-full h-80 relative">
+      {mounted ? children : null}
+    </div>
+  );
 }
 
 function Skeleton() {
