@@ -1,9 +1,12 @@
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate, redirect } from "@tanstack/react-router";
 import { useState, type FormEvent } from "react";
 import { Eye, EyeOff, ArrowLeft, ArrowRight, Loader2, AlertCircle, CheckCircle2 } from "lucide-react";
-import { login } from "@/lib/auth";
+import { isAuthenticated } from "@/lib/auth";
+import { useAuth } from "@/lib/auth-context";
 
 import logo from "@/assets/genescope-logo.png";
+
+type Search = { redirect?: string };
 
 export const Route = createFileRoute("/login")({
   head: () => ({
@@ -12,6 +15,14 @@ export const Route = createFileRoute("/login")({
       { name: "description", content: "Sign in to GeneScope to access the clinical decision-support workspace." },
     ],
   }),
+  validateSearch: (search: Record<string, unknown>): Search => ({
+    redirect: typeof search.redirect === "string" ? search.redirect : undefined,
+  }),
+  beforeLoad: ({ search }) => {
+    if (typeof window !== "undefined" && isAuthenticated()) {
+      throw redirect({ to: (search as Search).redirect ?? "/" });
+    }
+  },
   component: LoginPage,
 });
 
