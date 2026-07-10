@@ -7,10 +7,9 @@ import {
   CheckCircle2,
   Eye,
   EyeOff,
-  KeyRound,
   Loader2,
 } from "lucide-react";
-import { DEMO_EMAIL, DEMO_PASSWORD, isAuthenticated } from "@/lib/auth";
+import { isAuthenticated } from "@/lib/auth";
 import { useAuth } from "@/lib/auth-context";
 
 import logo from "@/assets/genescope-logo.png";
@@ -42,14 +41,8 @@ const TESTIMONIALS = [
   {
     quote:
       "GeneScope gave our clinicians a calibrated, explainable second opinion without ever exposing patient data to the cloud.",
-    name: "Dr. A. Reyes",
+    name: "Partnered Company",
     title: "Clinical Geneticist",
-  },
-  {
-    quote:
-      "Six structured inputs, a probability you can defend, and a knowledge card the team actually reads. That's the workflow we needed.",
-    name: "M. Cruz, MSc",
-    title: "Genetic Counselor",
   },
   {
     quote:
@@ -71,12 +64,6 @@ function LoginPage() {
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
   const t = TESTIMONIALS[idx];
-
-  const fillDemoAccount = () => {
-    setEmail(DEMO_EMAIL);
-    setPassword(DEMO_PASSWORD);
-    setError(null);
-  };
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -126,7 +113,7 @@ function LoginPage() {
                 onChange={(e) => setEmail(e.target.value)}
                 autoComplete="email"
                 disabled={submitting || success}
-                placeholder={DEMO_EMAIL}
+                placeholder="you@example.com"
                 className="w-full rounded-full border border-white/15 bg-white/5 px-5 py-3.5 text-cream outline-none transition placeholder:text-cream/35 focus:border-[var(--teal)] focus:bg-white/10 disabled:opacity-60"
               />
             </div>
@@ -190,26 +177,6 @@ function LoginPage() {
                 <span>Signed in. Redirecting...</span>
               </div>
             )}
-
-            <div className="rounded-3xl border border-white/15 bg-white/5 p-4 text-sm text-cream/75">
-              <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                <div>
-                  <div className="font-semibold text-cream">Demo access</div>
-                  <div className="mt-1 text-xs text-cream/60">
-                    {DEMO_EMAIL} / {DEMO_PASSWORD}
-                  </div>
-                </div>
-                <button
-                  type="button"
-                  onClick={fillDemoAccount}
-                  disabled={submitting || success}
-                  className="inline-flex items-center justify-center gap-2 rounded-full border border-white/20 px-4 py-2 text-xs font-semibold uppercase tracking-wider text-cream transition hover:bg-white/10 disabled:opacity-60"
-                >
-                  <KeyRound className="h-4 w-4" />
-                  Use demo account
-                </button>
-              </div>
-            </div>
 
             <button
               type="submit"
