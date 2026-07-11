@@ -187,19 +187,6 @@ function LoginPage() {
               Keep me signed in
             </label>
 
-            {error && (
-              <div role="alert" className="flex items-start gap-2 rounded-xl px-3 py-2.5 text-sm" style={{ background: "color-mix(in oklab, var(--destructive) 12%, transparent)", color: "var(--destructive)", border: "1px solid color-mix(in oklab, var(--destructive) 35%, transparent)" }}>
-                <AlertCircle className="h-4 w-4 mt-0.5 shrink-0" />
-                <span>{error}</span>
-              </div>
-            )}
-            {success && (
-              <div role="status" className="flex items-start gap-2 rounded-xl px-3 py-2.5 text-sm" style={{ background: "color-mix(in oklab, var(--teal) 15%, transparent)", color: "var(--teal-deep)", border: "1px solid color-mix(in oklab, var(--teal) 35%, transparent)" }}>
-                <CheckCircle2 className="h-4 w-4 mt-0.5 shrink-0" />
-                <span>Signed in. Redirecting…</span>
-              </div>
-            )}
-
             <button
               type="submit"
               disabled={submitting || success}
@@ -211,6 +198,19 @@ function LoginPage() {
               {!submitting && !success && <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />}
             </button>
           </form>
+
+          {error && (
+            <div role="alert" className="mt-5 flex items-start gap-2 rounded-xl px-3 py-2.5 text-sm" style={{ background: "color-mix(in oklab, var(--destructive) 12%, transparent)", color: "var(--destructive)", border: "1px solid color-mix(in oklab, var(--destructive) 35%, transparent)" }}>
+              <AlertCircle className="h-4 w-4 mt-0.5 shrink-0" />
+              <span>{error}</span>
+            </div>
+          )}
+          {success && (
+            <div role="status" className="mt-5 flex items-start gap-2 rounded-xl px-3 py-2.5 text-sm" style={{ background: "color-mix(in oklab, var(--teal) 15%, transparent)", color: "var(--teal-deep)", border: "1px solid color-mix(in oklab, var(--teal) 35%, transparent)" }}>
+              <CheckCircle2 className="h-4 w-4 mt-0.5 shrink-0" />
+              <span>Signed in. Redirecting…</span>
+            </div>
+          )}
         </div>
 
         <div className="relative w-full max-w-md mx-auto lg:max-w-lg pt-6 text-center text-sm" style={{ color: "color-mix(in oklab, var(--ink) 65%, transparent)" }}>
