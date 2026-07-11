@@ -2,9 +2,6 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { LogOut, Save, KeyRound, ShieldCheck, UserRound, Mail, Building2, Phone } from "lucide-react";
 import { useAuth } from "@/lib/auth-context";
-import magnifier from "@/assets/illustrations/magnifier-strand.png";
-import clipboard from "@/assets/illustrations/clipboard.png";
-import fireFlask from "@/assets/illustrations/fire-flask.png";
 
 export const Route = createFileRoute("/_authenticated/profile")({
   component: ProfilePage,
@@ -97,140 +94,137 @@ function ProfilePage() {
 
   if (!user) {
     return (
-    <div className="relative overflow-hidden" style={{ background: "var(--paper)", color: "var(--ink)" }}>
-      <div className="relative mx-auto max-w-[1200px] px-4 sm:px-6 lg:px-10 py-16 text-center text-foreground/70 z-10">
+      <div className="mx-auto max-w-3xl px-6 py-16 text-center text-foreground/70">
         Loading your profile…
       </div>
-    </div>
-  );
-}
+    );
+  }
 
   const displayName = user.full_name?.trim() || user.email.split("@")[0];
 
   return (
-    <div className="relative overflow-hidden" style={{ background: "var(--paper)", color: "var(--ink)" }}>
-      <div className="relative mx-auto max-w-[1200px] px-4 sm:px-6 lg:px-10 py-16 space-y-10 z-10">
-        {/* Editorial header */}
-        <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
-          <div className="max-w-2xl">
-            <div className="eyebrow text-coral mb-4">Account · Profile</div>
-            <h1 className="display-lg">
-              Your <span className="hl">profile</span>
-            </h1>
-            <p className="mt-4 text-foreground/75">
-              Manage the identity attached to your GeneScope workspace.
-            </p>
-          </div>
-          <button
-            onClick={handleLogout}
-            className="pill pill-coral self-start"
-          >
-            <LogOut className="h-4 w-4" />
-            Sign out
-          </button>
+    <div className="mx-auto max-w-[1200px] px-6 py-12 lg:py-16">
+      {/* Editorial header */}
+      <div className="grid grid-cols-1 md:grid-cols-[1fr_auto] items-end gap-6 border-b border-foreground/10 pb-8 mb-10">
+        <div>
+          <div className="text-[11px] uppercase tracking-[0.28em] text-foreground/60">§ Account · Profile</div>
+          <h1 className="mt-3 font-display text-4xl md:text-5xl leading-[1.05]">Your profile</h1>
+          <p className="mt-3 text-sm text-foreground/70 max-w-lg">
+            Manage the identity attached to your GeneScope workspace.
+          </p>
         </div>
+        <button
+          onClick={handleLogout}
+          className="inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-[12px] font-semibold uppercase tracking-wider transition hover:opacity-90 justify-self-start md:justify-self-end"
+          style={{ background: "var(--coral)", color: "var(--nav-bg)" }}
+        >
+          <LogOut className="h-4 w-4" />
+          Sign out
+        </button>
+      </div>
 
-        {/* Identity summary */}
-        <section className="rounded-3xl bg-card text-card-foreground p-6 md:p-8 relative overflow-hidden">
-          <img src={magnifier} alt="" className="hidden md:block absolute right-6 top-6 w-20 object-contain opacity-90" />
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 items-center relative">
-            <div className="flex items-center gap-4 md:col-span-2">
-              <div className="h-16 w-16 shrink-0 rounded-full bg-coral flex items-center justify-center text-2xl font-bold text-card-foreground">
-                {displayName.charAt(0).toUpperCase()}
-              </div>
-              <div className="min-w-0">
-                <div className="font-display text-2xl truncate">{displayName}</div>
-                <div className="text-xs text-card-foreground/60 truncate">{user.email}</div>
-              </div>
+      {/* Identity summary — full width, symmetric */}
+      <section className="rounded-3xl border border-foreground/10 bg-foreground/[0.02] p-6 md:p-8 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 items-center">
+          <div className="flex items-center gap-4 md:col-span-2">
+            <div
+              className="h-16 w-16 shrink-0 rounded-full flex items-center justify-center text-2xl font-bold"
+              style={{ background: "var(--coral)", color: "var(--nav-bg)" }}
+            >
+              {displayName.charAt(0).toUpperCase()}
             </div>
-            <Stat icon={<UserRound className="h-3.5 w-3.5" />} label="Role" value={user.role} />
-            <Stat icon={<ShieldCheck className="h-3.5 w-3.5" />} label="Status" value="Active" />
+            <div className="min-w-0">
+              <div className="font-display text-2xl truncate">{displayName}</div>
+              <div className="text-xs text-foreground/60 truncate">{user.email}</div>
+            </div>
           </div>
-        </section>
-
-        {/* Two symmetric cards */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {/* Personal info */}
-          <form onSubmit={handleSave} className="rounded-3xl bg-card text-card-foreground p-6 md:p-8 flex flex-col relative overflow-hidden">
-            <img src={clipboard} alt="" className="hidden md:block absolute right-6 top-6 w-20 object-contain opacity-90" />
-            <div className="flex items-center gap-2 text-[11px] uppercase tracking-[0.24em] text-card-foreground/60">
-              <UserRound className="h-3.5 w-3.5" />
-              <span>01 · Personal info</span>
-            </div>
-            <h2 className="mt-3 font-display text-2xl">Identity</h2>
-            <p className="mt-1 text-xs text-card-foreground/60">Stored securely in your GeneScope database.</p>
-
-            <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <Field label="Email" icon={<Mail className="h-3.5 w-3.5" />} value={user.email} readOnly />
-              <Field label="Full name" icon={<UserRound className="h-3.5 w-3.5" />} value={fullName} onChange={setFullName} placeholder="Jane Dela Cruz" />
-              <Field label="Phone" icon={<Phone className="h-3.5 w-3.5" />} value={phone} onChange={setPhone} placeholder="+63 900 000 0000" />
-              <Field label="Organization" icon={<Building2 className="h-3.5 w-3.5" />} value={organization} onChange={setOrganization} placeholder="FEU Institute of Technology" />
-            </div>
-            <div className="mt-4">
-              <label className="block text-[11px] uppercase tracking-[0.2em] text-card-foreground/60 mb-1.5">Bio</label>
-              <textarea
-                value={bio}
-                onChange={(e) => setBio(e.target.value)}
-                rows={4}
-                placeholder="A short description of your role or research focus."
-                className="w-full rounded-2xl border border-card-foreground/15 bg-cream-dim px-4 py-3 text-sm focus:outline-none focus:border-coral resize-none"
-              />
-            </div>
-
-            <div className="mt-auto pt-6 flex items-center gap-4 min-h-[52px]">
-              <div className="flex-1 min-h-[20px]">
-                {status && (
-                  <span className={`text-xs ${status.kind === "ok" ? "text-emerald-600" : "text-coral"}`}>
-                    {status.msg}
-                  </span>
-                )}
-              </div>
-              <button
-                type="submit"
-                disabled={saving}
-                className="pill bg-green-deep text-cream hover:bg-green-deep/85 disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                <Save className="h-4 w-4" />
-                {saving ? "Saving…" : "Save changes"}
-              </button>
-            </div>
-          </form>
-
-          {/* Password */}
-          <form onSubmit={handlePassword} className="rounded-3xl bg-card text-card-foreground p-6 md:p-8 flex flex-col relative overflow-hidden">
-            <img src={fireFlask} alt="" className="hidden md:block absolute right-6 top-6 w-20 object-contain opacity-90" />
-            <div className="flex items-center gap-2 text-[11px] uppercase tracking-[0.24em] text-card-foreground/60">
-              <KeyRound className="h-3.5 w-3.5" />
-              <span>02 · Security</span>
-            </div>
-            <h2 className="mt-3 font-display text-2xl">Change password</h2>
-            <p className="mt-1 text-xs text-card-foreground/60">Use at least 8 characters. You&apos;ll stay signed in.</p>
-
-            <div className="mt-6 space-y-4">
-              <Field label="Current password" type="password" value={currentPw} onChange={setCurrentPw} />
-              <Field label="New password" type="password" value={newPw} onChange={setNewPw} />
-              <Field label="Confirm new password" type="password" value={confirmPw} onChange={setConfirmPw} />
-            </div>
-
-            <div className="mt-auto pt-6 flex items-center gap-4 min-h-[52px]">
-              <div className="flex-1 min-h-[20px]">
-                {pwStatus && (
-                  <span className={`text-xs ${pwStatus.kind === "ok" ? "text-emerald-600" : "text-coral"}`}>
-                    {pwStatus.msg}
-                  </span>
-                )}
-              </div>
-              <button
-                type="submit"
-                disabled={pwSaving || !currentPw || !newPw}
-                className="pill bg-green-deep text-cream hover:bg-green-deep/85 disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                <KeyRound className="h-4 w-4" />
-                {pwSaving ? "Updating…" : "Update password"}
-              </button>
-            </div>
-          </form>
+          <Stat icon={<UserRound className="h-3.5 w-3.5" />} label="Role" value={user.role} />
+          <Stat icon={<ShieldCheck className="h-3.5 w-3.5" />} label="Status" value="Active" />
         </div>
+      </section>
+
+      {/* Two symmetric cards */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        {/* Personal info */}
+        <form onSubmit={handleSave} className="rounded-3xl border border-foreground/10 bg-foreground/[0.02] p-6 md:p-8 flex flex-col">
+          <div className="flex items-center gap-2 text-[11px] uppercase tracking-[0.24em] text-foreground/60">
+            <UserRound className="h-3.5 w-3.5" />
+            <span>01 · Personal info</span>
+          </div>
+          <h2 className="mt-3 font-display text-2xl">Identity</h2>
+          <p className="mt-1 text-xs text-foreground/60">Stored securely in your GeneScope database.</p>
+
+          <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <Field label="Email" icon={<Mail className="h-3.5 w-3.5" />} value={user.email} readOnly />
+            <Field label="Full name" icon={<UserRound className="h-3.5 w-3.5" />} value={fullName} onChange={setFullName} placeholder="Jane Dela Cruz" />
+            <Field label="Phone" icon={<Phone className="h-3.5 w-3.5" />} value={phone} onChange={setPhone} placeholder="+63 900 000 0000" />
+            <Field label="Organization" icon={<Building2 className="h-3.5 w-3.5" />} value={organization} onChange={setOrganization} placeholder="FEU Institute of Technology" />
+          </div>
+          <div className="mt-4">
+            <label className="block text-[11px] uppercase tracking-[0.2em] text-foreground/60 mb-1.5">Bio</label>
+            <textarea
+              value={bio}
+              onChange={(e) => setBio(e.target.value)}
+              rows={4}
+              placeholder="A short description of your role or research focus."
+              className="w-full rounded-2xl border border-foreground/15 bg-background/40 px-4 py-3 text-sm focus:outline-none focus:border-coral resize-none"
+            />
+          </div>
+
+          <div className="mt-auto pt-6 flex items-center gap-4 min-h-[52px]">
+            <div className="flex-1 min-h-[20px]">
+              {status && (
+                <span className={`text-xs ${status.kind === "ok" ? "text-emerald-400" : "text-coral"}`}>
+                  {status.msg}
+                </span>
+              )}
+            </div>
+            <button
+              type="submit"
+              disabled={saving}
+              className="inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-[12px] font-semibold uppercase tracking-wider disabled:opacity-50 transition hover:opacity-90"
+              style={{ background: "var(--surface-strong)", color: "var(--nav-bg)" }}
+            >
+              <Save className="h-4 w-4" />
+              {saving ? "Saving…" : "Save changes"}
+            </button>
+          </div>
+        </form>
+
+        {/* Password */}
+        <form onSubmit={handlePassword} className="rounded-3xl border border-foreground/10 bg-foreground/[0.02] p-6 md:p-8 flex flex-col">
+          <div className="flex items-center gap-2 text-[11px] uppercase tracking-[0.24em] text-foreground/60">
+            <KeyRound className="h-3.5 w-3.5" />
+            <span>02 · Security</span>
+          </div>
+          <h2 className="mt-3 font-display text-2xl">Change password</h2>
+          <p className="mt-1 text-xs text-foreground/60">Use at least 8 characters. You'll stay signed in.</p>
+
+          <div className="mt-6 space-y-4">
+            <Field label="Current password" type="password" value={currentPw} onChange={setCurrentPw} />
+            <Field label="New password" type="password" value={newPw} onChange={setNewPw} />
+            <Field label="Confirm new password" type="password" value={confirmPw} onChange={setConfirmPw} />
+          </div>
+
+          <div className="mt-auto pt-6 flex items-center gap-4 min-h-[52px]">
+            <div className="flex-1 min-h-[20px]">
+              {pwStatus && (
+                <span className={`text-xs ${pwStatus.kind === "ok" ? "text-emerald-400" : "text-coral"}`}>
+                  {pwStatus.msg}
+                </span>
+              )}
+            </div>
+            <button
+              type="submit"
+              disabled={pwSaving || !currentPw || !newPw}
+              className="inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-[12px] font-semibold uppercase tracking-wider disabled:opacity-50 transition hover:opacity-90"
+              style={{ background: "var(--surface-strong)", color: "var(--nav-bg)" }}
+            >
+              <KeyRound className="h-4 w-4" />
+              {pwSaving ? "Updating…" : "Update password"}
+            </button>
+          </div>
+        </form>
       </div>
     </div>
   );
@@ -238,8 +232,8 @@ function ProfilePage() {
 
 function Stat({ icon, label, value }: { icon: React.ReactNode; label: string; value: string }) {
   return (
-    <div className="rounded-2xl border border-card-foreground/10 bg-cream-dim px-4 py-3">
-      <div className="flex items-center gap-2 text-[10px] uppercase tracking-[0.22em] text-card-foreground/60">
+    <div className="rounded-2xl border border-foreground/10 bg-background/30 px-4 py-3">
+      <div className="flex items-center gap-2 text-[10px] uppercase tracking-[0.22em] text-foreground/60">
         {icon}
         <span>{label}</span>
       </div>
@@ -267,7 +261,7 @@ function Field({
 }) {
   return (
     <label className="block">
-      <span className="flex items-center gap-1.5 text-[11px] uppercase tracking-[0.2em] text-card-foreground/60 mb-1.5">
+      <span className="flex items-center gap-1.5 text-[11px] uppercase tracking-[0.2em] text-foreground/60 mb-1.5">
         {icon}
         {label}
       </span>
@@ -277,7 +271,7 @@ function Field({
         onChange={(e) => onChange?.(e.target.value)}
         readOnly={readOnly}
         placeholder={placeholder}
-        className={`w-full rounded-2xl border border-card-foreground/15 bg-cream-dim px-4 py-3 text-sm focus:outline-none focus:border-coral ${readOnly ? "opacity-70 cursor-not-allowed" : ""}`}
+        className={`w-full rounded-2xl border border-foreground/15 bg-background/40 px-4 py-3 text-sm focus:outline-none focus:border-coral ${readOnly ? "opacity-70 cursor-not-allowed" : ""}`}
       />
     </label>
   );
