@@ -99,21 +99,21 @@ function LoginPage() {
             border: "1px solid color-mix(in oklab, var(--ink) 12%, transparent)",
           }}
         >
-          <div className="text-center">
+          <div className="text-left">
             <div
               className="eyebrow"
               style={{ color: "color-mix(in oklab, var(--ink) 60%, transparent)" }}
             >
               Restricted access
             </div>
-            <h1 className="mt-1 font-display text-3xl sm:text-4xl leading-tight">
+            <h1 className="mt-1 font-display text-2xl sm:text-3xl leading-tight">
               Welcome <span className="hl">back</span>.
             </h1>
             <p
               className="mt-2 text-sm"
               style={{ color: "color-mix(in oklab, var(--ink) 68%, transparent)" }}
             >
-              Sign in to continue to the workspace.
+              Enter your credentials to continue.
             </p>
           </div>
 
