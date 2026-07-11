@@ -47,7 +47,7 @@ function TermsPage() {
     >
       {/* LEFT — terms content */}
       <aside
-        className="relative hidden lg:flex flex-col p-12 xl:p-14 overflow-hidden"
+        className="relative hidden lg:flex flex-col p-12 xl:p-14 overflow-y-auto"
         style={{ background: "var(--ink)", color: "var(--cream)" }}
       >
         <img
