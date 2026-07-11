@@ -53,7 +53,6 @@ function RegisterPage() {
       return;
     }
 
-
     setSubmitting(true);
     try {
       await register({ email: email.trim(), password, full_name: fullName.trim() || undefined });
