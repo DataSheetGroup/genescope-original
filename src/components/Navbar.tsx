@@ -86,12 +86,12 @@ export function Navbar() {
               <Link
                 to="/profile"
                 title={user?.email}
+                aria-label="Profile"
                 activeProps={{ style: { background: "var(--coral)", color: "var(--nav-bg)" } }}
-                className="inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wider transition hover:opacity-90"
+                className="inline-flex items-center justify-center rounded-full h-9 w-9 transition hover:opacity-90"
                 style={{ background: "var(--surface-strong)", color: "var(--nav-bg)" }}
               >
-                <UserRound className="h-3.5 w-3.5" />
-                <span className="max-w-[120px] truncate">{displayName}</span>
+                <UserRound className="h-4 w-4" />
               </Link>
             )}
           </div>
