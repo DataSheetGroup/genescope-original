@@ -47,6 +47,10 @@ function RegisterPage() {
       setError("Password must be at least 8 characters.");
       return;
     }
+    if (!agreed) {
+      setError("Please agree to the Terms and Conditions.");
+      return;
+    }
     setSubmitting(true);
     try {
       await register({ email: email.trim(), password });
