@@ -181,6 +181,20 @@ function RegisterPage() {
                 style={inputStyle}
               />
             </div>
+            <div>
+              <label htmlFor="confirmPassword" className={labelClass} style={labelStyle}>Confirm password</label>
+              <input
+                id="confirmPassword"
+                type="password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                autoComplete="new-password"
+                disabled={submitting || success}
+                placeholder="Re-enter your password"
+                className={inputClass}
+                style={inputStyle}
+              />
+            </div>
 
             <button
               type="submit"
