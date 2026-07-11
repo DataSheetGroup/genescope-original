@@ -69,8 +69,10 @@ function RegisterPage() {
     <AuthSplitShell
       eyebrow="Request access"
       headline={<>Join the <span className="hl">workspace</span>.</>}
-      intro="Only emails on the approved partner-domain allowlist will be granted access."
+      intro="Create your workspace account to continue."
       brandTagline={<>Precision<br /><span className="hl">partnerships</span><br />start here.</>}
+      brandNote={<>Only emails on the approved partner-domain allowlist will be granted access. Approvals are typically reviewed within one business day.</>}
+
       footer={
         <>
           Already have an account?{" "}

@@ -10,11 +10,13 @@ type Props = {
   headline: ReactNode; // supports <span className="hl"> for highlight
   intro: string;
   brandTagline?: ReactNode;
+  brandNote?: ReactNode; // extra text below the tagline on the left slab
   children: ReactNode; // form
   footer: ReactNode;
 };
 
-export function AuthSplitShell({ eyebrow, headline, intro, brandTagline, children, footer }: Props) {
+export function AuthSplitShell({ eyebrow, headline, intro, brandTagline, brandNote, children, footer }: Props) {
+
   return (
     <div
       className="min-h-screen w-full grid lg:grid-cols-2 lg:h-screen lg:overflow-hidden"
@@ -52,8 +54,9 @@ export function AuthSplitShell({ eyebrow, headline, intro, brandTagline, childre
             )}
           </h1>
           <p className="mt-5 max-w-sm text-sm leading-relaxed opacity-80">
-            Restricted workspace for authorized partner clinicians and developers.
+            {brandNote ?? "Restricted workspace for authorized partner clinicians and developers."}
           </p>
+
         </div>
 
         <div className="relative text-xs opacity-60">
@@ -93,7 +96,7 @@ export function AuthSplitShell({ eyebrow, headline, intro, brandTagline, childre
           <div className="mt-4 lg:mt-5">{children}</div>
         </div>
 
-        <div className="relative w-full max-w-md mx-auto lg:max-w-lg text-center text-sm px-6 pb-5 sm:px-10 sm:pb-6 lg:px-0 lg:pb-8" style={{ color: "color-mix(in oklab, var(--ink) 65%, transparent)" }}>
+        <div className="relative w-full max-w-md mx-auto lg:max-w-lg text-center text-sm px-6 pb-5 sm:px-10 sm:pb-6 lg:px-0 lg:pb-10 xl:pb-14" style={{ color: "color-mix(in oklab, var(--ink) 65%, transparent)" }}>
           {footer}
         </div>
 
