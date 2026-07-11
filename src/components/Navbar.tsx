@@ -53,7 +53,7 @@ export function Navbar() {
   });
   const online = !!data && !isError;
 
-  const displayName = user?.full_name?.trim() || user?.email?.split("@")[0] || "Profile";
+  
 
   return (
     <header className="sticky top-0 z-40" style={{ background: "var(--nav-bg)", color: "var(--nav-fg)" }}>
