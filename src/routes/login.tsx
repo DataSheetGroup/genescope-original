@@ -70,6 +70,7 @@ function LoginPage() {
       eyebrow="Sign in"
       headline={<>Welcome <span className="hl">back</span>.</>}
       intro="Enter your credentials to continue."
+      showBackHome={false}
       footer={
         <>
           No account?{" "}
