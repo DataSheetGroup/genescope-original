@@ -81,21 +81,22 @@ export function AuthSplitShell({ eyebrow, headline, intro, brandTagline, childre
           </Link>
         </div>
 
-        <div className="relative flex-1 flex flex-col justify-center w-full max-w-md mx-auto lg:max-w-lg px-6 pt-6 pb-4 sm:px-10 lg:px-0 lg:pt-8 lg:pb-6">
+        <div className="relative flex-1 flex flex-col justify-center w-full max-w-md mx-auto lg:max-w-lg px-6 pt-4 pb-3 sm:px-10 lg:px-0 lg:pt-6 lg:pb-4">
           <div className="eyebrow" style={{ color: "color-mix(in oklab, var(--ink) 60%, transparent)" }}>
             {eyebrow}
           </div>
-          <h2 className="mt-3 display-md">{headline}</h2>
-          <p className="mt-3 text-sm lg:text-base" style={{ color: "color-mix(in oklab, var(--ink) 68%, transparent)" }}>
+          <h2 className="mt-2 display-md">{headline}</h2>
+          <p className="mt-2 text-sm" style={{ color: "color-mix(in oklab, var(--ink) 68%, transparent)" }}>
             {intro}
           </p>
 
-          <div className="mt-6 lg:mt-8">{children}</div>
+          <div className="mt-4 lg:mt-5">{children}</div>
         </div>
 
-        <div className="relative w-full max-w-md mx-auto lg:max-w-lg text-center text-sm px-6 pb-6 sm:px-10 sm:pb-8 lg:px-0 lg:pb-10 xl:pb-14" style={{ color: "color-mix(in oklab, var(--ink) 65%, transparent)" }}>
+        <div className="relative w-full max-w-md mx-auto lg:max-w-lg text-center text-sm px-6 pb-5 sm:px-10 sm:pb-6 lg:px-0 lg:pb-8" style={{ color: "color-mix(in oklab, var(--ink) 65%, transparent)" }}>
           {footer}
         </div>
+
       </section>
     </div>
   );
