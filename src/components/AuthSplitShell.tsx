@@ -11,27 +11,28 @@ type Props = {
   intro: string;
   brandTagline?: ReactNode;
   brandNote?: ReactNode; // extra text below the tagline on the left slab
+  showBackHome?: boolean;
   children: ReactNode; // form
   footer: ReactNode;
 };
 
-export function AuthSplitShell({ eyebrow, headline, intro, brandTagline, brandNote, children, footer }: Props) {
+export function AuthSplitShell({ eyebrow, headline, intro, brandTagline, brandNote, showBackHome = true, children, footer }: Props) {
 
   return (
     <div
-      className="min-h-screen w-full grid lg:grid-cols-2 lg:h-screen lg:overflow-hidden"
+      className="min-h-dvh w-full md:grid md:h-dvh md:grid-cols-2 md:overflow-hidden"
       style={{ background: "var(--cream)", color: "var(--ink)" }}
     >
       {/* LEFT — brand slab */}
       <aside
-        className="relative hidden lg:flex flex-col justify-between p-10 xl:p-14 overflow-hidden"
+        className="relative hidden h-full overflow-hidden p-8 md:grid md:grid-rows-[auto_minmax(0,1fr)_auto] xl:p-14"
         style={{ background: "var(--ink)", color: "var(--cream)" }}
       >
         <img
           src={stickerHelix}
           alt=""
           aria-hidden
-          className="pointer-events-none select-none absolute right-14 top-14 w-20 xl:w-24 opacity-70"
+          className="pointer-events-none select-none absolute right-10 top-10 w-18 opacity-65 xl:right-14 xl:top-14 xl:w-24"
           style={{ transform: "rotate(-10deg)" }}
         />
 
@@ -40,7 +41,7 @@ export function AuthSplitShell({ eyebrow, headline, intro, brandTagline, brandNo
           <span className="font-brand text-2xl">GeneScope</span>
         </Link>
 
-        <div className="relative">
+        <div className="relative self-center py-5">
           <div className="eyebrow mb-4 opacity-75">Clinical decision-support</div>
           <h1 className="display-lg leading-[0.95]">
             {brandTagline ?? (
@@ -59,32 +60,36 @@ export function AuthSplitShell({ eyebrow, headline, intro, brandTagline, brandNo
 
         </div>
 
-        <div className="relative text-xs opacity-60">
+        <div className="relative text-xs leading-none opacity-60">
           © 2026 Data Sheet Group · RA 10173-aligned
         </div>
       </aside>
 
       {/* RIGHT — form */}
-      <section className="relative flex flex-col h-full min-h-screen lg:min-h-0 lg:overflow-y-auto">
+      <section className="relative flex min-h-dvh flex-col md:h-dvh md:min-h-0 md:grid md:grid-rows-[auto_minmax(0,1fr)_auto] md:overflow-hidden md:p-8 xl:p-14">
 
 
         {/* Top bar — back link so users can leave auth pages */}
-        <div className="relative w-full max-w-md mx-auto lg:max-w-lg flex items-center justify-between px-6 pt-6 sm:px-10 sm:pt-8 lg:px-0 lg:pt-10 xl:pt-14">
-          <Link
-            to="/"
-            className="inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider hover:opacity-70 transition"
-            style={{ color: "color-mix(in oklab, var(--ink) 70%, transparent)" }}
-          >
-            <ArrowLeft className="h-3.5 w-3.5" />
-            Back to home
-          </Link>
-          <Link to="/" className="lg:hidden inline-flex items-center gap-2">
+        <div className="relative mx-auto flex w-full max-w-md items-center justify-between px-6 pt-6 sm:px-10 sm:pt-8 md:max-w-lg md:px-0 md:pt-0">
+          {showBackHome ? (
+            <Link
+              to="/"
+              className="inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider transition hover:opacity-70"
+              style={{ color: "color-mix(in oklab, var(--ink) 70%, transparent)" }}
+            >
+              <ArrowLeft className="h-3.5 w-3.5" />
+              Back to home
+            </Link>
+          ) : (
+            <span className="hidden md:block" aria-hidden="true" />
+          )}
+          <Link to="/" className="inline-flex items-center gap-2 md:hidden">
             <img src={logo} alt="GeneScope" className="h-7 w-7 object-contain" />
             <span className="font-brand text-lg">GeneScope</span>
           </Link>
         </div>
 
-        <div className="relative flex-1 flex flex-col justify-center w-full max-w-md mx-auto lg:max-w-lg px-6 pt-4 pb-3 sm:px-10 lg:px-0 lg:pt-6 lg:pb-4">
+        <div className="relative mx-auto flex w-full max-w-md flex-1 flex-col justify-center px-6 pb-3 pt-4 sm:px-10 md:min-h-0 md:max-w-lg md:px-0 md:py-4">
           <div className="eyebrow" style={{ color: "color-mix(in oklab, var(--ink) 60%, transparent)" }}>
             {eyebrow}
           </div>
@@ -96,7 +101,7 @@ export function AuthSplitShell({ eyebrow, headline, intro, brandTagline, brandNo
           <div className="mt-4 lg:mt-5">{children}</div>
         </div>
 
-        <div className="relative w-full max-w-md mx-auto lg:max-w-lg text-center text-sm px-6 pb-5 sm:px-10 sm:pb-6 lg:px-0 lg:pb-10 xl:pb-14" style={{ color: "color-mix(in oklab, var(--ink) 65%, transparent)" }}>
+        <div className="relative mx-auto w-full max-w-md px-6 pb-5 text-center text-sm leading-none sm:px-10 sm:pb-6 md:max-w-lg md:px-0 md:pb-0" style={{ color: "color-mix(in oklab, var(--ink) 65%, transparent)" }}>
           {footer}
         </div>
 
