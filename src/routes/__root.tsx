@@ -17,13 +17,6 @@ import { ThemeProvider } from "@/lib/theme";
 import { AuthProvider } from "@/lib/auth-context";
 
 const AUTH_ROUTES = ["/login", "/register", "/forgot-password", "/reset-password"];
-const AUTH_ROUTE_SCRIPT = `(() => {
-  const authRoutes = ${JSON.stringify(AUTH_ROUTES)};
-  const setAuthRoute = () => {
-    document.documentElement.dataset.authRoute = authRoutes.includes(window.location.pathname) ? "true" : "false";
-  };
-  setAuthRoute();
-})();`;
 
 function NotFoundComponent() {
   return (
@@ -102,10 +95,12 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 });
 
 function RootShell({ children }: { children: React.ReactNode }) {
+  const { pathname } = useLocation();
+  const isAuthRoute = AUTH_ROUTES.includes(pathname);
+
   return (
-    <html lang="en">
+    <html lang="en" data-auth-route={isAuthRoute ? "true" : undefined}>
       <head>
-        <script dangerouslySetInnerHTML={{ __html: AUTH_ROUTE_SCRIPT }} />
         <style>{`html[data-auth-route="true"], html[data-auth-route="true"] body { overflow: hidden; } html[data-auth-route="true"] .auth-chrome { display: none !important; }`}</style>
         <HeadContent />
       </head>
