@@ -5,8 +5,8 @@ import { useAuth } from "@/lib/auth-context";
 import { isAuthenticated } from "@/lib/auth";
 
 import logo from "@/assets/genescope-logo.png";
-import stickerFlask from "@/assets/stickers/flask.png";
-import stickerPotion from "@/assets/stickers/potion.png";
+import stickerFlask from "@/assets/stickers/flask-green.png";
+import stickerPotion from "@/assets/stickers/potion-blue.png";
 
 export const Route = createFileRoute("/register")({
   head: () => ({
