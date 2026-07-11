@@ -1,22 +1,14 @@
 import { createFileRoute, Link, useNavigate, redirect } from "@tanstack/react-router";
 import { useState, type FormEvent } from "react";
-import { AlertCircle, CheckCircle2, Loader2, ArrowRight, Eye, EyeOff } from "lucide-react";
+import { AlertCircle, CheckCircle2, Loader2 } from "lucide-react";
+import { AuthShell, authButtonClass, authInputClass, authLabelClass } from "@/components/AuthShell";
 import { useAuth } from "@/lib/auth-context";
 import { isAuthenticated } from "@/lib/auth";
-import {
-  AuthSplitShell,
-  authInputClass,
-  authInputStyle,
-  authLabelClass,
-  authLabelStyle,
-  authSubmitClass,
-  authSubmitStyle,
-} from "@/components/AuthSplitShell";
 
 export const Route = createFileRoute("/register")({
   head: () => ({
     meta: [
-      { title: "Request access · GeneScope" },
+      { title: "Create account · GeneScope" },
       { name: "description", content: "Request access to the GeneScope clinical decision-support workspace." },
     ],
   }),
@@ -32,7 +24,6 @@ export const Route = createFileRoute("/register")({
 function RegisterPage() {
   const navigate = useNavigate();
   const { register } = useAuth();
-  const [showPw, setShowPw] = useState(false);
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -66,40 +57,33 @@ function RegisterPage() {
   };
 
   return (
-    <AuthSplitShell
-      eyebrow="Request access"
-      headline={<>Join the <span className="hl">workspace</span>.</>}
-      intro="Create your workspace account to continue."
-      brandTagline={<>Precision<br /><span className="hl">partnerships</span><br />start here.</>}
-      brandNote={<>Only emails on the approved partner-domain allowlist will be granted access. Approvals are typically reviewed within one business day.</>}
-
+    <AuthShell
+      title="Create account"
+      subtitle="Only emails on the approved partner-domain allowlist will be granted access."
       footer={
         <>
           Already have an account?{" "}
-          <Link to="/login" className="font-semibold underline underline-offset-4" style={{ color: "var(--ink)" }}>
+          <Link to="/login" className="font-medium text-cream underline underline-offset-4">
             Sign in
           </Link>
         </>
       }
     >
-      <form onSubmit={onSubmit} noValidate className="space-y-3">
+      <form className="space-y-6" onSubmit={onSubmit} noValidate>
         <div>
-          <label htmlFor="fullName" className={authLabelClass} style={authLabelStyle}>Full name</label>
+          <label className={authLabelClass}>Full name</label>
           <input
-            id="fullName"
             type="text"
             value={fullName}
             onChange={(e) => setFullName(e.target.value)}
             disabled={submitting || success}
             placeholder="Dr. Jane Doe"
             className={authInputClass}
-            style={authInputStyle}
           />
         </div>
         <div>
-          <label htmlFor="email" className={authLabelClass} style={authLabelStyle}>Email</label>
+          <label className={authLabelClass}>Email</label>
           <input
-            id="email"
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
@@ -107,55 +91,39 @@ function RegisterPage() {
             disabled={submitting || success}
             placeholder="you@partner.org"
             className={authInputClass}
-            style={authInputStyle}
           />
         </div>
         <div>
-          <label htmlFor="password" className={authLabelClass} style={authLabelStyle}>Password</label>
-          <div className="relative">
-            <input
-              id="password"
-              type={showPw ? "text" : "password"}
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              autoComplete="new-password"
-              disabled={submitting || success}
-              placeholder="At least 8 characters"
-              className={`${authInputClass} pr-11`}
-              style={authInputStyle}
-            />
-            <button
-              type="button"
-              onClick={() => setShowPw((v) => !v)}
-              className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[color-mix(in_oklab,var(--ink)_55%,transparent)] hover:text-[var(--ink)]"
-              aria-label={showPw ? "Hide password" : "Show password"}
-            >
-              {showPw ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-            </button>
-          </div>
+          <label className={authLabelClass}>Password</label>
+          <input
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            autoComplete="new-password"
+            disabled={submitting || success}
+            placeholder="At least 8 characters"
+            className={authInputClass}
+          />
         </div>
 
-        <button type="submit" disabled={submitting || success} className={authSubmitClass} style={authSubmitStyle}>
-          {submitting && <Loader2 className="h-4 w-4 animate-spin" />}
-          {submitting ? "Creating account…" : success ? "Success" : "Create account"}
-          {!submitting && !success && <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />}
-        </button>
-      </form>
-
-      <div className="mt-3 min-h-[44px]">
         {error && (
-          <div role="alert" className="flex items-start gap-2 rounded-xl px-3 py-2.5 text-sm" style={{ background: "color-mix(in oklab, var(--destructive) 12%, transparent)", color: "var(--destructive)", border: "1px solid color-mix(in oklab, var(--destructive) 35%, transparent)" }}>
+          <div role="alert" className="flex items-start gap-2 rounded-2xl border border-red-400/40 bg-red-500/10 px-4 py-3 text-sm text-red-100">
             <AlertCircle className="h-4 w-4 mt-0.5 shrink-0" />
             <span>{error}</span>
           </div>
         )}
         {success && (
-          <div role="status" className="flex items-start gap-2 rounded-xl px-3 py-2.5 text-sm" style={{ background: "color-mix(in oklab, var(--teal) 15%, transparent)", color: "var(--teal-deep)", border: "1px solid color-mix(in oklab, var(--teal) 35%, transparent)" }}>
+          <div role="status" className="flex items-start gap-2 rounded-2xl border border-emerald-400/40 bg-emerald-500/10 px-4 py-3 text-sm text-emerald-100">
             <CheckCircle2 className="h-4 w-4 mt-0.5 shrink-0" />
             <span>Account created. Redirecting…</span>
           </div>
         )}
-      </div>
-    </AuthSplitShell>
+
+        <button type="submit" disabled={submitting || success} className={authButtonClass} style={{ background: "var(--gradient-brand)" }}>
+          {submitting && <Loader2 className="h-4 w-4 animate-spin" />}
+          {submitting ? "Creating account…" : success ? "Success" : "Create account"}
+        </button>
+      </form>
+    </AuthShell>
   );
 }
