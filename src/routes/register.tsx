@@ -73,9 +73,9 @@ function RegisterPage() {
 
   const inputStyle = { border: "1.5px solid color-mix(in oklab, var(--ink) 15%, transparent)" } as const;
   const inputClass =
-    "w-full rounded-xl bg-white px-4 py-3.5 text-[var(--ink)] placeholder:text-[color-mix(in_oklab,var(--ink)_35%,transparent)] outline-none transition focus:ring-2 focus:ring-[var(--ink)] disabled:opacity-60 [@media(max-height:700px)]:py-2";
+    "w-full rounded-full bg-white px-5 py-3.5 text-[var(--ink)] placeholder:text-[color-mix(in_oklab,var(--ink)_35%,transparent)] outline-none transition focus:ring-2 focus:ring-[var(--ink)] disabled:opacity-60 [@media(max-height:700px)]:py-2.5";
   const labelStyle = { color: "color-mix(in oklab, var(--ink) 75%, transparent)" } as const;
-  const labelClass = "block text-xs font-semibold uppercase tracking-wider mb-2 [@media(max-height:700px)]:mb-0.5";
+  const labelClass = "block text-xs font-semibold uppercase tracking-wider mb-2 [@media(max-height:700px)]:mb-1";
 
   return (
     <div
@@ -130,7 +130,7 @@ function RegisterPage() {
         />
 
         <div className="relative w-full max-w-md mx-auto lg:max-w-lg flex-1 flex flex-col justify-center min-h-0">
-          <Link to="/" className="lg:hidden mb-6 inline-flex items-center gap-2 [@media(max-height:700px)]:mb-4">
+          <Link to="/" className="lg:hidden mb-6 inline-flex items-center gap-2">
             <img src={logo} alt="GeneScope" className="h-8 w-8 object-contain" />
             <span className="font-brand text-xl">GeneScope</span>
           </Link>
@@ -141,11 +141,11 @@ function RegisterPage() {
           <h2 className="mt-3 display-md [@media(max-height:700px)]:mt-2">
             Create <span className="hl">account</span>.
           </h2>
-          <p className="mt-4 text-sm lg:text-base [@media(max-height:700px)]:mt-1" style={{ color: "color-mix(in oklab, var(--ink) 68%, transparent)" }}>
+          <p className="mt-4 text-sm lg:text-base [@media(max-height:700px)]:mt-2" style={{ color: "color-mix(in oklab, var(--ink) 68%, transparent)" }}>
             Approved partner emails only.
           </p>
 
-          <form onSubmit={onSubmit} noValidate className="mt-8 lg:mt-10 space-y-4 [@media(max-height:700px)]:mt-5 [@media(max-height:700px)]:space-y-2">
+          <form onSubmit={onSubmit} noValidate className="mt-8 lg:mt-10 space-y-5 [@media(max-height:700px)]:mt-6 [@media(max-height:700px)]:space-y-3">
             <div>
               <label htmlFor="fullName" className={labelClass} style={labelStyle}>Full name</label>
               <input
@@ -173,7 +173,7 @@ function RegisterPage() {
                 style={{ ...inputStyle, border: errors.email || errors.general ? "1.5px solid var(--destructive)" : inputStyle.border }}
               />
               {(errors.email || errors.general) && (
-                <div className="mt-1 text-xs [@media(max-height:700px)]:text-[11px]" style={{ color: "var(--destructive)" }}>
+                <div className="mt-1.5 text-xs" style={{ color: "var(--destructive)" }}>
                   {errors.email || errors.general}
                 </div>
               )}
@@ -192,7 +192,7 @@ function RegisterPage() {
                 style={{ ...inputStyle, border: errors.password ? "1.5px solid var(--destructive)" : inputStyle.border }}
               />
               {errors.password && (
-                <div className="mt-1 text-xs [@media(max-height:700px)]:text-[11px]" style={{ color: "var(--destructive)" }}>
+                <div className="mt-1.5 text-xs" style={{ color: "var(--destructive)" }}>
                   {errors.password}
                 </div>
               )}
@@ -211,7 +211,7 @@ function RegisterPage() {
                 style={{ ...inputStyle, border: errors.confirmPassword ? "1.5px solid var(--destructive)" : inputStyle.border }}
               />
               {errors.confirmPassword && (
-                <div className="mt-1 text-xs [@media(max-height:700px)]:text-[11px]" style={{ color: "var(--destructive)" }}>
+                <div className="mt-1.5 text-xs" style={{ color: "var(--destructive)" }}>
                   {errors.confirmPassword}
                 </div>
               )}
@@ -220,7 +220,7 @@ function RegisterPage() {
             <button
               type="submit"
               disabled={submitting || success}
-              className="group w-full rounded-full py-3.5 font-display uppercase tracking-wider text-sm transition hover:opacity-90 disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2 [@media(max-height:700px)]:py-2"
+              className="group w-full rounded-full px-5 py-3.5 font-display uppercase tracking-wider text-sm transition hover:opacity-90 disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2 [@media(max-height:700px)]:py-2.5"
               style={{ background: "var(--ink)", color: "var(--cream)" }}
             >
               {submitting && <Loader2 className="h-4 w-4 animate-spin" />}
