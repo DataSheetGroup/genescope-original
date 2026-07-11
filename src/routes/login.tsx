@@ -25,7 +25,6 @@ export const Route = createFileRoute("/login")({
       throw redirect({ to: (search as Search).redirect ?? "/" });
     }
   },
-  ssr: false,
   component: LoginPage,
 });
 
