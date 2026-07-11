@@ -161,9 +161,9 @@ function TermsPage() {
         </div>
 
         <div className="relative w-full max-w-md mx-auto lg:max-w-lg text-center text-sm" style={{ color: "color-mix(in oklab, var(--ink) 65%, transparent)" }}>
-          Need help?{" "}
+          Already have an account?{" "}
           <Link to="/login" className="font-semibold underline underline-offset-4" style={{ color: "var(--ink)" }}>
-            Contact support
+            Sign in
           </Link>
         </div>
       </section>
