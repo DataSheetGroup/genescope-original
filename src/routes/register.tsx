@@ -46,18 +46,17 @@ function RegisterPage() {
   const onSubmit = async (e: FormEvent) => {
     e.preventDefault();
     if (submitting) return;
-    setError(null);
+    setErrors({});
 
-    if (!email || !password || !confirmPassword) {
-      setError("Please fill in all fields.");
-      return;
-    }
-    if (password.length < 8) {
-      setError("Password must be at least 8 characters.");
-      return;
-    }
-    if (password !== confirmPassword) {
-      setError("Passwords do not match.");
+    const next: FieldErrors = {};
+    if (!email.trim()) next.email = "Please enter your email.";
+    if (!password) next.password = "Please enter a password.";
+    else if (password.length < 8) next.password = "Password must be at least 8 characters.";
+    if (!confirmPassword) next.confirmPassword = "Please confirm your password.";
+    else if (password && password !== confirmPassword) next.confirmPassword = "Passwords do not match.";
+
+    if (Object.keys(next).length > 0) {
+      setErrors(next);
       return;
     }
 
@@ -67,7 +66,7 @@ function RegisterPage() {
       setSuccess(true);
       setTimeout(() => navigate({ to: "/" }), 400);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Registration failed.");
+      setErrors({ general: err instanceof Error ? err.message : "Registration failed." });
       setSubmitting(false);
     }
   };
