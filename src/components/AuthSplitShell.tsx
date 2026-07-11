@@ -81,7 +81,7 @@ export function AuthSplitShell({ eyebrow, headline, intro, brandTagline, childre
           </Link>
         </div>
 
-        <div className="relative flex-1 flex flex-col justify-center w-full max-w-md mx-auto lg:max-w-lg px-6 py-8 sm:px-10 lg:px-0 lg:py-10">
+        <div className="relative flex-1 flex flex-col justify-center w-full max-w-md mx-auto lg:max-w-lg px-6 pt-6 pb-4 sm:px-10 lg:px-0 lg:pt-8 lg:pb-6">
           <div className="eyebrow" style={{ color: "color-mix(in oklab, var(--ink) 60%, transparent)" }}>
             {eyebrow}
           </div>
