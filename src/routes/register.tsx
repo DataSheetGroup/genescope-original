@@ -1,20 +1,12 @@
 import { createFileRoute, Link, useNavigate, redirect } from "@tanstack/react-router";
 import { useState, type FormEvent } from "react";
-import { Loader2, ArrowRight } from "lucide-react";
-import { useAuth } from "@/lib/auth-context";
+import { Eye, EyeOff, Loader2, AlertCircle, CheckCircle2, ArrowRight } from "lucide-react";
 import { isAuthenticated } from "@/lib/auth";
+import { useAuth } from "@/lib/auth-context";
 
 import logo from "@/assets/genescope-logo.png";
 import stickerHelix from "@/assets/stickers/molecule.png";
 import stickerMicroscope from "@/assets/stickers/microscope.png";
-
-type FieldErrors = {
-  fullName?: string;
-  email?: string;
-  password?: string;
-  confirmPassword?: string;
-  general?: string;
-};
 
 export const Route = createFileRoute("/register")({
   head: () => ({
@@ -35,51 +27,39 @@ export const Route = createFileRoute("/register")({
 function RegisterPage() {
   const navigate = useNavigate();
   const { register } = useAuth();
-  const [fullName, setFullName] = useState("");
+  const [showPw, setShowPw] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
   const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
-  const [errors, setErrors] = useState<FieldErrors>({});
 
-  const onSubmit = async (e: FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     if (submitting) return;
-    setErrors({});
-
-    const next: FieldErrors = {};
-    if (!email.trim()) next.email = "Please enter your email.";
-    if (!password) next.password = "Please enter a password.";
-    else if (password.length < 8) next.password = "Password must be at least 8 characters.";
-    if (!confirmPassword) next.confirmPassword = "Please confirm your password.";
-    else if (password && password !== confirmPassword) next.confirmPassword = "Passwords do not match.";
-
-    if (Object.keys(next).length > 0) {
-      setErrors(next);
+    setError(null);
+    if (!email || !password) {
+      setError("Please enter both email and password.");
       return;
     }
-
+    if (password.length < 8) {
+      setError("Password must be at least 8 characters.");
+      return;
+    }
     setSubmitting(true);
     try {
-      await register({ email: email.trim(), password, full_name: fullName.trim() || undefined });
+      await register({ email: email.trim(), password });
       setSuccess(true);
       setTimeout(() => navigate({ to: "/" }), 400);
     } catch (err) {
-      setErrors({ general: err instanceof Error ? err.message : "Registration failed." });
+      setError(err instanceof Error ? err.message : "Request failed.");
       setSubmitting(false);
     }
   };
 
-  const inputStyle = { border: "1.5px solid color-mix(in oklab, var(--ink) 15%, transparent)" } as const;
-  const inputClass =
-    "w-full rounded-xl bg-white px-4 py-3.5 text-[var(--ink)] placeholder:text-[color-mix(in_oklab,var(--ink)_35%,transparent)] outline-none transition focus:ring-2 focus:ring-[var(--ink)] disabled:opacity-60 [@media(max-height:700px)]:py-2";
-  const labelStyle = { color: "color-mix(in oklab, var(--ink) 75%, transparent)" } as const;
-  const labelClass = "block text-xs font-semibold uppercase tracking-wider mb-2 [@media(max-height:700px)]:mb-0.5";
-
   return (
     <div
-      className="h-screen w-full grid lg:grid-cols-2 overflow-hidden animate-in fade-in duration-300"
+      className="h-screen w-full grid lg:grid-cols-2 overflow-hidden"
       style={{ background: "var(--cream)", color: "var(--ink)" }}
     >
       {/* LEFT — brand slab */}
@@ -120,7 +100,7 @@ function RegisterPage() {
       </aside>
 
       {/* RIGHT — form */}
-      <section className="relative flex flex-col h-full p-6 sm:p-10 lg:p-12 xl:p-14 overflow-hidden [@media(max-height:700px)]:p-5 sm:[@media(max-height:700px)]:px-7 sm:[@media(max-height:700px)]:py-5 lg:[@media(max-height:700px)]:px-10 lg:[@media(max-height:700px)]:py-5">
+      <section className="relative flex flex-col h-full p-6 sm:p-10 lg:p-12 xl:p-14 overflow-hidden">
         <img
           src={stickerMicroscope}
           alt=""
@@ -130,7 +110,8 @@ function RegisterPage() {
         />
 
         <div className="relative w-full max-w-md mx-auto lg:max-w-lg flex-1 flex flex-col justify-center min-h-0">
-          <Link to="/" className="lg:hidden mb-6 inline-flex items-center gap-2 [@media(max-height:700px)]:mb-4">
+          {/* mobile brand */}
+          <Link to="/" className="lg:hidden mb-6 inline-flex items-center gap-2">
             <img src={logo} alt="GeneScope" className="h-8 w-8 object-contain" />
             <span className="font-brand text-xl">GeneScope</span>
           </Link>
@@ -138,29 +119,18 @@ function RegisterPage() {
           <div className="eyebrow" style={{ color: "color-mix(in oklab, var(--ink) 60%, transparent)" }}>
             Request access
           </div>
-          <h2 className="mt-3 display-md [@media(max-height:700px)]:mt-2">
+          <h2 className="mt-3 display-md">
             Create <span className="hl">account</span>.
           </h2>
-          <p className="mt-4 text-sm lg:text-base [@media(max-height:700px)]:mt-1" style={{ color: "color-mix(in oklab, var(--ink) 68%, transparent)" }}>
+          <p className="mt-4 text-sm lg:text-base" style={{ color: "color-mix(in oklab, var(--ink) 68%, transparent)" }}>
             Approved partner emails only.
           </p>
 
-          <form onSubmit={onSubmit} noValidate className="mt-8 lg:mt-10 space-y-4 [@media(max-height:700px)]:mt-5 [@media(max-height:700px)]:space-y-2">
+          <form onSubmit={handleSubmit} noValidate className="mt-8 lg:mt-10 space-y-5">
             <div>
-              <label htmlFor="fullName" className={labelClass} style={labelStyle}>Full name</label>
-              <input
-                id="fullName"
-                type="text"
-                value={fullName}
-                onChange={(e) => setFullName(e.target.value)}
-                disabled={submitting || success}
-                placeholder="Dr. Jane Doe"
-                className={inputClass}
-                style={inputStyle}
-              />
-            </div>
-            <div>
-              <label htmlFor="email" className={labelClass} style={labelStyle}>Email</label>
+              <label htmlFor="email" className="block text-xs font-semibold uppercase tracking-wider mb-2" style={{ color: "color-mix(in oklab, var(--ink) 75%, transparent)" }}>
+                Email
+              </label>
               <input
                 id="email"
                 type="email"
@@ -169,58 +139,42 @@ function RegisterPage() {
                 autoComplete="email"
                 disabled={submitting || success}
                 placeholder="you@partner.org"
-                className={`${inputClass} ${errors.email || errors.general ? "border-[var(--destructive)] focus:ring-[var(--destructive)]" : ""}`}
-                style={{ ...inputStyle, border: errors.email || errors.general ? "1.5px solid var(--destructive)" : inputStyle.border }}
+                className="w-full rounded-xl bg-white px-4 py-3.5 text-[var(--ink)] placeholder:text-[color-mix(in_oklab,var(--ink)_35%,transparent)] outline-none transition focus:ring-2 focus:ring-[var(--ink)] disabled:opacity-60"
+                style={{ border: "1.5px solid color-mix(in oklab, var(--ink) 15%, transparent)" }}
               />
-              {(errors.email || errors.general) && (
-                <div className="mt-1 text-xs [@media(max-height:700px)]:text-[11px]" style={{ color: "var(--destructive)" }}>
-                  {errors.email || errors.general}
-                </div>
-              )}
             </div>
+
             <div>
-              <label htmlFor="password" className={labelClass} style={labelStyle}>Password</label>
-              <input
-                id="password"
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                autoComplete="new-password"
-                disabled={submitting || success}
-                placeholder="At least 8 characters"
-                className={`${inputClass} ${errors.password ? "border-[var(--destructive)] focus:ring-[var(--destructive)]" : ""}`}
-                style={{ ...inputStyle, border: errors.password ? "1.5px solid var(--destructive)" : inputStyle.border }}
-              />
-              {errors.password && (
-                <div className="mt-1 text-xs [@media(max-height:700px)]:text-[11px]" style={{ color: "var(--destructive)" }}>
-                  {errors.password}
-                </div>
-              )}
-            </div>
-            <div>
-              <label htmlFor="confirmPassword" className={labelClass} style={labelStyle}>Confirm password</label>
-              <input
-                id="confirmPassword"
-                type="password"
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-                autoComplete="new-password"
-                disabled={submitting || success}
-                placeholder="Re-enter your password"
-                className={`${inputClass} ${errors.confirmPassword ? "border-[var(--destructive)] focus:ring-[var(--destructive)]" : ""}`}
-                style={{ ...inputStyle, border: errors.confirmPassword ? "1.5px solid var(--destructive)" : inputStyle.border }}
-              />
-              {errors.confirmPassword && (
-                <div className="mt-1 text-xs [@media(max-height:700px)]:text-[11px]" style={{ color: "var(--destructive)" }}>
-                  {errors.confirmPassword}
-                </div>
-              )}
+              <label htmlFor="password" className="block text-xs font-semibold uppercase tracking-wider mb-2" style={{ color: "color-mix(in oklab, var(--ink) 75%, transparent)" }}>
+                Password
+              </label>
+              <div className="relative">
+                <input
+                  id="password"
+                  type={showPw ? "text" : "password"}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  autoComplete="new-password"
+                  disabled={submitting || success}
+                  placeholder="At least 8 characters"
+                  className="w-full rounded-xl bg-white px-4 py-3.5 pr-11 text-[var(--ink)] placeholder:text-[color-mix(in_oklab,var(--ink)_35%,transparent)] outline-none transition focus:ring-2 focus:ring-[var(--ink)] disabled:opacity-60"
+                  style={{ border: "1.5px solid color-mix(in oklab, var(--ink) 15%, transparent)" }}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPw((v) => !v)}
+                  className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[color-mix(in_oklab,var(--ink)_55%,transparent)] hover:text-[var(--ink)]"
+                  aria-label={showPw ? "Hide password" : "Show password"}
+                >
+                  {showPw ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                </button>
+              </div>
             </div>
 
             <button
               type="submit"
               disabled={submitting || success}
-              className="group w-full rounded-full py-3.5 font-display uppercase tracking-wider text-sm transition hover:opacity-90 disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2 [@media(max-height:700px)]:py-2"
+              className="group w-full rounded-full py-4 font-display uppercase tracking-wider text-sm transition hover:opacity-90 disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2"
               style={{ background: "var(--ink)", color: "var(--cream)" }}
             >
               {submitting && <Loader2 className="h-4 w-4 animate-spin" />}
@@ -228,6 +182,21 @@ function RegisterPage() {
               {!submitting && !success && <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />}
             </button>
           </form>
+
+          <div className="mt-5 min-h-[58px]">
+            {error && (
+              <div role="alert" className="flex items-start gap-2 rounded-xl px-3 py-2.5 text-sm" style={{ background: "color-mix(in oklab, var(--destructive) 12%, transparent)", color: "var(--destructive)", border: "1px solid color-mix(in oklab, var(--destructive) 35%, transparent)" }}>
+                <AlertCircle className="h-4 w-4 mt-0.5 shrink-0" />
+                <span>{error}</span>
+              </div>
+            )}
+            {success && (
+              <div role="status" className="flex items-start gap-2 rounded-xl px-3 py-2.5 text-sm" style={{ background: "color-mix(in oklab, var(--teal) 15%, transparent)", color: "var(--teal-deep)", border: "1px solid color-mix(in oklab, var(--teal) 35%, transparent)" }}>
+                <CheckCircle2 className="h-4 w-4 mt-0.5 shrink-0" />
+                <span>Account created. Redirecting…</span>
+              </div>
+            )}
+          </div>
         </div>
 
         <div className="relative w-full max-w-md mx-auto lg:max-w-lg text-center text-sm" style={{ color: "color-mix(in oklab, var(--ink) 65%, transparent)" }}>
