@@ -103,21 +103,21 @@ export function AuthSplitShell({ eyebrow, headline, intro, brandTagline, childre
 }
 
 export const authInputClass =
-  "w-full rounded-xl bg-white px-4 py-3.5 text-[var(--ink)] placeholder:text-[color-mix(in_oklab,var(--ink)_35%,transparent)] outline-none transition focus:ring-2 focus:ring-[var(--ink)] disabled:opacity-60";
+  "w-full rounded-xl bg-white px-4 py-2.5 text-[var(--ink)] placeholder:text-[color-mix(in_oklab,var(--ink)_35%,transparent)] outline-none transition focus:ring-2 focus:ring-[var(--ink)] disabled:opacity-60";
 
 export const authInputStyle = {
   border: "1.5px solid color-mix(in oklab, var(--ink) 15%, transparent)",
 } as const;
 
 export const authLabelClass =
-  "block text-xs font-semibold uppercase tracking-wider mb-2";
+  "block text-xs font-semibold uppercase tracking-wider mb-1.5";
 
 export const authLabelStyle = {
   color: "color-mix(in oklab, var(--ink) 75%, transparent)",
 } as const;
 
 export const authSubmitClass =
-  "group w-full rounded-full py-4 font-display uppercase tracking-wider text-sm transition hover:opacity-90 disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2";
+  "group w-full rounded-full py-3 font-display uppercase tracking-wider text-sm transition hover:opacity-90 disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2";
 
 export const authSubmitStyle = {
   background: "var(--ink)",
