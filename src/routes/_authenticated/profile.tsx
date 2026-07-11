@@ -103,25 +103,33 @@ function ProfilePage() {
   const displayName = user.full_name?.trim() || user.email.split("@")[0];
 
   return (
-    <div className="mx-auto max-w-[1200px] px-6 py-12 lg:py-16">
-      {/* Editorial header */}
-      <div className="grid grid-cols-1 md:grid-cols-[1fr_auto] items-end gap-6 border-b border-foreground/10 pb-8 mb-10">
-        <div>
-          <div className="text-[11px] uppercase tracking-[0.28em] text-foreground/60">§ Account · Profile</div>
-          <h1 className="mt-3 font-display text-4xl md:text-5xl leading-[1.05]">Your profile</h1>
-          <p className="mt-3 text-sm text-foreground/70 max-w-lg">
-            Manage the identity attached to your GeneScope workspace.
-          </p>
+    <div className="pb-16">
+      {/* Editorial header — cream slab, green text */}
+      <section className="slab-cream">
+        <div className="mx-auto max-w-[1200px] px-6 pt-12 lg:pt-16 pb-10">
+          <div className="grid grid-cols-1 md:grid-cols-[1fr_auto] items-end gap-6">
+            <div>
+              <div className="text-[11px] uppercase tracking-[0.28em]" style={{ color: "var(--green-deep)", opacity: 0.7 }}>
+                § Account · Profile
+              </div>
+              <h1 className="mt-3 font-display text-4xl md:text-5xl leading-[1.05]" style={{ color: "var(--green-deep)" }}>
+                Your <span className="hl">profile</span>
+              </h1>
+              <p className="mt-3 text-sm max-w-lg" style={{ color: "var(--green-deep)", opacity: 0.75 }}>
+                Manage the identity attached to your GeneScope workspace.
+              </p>
+            </div>
+            <button
+              onClick={handleLogout}
+              className="inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-[12px] font-semibold uppercase tracking-wider transition hover:opacity-90 justify-self-start md:justify-self-end"
+              style={{ background: "var(--coral)", color: "var(--paper)" }}
+            >
+              <LogOut className="h-4 w-4" />
+              Sign out
+            </button>
+          </div>
         </div>
-        <button
-          onClick={handleLogout}
-          className="inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-[12px] font-semibold uppercase tracking-wider transition hover:opacity-90 justify-self-start md:justify-self-end"
-          style={{ background: "var(--coral)", color: "var(--nav-bg)" }}
-        >
-          <LogOut className="h-4 w-4" />
-          Sign out
-        </button>
-      </div>
+      </section>
 
       {/* Identity summary — full width, symmetric */}
       <section className="rounded-3xl border border-foreground/10 bg-foreground/[0.02] p-6 md:p-8 mb-8">
