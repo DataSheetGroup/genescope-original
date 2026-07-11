@@ -4,7 +4,7 @@ import {
   Link,
   createRootRouteWithContext,
   useRouter,
-  useRouterState,
+  useLocation,
   HeadContent,
   Scripts,
 } from "@tanstack/react-router";
@@ -109,7 +109,7 @@ function RootShell({ children }: { children: React.ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
-  const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const { pathname } = useLocation();
   const isAuthRoute = AUTH_ROUTES.includes(pathname);
 
   return (
