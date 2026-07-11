@@ -5,7 +5,6 @@ import { forgotPassword } from "@/lib/auth";
 
 import logo from "@/assets/genescope-logo.png";
 import stickerHelix from "@/assets/stickers/molecule.png";
-import stickerMicroscope from "@/assets/stickers/microscope.png";
 
 export const Route = createFileRoute("/forgot-password")({
   head: () => ({
