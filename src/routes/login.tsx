@@ -5,6 +5,11 @@ import { isAuthenticated } from "@/lib/auth";
 import { useAuth } from "@/lib/auth-context";
 
 import logo from "@/assets/genescope-logo.png";
+import stickerHelix from "@/assets/stickers/molecule.png";
+import stickerFlask from "@/assets/stickers/flask-purple.png";
+import stickerMicroscope from "@/assets/stickers/microscope.png";
+import stickerPotion from "@/assets/stickers/potion-blue.png";
+import stickerMagnet from "@/assets/stickers/magnet.png";
 
 type Search = { redirect?: string };
 
@@ -64,15 +69,38 @@ function LoginPage() {
     >
       {/* LEFT — brand slab (matches hero-green) */}
       <aside
-        className="hidden lg:flex flex-col justify-between p-12 xl:p-14"
+        className="relative hidden lg:flex flex-col justify-between p-12 xl:p-14 overflow-hidden"
         style={{ background: "var(--ink)", color: "var(--cream)" }}
       >
-        <Link to="/" className="inline-flex items-center gap-3 w-fit">
+        {/* Stickers — decorative */}
+        <img
+          src={stickerHelix}
+          alt=""
+          aria-hidden
+          className="pointer-events-none select-none absolute -top-6 -right-6 w-40 opacity-90 animate-float"
+          style={{ ["--rot" as never]: "12deg", transform: "rotate(12deg)" }}
+        />
+        <img
+          src={stickerFlask}
+          alt=""
+          aria-hidden
+          className="pointer-events-none select-none absolute bottom-24 -left-6 w-28 opacity-90 animate-drift"
+          style={{ ["--rot" as never]: "-14deg", transform: "rotate(-14deg)" }}
+        />
+        <img
+          src={stickerMicroscope}
+          alt=""
+          aria-hidden
+          className="pointer-events-none select-none absolute top-1/2 right-8 w-24 opacity-80 animate-float"
+          style={{ ["--rot" as never]: "-8deg", transform: "rotate(-8deg)" }}
+        />
+
+        <Link to="/" className="relative inline-flex items-center gap-3 w-fit">
           <img src={logo} alt="GeneScope" className="h-9 w-9 object-contain" />
           <span className="font-brand text-2xl">GeneScope</span>
         </Link>
 
-        <div>
+        <div className="relative">
           <div className="eyebrow mb-5 opacity-75">Clinical decision-support</div>
           <h1 className="display-lg leading-[0.95]">
             Decisions
@@ -87,13 +115,27 @@ function LoginPage() {
           </p>
         </div>
 
-        <div className="text-xs opacity-60">
+        <div className="relative text-xs opacity-60">
           © 2026 Data Sheet Group · RA 10173-aligned
         </div>
       </aside>
 
       {/* RIGHT — form */}
-      <section className="flex items-center justify-center px-6 py-8 sm:px-10 h-screen overflow-y-auto lg:overflow-hidden">
+      <section className="relative flex items-center justify-center px-6 py-8 sm:px-10 h-screen overflow-y-auto lg:overflow-hidden">
+        <img
+          src={stickerPotion}
+          alt=""
+          aria-hidden
+          className="pointer-events-none select-none absolute top-6 right-6 w-20 opacity-80 animate-drift hidden sm:block"
+          style={{ ["--rot" as never]: "10deg", transform: "rotate(10deg)" }}
+        />
+        <img
+          src={stickerMagnet}
+          alt=""
+          aria-hidden
+          className="pointer-events-none select-none absolute bottom-6 left-6 w-16 opacity-70 animate-float hidden sm:block"
+          style={{ ["--rot" as never]: "-12deg", transform: "rotate(-12deg)" }}
+        />
         <div className="w-full max-w-sm">
           {/* mobile brand */}
           <Link to="/" className="lg:hidden mb-8 inline-flex items-center gap-2">
