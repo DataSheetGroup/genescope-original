@@ -81,42 +81,43 @@ export function AuthSplitShell({ eyebrow, headline, intro, brandTagline, childre
           </Link>
         </div>
 
-        <div className="relative flex-1 flex flex-col justify-center w-full max-w-md mx-auto lg:max-w-lg px-6 pt-6 pb-4 sm:px-10 lg:px-0 lg:pt-8 lg:pb-6">
+        <div className="relative flex-1 flex flex-col justify-center w-full max-w-md mx-auto lg:max-w-lg px-6 pt-4 pb-3 sm:px-10 lg:px-0 lg:pt-6 lg:pb-4">
           <div className="eyebrow" style={{ color: "color-mix(in oklab, var(--ink) 60%, transparent)" }}>
             {eyebrow}
           </div>
-          <h2 className="mt-3 display-md">{headline}</h2>
-          <p className="mt-3 text-sm lg:text-base" style={{ color: "color-mix(in oklab, var(--ink) 68%, transparent)" }}>
+          <h2 className="mt-2 display-md">{headline}</h2>
+          <p className="mt-2 text-sm" style={{ color: "color-mix(in oklab, var(--ink) 68%, transparent)" }}>
             {intro}
           </p>
 
-          <div className="mt-6 lg:mt-8">{children}</div>
+          <div className="mt-4 lg:mt-5">{children}</div>
         </div>
 
-        <div className="relative w-full max-w-md mx-auto lg:max-w-lg text-center text-sm px-6 pb-6 sm:px-10 sm:pb-8 lg:px-0 lg:pb-10 xl:pb-14" style={{ color: "color-mix(in oklab, var(--ink) 65%, transparent)" }}>
+        <div className="relative w-full max-w-md mx-auto lg:max-w-lg text-center text-sm px-6 pb-5 sm:px-10 sm:pb-6 lg:px-0 lg:pb-8" style={{ color: "color-mix(in oklab, var(--ink) 65%, transparent)" }}>
           {footer}
         </div>
+
       </section>
     </div>
   );
 }
 
 export const authInputClass =
-  "w-full rounded-xl bg-white px-4 py-3.5 text-[var(--ink)] placeholder:text-[color-mix(in_oklab,var(--ink)_35%,transparent)] outline-none transition focus:ring-2 focus:ring-[var(--ink)] disabled:opacity-60";
+  "w-full rounded-xl bg-white px-4 py-2.5 text-[var(--ink)] placeholder:text-[color-mix(in_oklab,var(--ink)_35%,transparent)] outline-none transition focus:ring-2 focus:ring-[var(--ink)] disabled:opacity-60";
 
 export const authInputStyle = {
   border: "1.5px solid color-mix(in oklab, var(--ink) 15%, transparent)",
 } as const;
 
 export const authLabelClass =
-  "block text-xs font-semibold uppercase tracking-wider mb-2";
+  "block text-xs font-semibold uppercase tracking-wider mb-1.5";
 
 export const authLabelStyle = {
   color: "color-mix(in oklab, var(--ink) 75%, transparent)",
 } as const;
 
 export const authSubmitClass =
-  "group w-full rounded-full py-4 font-display uppercase tracking-wider text-sm transition hover:opacity-90 disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2";
+  "group w-full rounded-full py-3 font-display uppercase tracking-wider text-sm transition hover:opacity-90 disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2";
 
 export const authSubmitStyle = {
   background: "var(--ink)",
