@@ -80,7 +80,7 @@ function RegisterPage() {
         </>
       }
     >
-      <form onSubmit={onSubmit} noValidate className="space-y-5">
+      <form onSubmit={onSubmit} noValidate className="space-y-3">
         <div>
           <label htmlFor="fullName" className={authLabelClass} style={authLabelStyle}>Full name</label>
           <input
