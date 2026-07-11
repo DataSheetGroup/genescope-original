@@ -120,7 +120,7 @@ function RegisterPage() {
       </aside>
 
       {/* RIGHT — form */}
-      <section className="relative flex flex-col h-full p-6 sm:p-10 lg:p-12 xl:p-14 overflow-hidden [@media(max-height:700px)]:p-5 sm:[@media(max-height:700px)]:px-7 sm:[@media(max-height:700px)]:py-5 lg:[@media(max-height:700px)]:px-10 lg:[@media(max-height:700px)]:py-5">
+      <section className="relative flex flex-col h-full p-6 sm:p-10 lg:p-12 xl:p-14 overflow-hidden [@media(max-height:700px)]:p-4 sm:[@media(max-height:700px)]:px-6 sm:[@media(max-height:700px)]:py-4 lg:[@media(max-height:700px)]:px-8 lg:[@media(max-height:700px)]:py-4">
         <img
           src={stickerMicroscope}
           alt=""
