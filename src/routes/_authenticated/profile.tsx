@@ -108,7 +108,7 @@ function ProfilePage() {
   const displayName = user.full_name?.trim() || user.email.split("@")[0];
 
   return (
-    <div className="relative overflow-hidden">
+    <div className="relative overflow-hidden" style={{ background: "var(--paper)", color: "var(--ink)" }}>
       <div className="relative mx-auto max-w-[1200px] px-4 sm:px-6 lg:px-10 py-16 space-y-10 z-10">
         {/* Editorial header */}
         <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
