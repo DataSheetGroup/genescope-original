@@ -103,11 +103,11 @@ function RegisterPage() {
         <div className="relative">
           <div className="eyebrow mb-5 opacity-75">Partner onboarding</div>
           <h1 className="display-lg leading-[0.95]">
-            Join the
+            JOIN THE
             <br />
-            <span className="hl">restricted</span>
+            <span className="hl">RESTRICTED</span>
             <br />
-            workspace.
+            WORKSPACE.
           </h1>
           <p className="mt-6 max-w-sm text-sm leading-relaxed opacity-80">
             Request access using your approved partner-domain email.
@@ -141,7 +141,7 @@ function RegisterPage() {
               Request access
             </div>
             <h2 className="mt-3 display-md [@media(max-height:700px)]:mt-2">
-              Create <span className="hl">account</span>.
+              CREATE <span className="hl">ACCOUNT</span>.
             </h2>
             <p className="mt-4 text-sm lg:text-base [@media(max-height:700px)]:mt-2" style={{ color: "color-mix(in oklab, var(--ink) 68%, transparent)" }}>
               Approved partner emails only.
@@ -228,7 +228,7 @@ function RegisterPage() {
               style={{ background: "var(--ink)", color: "var(--cream)" }}
             >
               {submitting && <Loader2 className="h-4 w-4 animate-spin" />}
-              {submitting ? "Creating…" : success ? "Success" : "Create account"}
+              {submitting ? "CREATING…" : success ? "SUCCESS" : "CREATE ACCOUNT"}
               {!submitting && !success && <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />}
             </button>
           </form>
