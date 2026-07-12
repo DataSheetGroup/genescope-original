@@ -167,10 +167,14 @@ function PredictPage() {
 
   const handleSubmit = () => { if (allFilled) mutation.mutate(buildPayload()); };
   const handleReset = () => { setForm({}); mutation.reset(); setSaved(false); };
-  const handleSave = () => {
+  const handleSave = async () => {
     if (!mutation.data) return;
-    add(buildPayload(), mutation.data);
-    setSaved(true);
+    try {
+      await add(buildPayload(), mutation.data, true);
+      setSaved(true);
+    } catch (e) {
+      console.error("[save history] failed:", e);
+    }
   };
 
   const result: PredictResponse | undefined = mutation.data;
