@@ -27,7 +27,7 @@ def verify_password(pw: str, pw_hash: bytes) -> bool:
 
 def issue_token(user: User) -> str:
     payload = {
-        "sub": user.id,
+        "sub": str(user.id),
         "email": user.email,
         "role": user.role,
         "iat": datetime.utcnow(),
