@@ -27,7 +27,7 @@ def verify_password(pw: str, pw_hash: bytes) -> bool:
 
 def issue_token(user: User) -> str:
     payload = {
-        "sub": user.id,
+        "sub": str(user.id),
         "email": user.email,
         "role": user.role,
         "iat": datetime.utcnow(),
@@ -52,7 +52,7 @@ def require_auth(fn):
             return jsonify({"error": "Token expired"}), 401
         except Exception:
             return jsonify({"error": "Invalid token"}), 401
-        user = db.session.get(User, payload["sub"])
+        user = db.session.get(User, int(payload["sub"]))
         if not user or not user.is_active:
             return jsonify({"error": "Inactive user"}), 401
         request.user = user
