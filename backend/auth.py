@@ -92,6 +92,7 @@ def login():
     data = request.get_json(force=True) or {}
     email = (data.get("email") or "").strip().lower()
     password = data.get("password") or ""
+    remember = bool(data.get("remember"))
 
     user = User.query.filter_by(email=email).first()
     if not user or not verify_password(password, user.password_hash):
@@ -104,7 +105,7 @@ def login():
     user.last_login_at = datetime.utcnow()
     db.session.commit()
 
-    token = issue_token(user)
+    token = issue_token(user, remember=remember)
     return jsonify({"access_token": token, "user": user.to_public()})
 
 
