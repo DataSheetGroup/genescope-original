@@ -1,13 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
-import { Download, Trash2 } from "lucide-react";
+import { Download, Star, Trash2, X } from "lucide-react";
 import { useHistory, type HistoryItem } from "@/hooks/useHistory";
 import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from "@/components/ui/select";
-import pillCap from "@/assets/illustrations/pill-capsule.png";
-import magnifier from "@/assets/illustrations/magnifier-strand.png";
-import chromosome from "@/assets/illustrations/chromosome.png";
 
 export const Route = createFileRoute("/_authenticated/history")({
   head: () => ({
@@ -30,17 +27,19 @@ function toCsv(items: HistoryItem[]) {
 }
 
 function HistoryPage() {
-  const { items, clear } = useHistory();
+  const { items, clear, remove, toggleSave, isLoading } = useHistory();
   const [resultFilter, setResultFilter] = useState<string>("all");
   const [yearFilter, setYearFilter] = useState<string>("all");
   const [diseaseFilter, setDiseaseFilter] = useState<string>("all");
+  const [savedOnly, setSavedOnly] = useState(false);
 
   const filtered = useMemo(() => items.filter((it) => {
+    if (savedOnly && !it.saved) return false;
     if (resultFilter !== "all" && it.result.prediction !== resultFilter) return false;
     if (yearFilter !== "all" && String(it.input.Year) !== yearFilter) return false;
     if (diseaseFilter !== "all" && it.input.Disease_Category !== diseaseFilter) return false;
     return true;
-  }), [items, resultFilter, yearFilter, diseaseFilter]);
+  }), [items, resultFilter, yearFilter, diseaseFilter, savedOnly]);
 
   const handleExport = () => {
     const blob = new Blob([toCsv(filtered)], { type: "text/csv" });
@@ -95,6 +94,12 @@ function HistoryPage() {
                 {["Pediatrics","Neurology","Metabolic","Others"].map((d) => <SelectItem key={d} value={d}>{d}</SelectItem>)}
               </SelectContent>
             </Select>
+            <button
+              onClick={() => setSavedOnly((s) => !s)}
+              className={`pill text-xs px-4 py-2 ${savedOnly ? "bg-coral text-card-foreground" : "bg-cream text-card-foreground"}`}
+            >
+              <Star className={`h-3.5 w-3.5 ${savedOnly ? "fill-current" : ""}`} /> Saved only
+            </button>
           </div>
           <div className="flex gap-2">
             <button
@@ -114,12 +119,13 @@ function HistoryPage() {
           </div>
         </div>
 
+
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead className="bg-cream-dim text-xs uppercase tracking-wider text-card-foreground/65">
               <tr>
-                {["No.","Timestamp","Sex","Region","Disease","Facility","Year","Result","Confidence"].map((h) => (
-                  <th key={h} className="text-left px-5 py-3.5 font-semibold">{h}</th>
+                {["No.","Timestamp","Sex","Region","Disease","Facility","Year","Result","Confidence",""].map((h, i) => (
+                  <th key={i} className="text-left px-5 py-3.5 font-semibold">{h}</th>
                 ))}
               </tr>
             </thead>
@@ -147,13 +153,33 @@ function HistoryPage() {
                       </span>
                     </td>
                     <td className="px-5 py-3.5 tabular-nums font-display">{it.result.confidence.toFixed(1)}%</td>
+                    <td className="px-3 py-3.5 whitespace-nowrap">
+                      <div className="flex items-center gap-1">
+                        <button
+                          onClick={() => toggleSave(it.id, !it.saved)}
+                          title={it.saved ? "Unsave" : "Save"}
+                          className="p-1.5 rounded-full hover:bg-cream-dim"
+                        >
+                          <Star className={`h-4 w-4 ${it.saved ? "fill-coral text-coral" : "text-card-foreground/40"}`} />
+                        </button>
+                        <button
+                          onClick={() => remove(it.id)}
+                          title="Delete"
+                          className="p-1.5 rounded-full hover:bg-cream-dim text-card-foreground/40 hover:text-card-foreground"
+                        >
+                          <X className="h-4 w-4" />
+                        </button>
+                      </div>
+                    </td>
                   </tr>
                 );
               })}
               {!filtered.length && (
                 <tr>
-                  <td colSpan={9} className="px-5 py-20 text-center text-sm text-card-foreground/60">
-                    {items.length
+                  <td colSpan={10} className="px-5 py-20 text-center text-sm text-card-foreground/60">
+                    {isLoading
+                      ? "Loading history..."
+                      : items.length
                       ? "No records match the current filters."
                       : "No predictions recorded yet. Head to Predict to get started."}
                   </td>
@@ -167,3 +193,4 @@ function HistoryPage() {
     </div>
   );
 }
+
