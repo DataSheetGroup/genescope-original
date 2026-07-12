@@ -11,6 +11,8 @@ import predict
 
 def create_app() -> Flask:
     app = Flask(__name__)
+    from flask_cors import CORS
+    CORS(app, origins=["https://*.netlify.app", "http://localhost:8080", "http://genescope.online/", "http://www.genescope.online/", "genescope.online", "www.genescope.online", "https://genescope.online/", "https://www.genescope.online/"], supports_credentials=True)
     app.config.from_object(Config)
 
     db.init_app(app)
