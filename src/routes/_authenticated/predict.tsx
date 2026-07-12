@@ -66,10 +66,31 @@ function StepBadge({ n, label }: { n: number; label: string }) {
   );
 }
 
-function ConfidenceRing({ value }: { value: number }) {
+function useCountUp(target: number, duration = 700, deps: unknown[] = []) {
+  const [v, setV] = useState(0);
+  useEffect(() => {
+    let raf = 0;
+    const start = performance.now();
+    const from = 0;
+    const to = target;
+    const ease = (t: number) => 1 - Math.pow(1 - t, 3);
+    const tick = (now: number) => {
+      const p = Math.min(1, (now - start) / duration);
+      setV(from + (to - from) * ease(p));
+      if (p < 1) raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [target, duration, ...deps]);
+  return v;
+}
+
+function ConfidenceRing({ value, runId }: { value: number; runId: number }) {
   const r = 56;
   const c = 2 * Math.PI * r;
-  const offset = c - (value / 100) * c;
+  const animated = useCountUp(value, 700, [runId]);
+  const offset = c - (animated / 100) * c;
   return (
     <div className="relative h-36 w-36 text-card-foreground mx-auto">
       <svg viewBox="0 0 130 130" className="h-full w-full -rotate-90">
@@ -82,11 +103,11 @@ function ConfidenceRing({ value }: { value: number }) {
           strokeDasharray={c}
           strokeDashoffset={offset}
           strokeLinecap="round"
-          style={{ transition: "stroke-dashoffset 0.8s ease" }}
         />
       </svg>
       <div className="absolute inset-0 flex flex-col items-center justify-center">
-        <div className="font-display text-3xl tabular-nums">{value.toFixed(1)}%</div>
+        <div className="font-display text-3xl tabular-nums">{animated.toFixed(1)}%</div>
+
         <div className="text-[10px] uppercase tracking-wider opacity-70 mt-1">Confidence</div>
       </div>
     </div>
