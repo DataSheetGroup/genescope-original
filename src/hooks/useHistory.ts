@@ -1,49 +1,72 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback } from "react";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import type { PredictPayload, PredictResponse } from "@/lib/api";
+import {
+  addHistory,
+  clearHistory,
+  deleteHistory,
+  listHistory,
+  updateHistory,
+  type HistoryItem,
+} from "@/lib/user-data";
+import { useAuth } from "@/lib/auth-context";
 
-const KEY = "genescope.history.v1";
+export type { HistoryItem };
 
-export type HistoryItem = {
-  id: string;
-  timestamp: string;
-  input: PredictPayload;
-  result: PredictResponse;
-};
-
-function read(): HistoryItem[] {
-  if (typeof window === "undefined") return [];
-  try {
-    const raw = localStorage.getItem(KEY);
-    return raw ? (JSON.parse(raw) as HistoryItem[]) : [];
-  } catch {
-    return [];
-  }
-}
+const KEY = ["history"] as const;
 
 export function useHistory() {
-  const [items, setItems] = useState<HistoryItem[]>([]);
+  const qc = useQueryClient();
+  const { user } = useAuth();
+  const enabled = Boolean(user);
 
-  useEffect(() => {
-    setItems(read());
-  }, []);
+  const query = useQuery({
+    queryKey: KEY,
+    queryFn: () => listHistory(false),
+    enabled,
+    staleTime: 30_000,
+  });
 
-  const add = useCallback((input: PredictPayload, result: PredictResponse) => {
-    const item: HistoryItem = {
-      id: crypto.randomUUID(),
-      timestamp: new Date().toISOString(),
-      input,
-      result,
-    };
-    const next = [item, ...read()];
-    localStorage.setItem(KEY, JSON.stringify(next));
-    setItems(next);
-    return item;
-  }, []);
+  const addM = useMutation({
+    mutationFn: ({ input, result, saved }: { input: PredictPayload; result: PredictResponse; saved?: boolean }) =>
+      addHistory(input, result, saved),
+    onSuccess: () => qc.invalidateQueries({ queryKey: KEY }),
+  });
 
-  const clear = useCallback(() => {
-    localStorage.removeItem(KEY);
-    setItems([]);
-  }, []);
+  const clearM = useMutation({
+    mutationFn: () => clearHistory(),
+    onSuccess: () => qc.setQueryData(KEY, []),
+  });
 
-  return { items, add, clear };
+  const deleteM = useMutation({
+    mutationFn: (id: string) => deleteHistory(id),
+    onSuccess: () => qc.invalidateQueries({ queryKey: KEY }),
+  });
+
+  const toggleSaveM = useMutation({
+    mutationFn: ({ id, saved }: { id: string; saved: boolean }) => updateHistory(id, { saved }),
+    onSuccess: () => qc.invalidateQueries({ queryKey: KEY }),
+  });
+
+  const add = useCallback(
+    (input: PredictPayload, result: PredictResponse, saved = false) =>
+      addM.mutateAsync({ input, result, saved }),
+    [addM],
+  );
+  const clear = useCallback(() => clearM.mutate(), [clearM]);
+  const remove = useCallback((id: string) => deleteM.mutate(id), [deleteM]);
+  const toggleSave = useCallback(
+    (id: string, saved: boolean) => toggleSaveM.mutate({ id, saved }),
+    [toggleSaveM],
+  );
+
+  return {
+    items: query.data ?? [],
+    isLoading: query.isLoading,
+    error: query.error,
+    add,
+    clear,
+    remove,
+    toggleSave,
+  };
 }
