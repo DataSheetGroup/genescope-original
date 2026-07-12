@@ -158,6 +158,10 @@ function PredictPage() {
   const [form, setForm] = useState<Form>({});
   const { add } = useHistory();
   const [saved, setSaved] = useState(false);
+  const [runId, setRunId] = useState(0);
+  const [statusStep, setStatusStep] = useState(0);
+  const abortRef = useRef<AbortController | null>(null);
+  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const allFilled = useMemo(
     () => FIELDS.every((f) => form[f.key] !== undefined && form[f.key] !== ""),
@@ -166,9 +170,29 @@ function PredictPage() {
   const filledCount = FIELDS.filter((f) => form[f.key]).length;
 
   const mutation = useMutation({
-    mutationFn: (payload: PredictPayload) => postPredict(payload),
-    onSuccess: () => setSaved(false),
+    mutationFn: (payload: PredictPayload) => {
+      abortRef.current?.abort();
+      const ac = new AbortController();
+      abortRef.current = ac;
+      return postPredict(payload, { signal: ac.signal });
+    },
+    onSuccess: () => {
+      setSaved(false);
+      setRunId((r) => r + 1);
+    },
   });
+
+  // Cycle status line while a request is in flight.
+  useEffect(() => {
+    if (!mutation.isPending) return;
+    setStatusStep(0);
+    const t1 = setTimeout(() => setStatusStep(1), 180);
+    const t2 = setTimeout(() => setStatusStep(2), 420);
+    return () => {
+      clearTimeout(t1);
+      clearTimeout(t2);
+    };
+  }, [mutation.isPending, runId]);
 
   const fi = useQuery({
     queryKey: ["feature-importance"],
@@ -186,8 +210,26 @@ function PredictPage() {
     Year: Number(form.Year),
   });
 
+  // Auto-predict (debounced) when all six inputs are filled or change.
+  useEffect(() => {
+    if (!allFilled) return;
+    if (debounceRef.current) clearTimeout(debounceRef.current);
+    debounceRef.current = setTimeout(() => {
+      mutation.mutate(buildPayload());
+    }, 350);
+    return () => {
+      if (debounceRef.current) clearTimeout(debounceRef.current);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [form.Sex, form.Geographic_Region, form.Location_Type, form.Disease_Category, form.Facility_Type, form.Year, allFilled]);
+
   const handleSubmit = () => { if (allFilled) mutation.mutate(buildPayload()); };
-  const handleReset = () => { setForm({}); mutation.reset(); setSaved(false); };
+  const handleReset = () => {
+    abortRef.current?.abort();
+    setForm({});
+    mutation.reset();
+    setSaved(false);
+  };
   const handleSave = async () => {
     if (!mutation.data) return;
     try {
@@ -200,6 +242,23 @@ function PredictPage() {
 
   const result: PredictResponse | undefined = mutation.data;
   const info = result ? KNOWLEDGE[result.prediction as keyof typeof KNOWLEDGE] : null;
+  const statusMessages = ["Encoding indicators…", "Sending to model…", "Computing probabilities…"];
+  const activityState: "idle" | "running" | "done" | "error" = mutation.isPending
+    ? "running"
+    : mutation.isError
+      ? "error"
+      : result
+        ? "done"
+        : "idle";
+  const dotColor =
+    activityState === "running"
+      ? "bg-purple"
+      : activityState === "error"
+        ? "bg-coral"
+        : activityState === "done"
+          ? "bg-green-deep"
+          : "bg-card-foreground/30";
+
 
   return (
     <div className="relative overflow-hidden">
